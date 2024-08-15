@@ -9,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from os import environ
+
 
 # Local imports
 
@@ -36,4 +38,8 @@ CORS(app)
 flask_bcrypt = Bcrypt(app)
 
 # flask-session configuration
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SESSION_SQLALCHEMY"] = db
+
+app.secret_key = environ.get("SESSION_SECRET")
 # Session(app)
