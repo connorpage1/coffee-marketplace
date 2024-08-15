@@ -11,14 +11,12 @@ class Order(db.Model, SerializerMixin):
     total = db.Column(db.Float, nullable=False)
     status = db.Column(db.String)
     discount = db.Column(db.Float)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
 
-    user = db.relationship('User', back_populate='orders')
+    # user = db.relationship('User', back_populates='orders')
     order_items = db.relationship('OrderItem', back_populates='order')
-    def __repr__(self):
-        return f"<Order {self.total}, {self.status}>"
-
+    # serialize_rules = ('order_items.order',)
 
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
