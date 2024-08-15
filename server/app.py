@@ -69,15 +69,26 @@ class Login(Resource):
                     session["user_id"] = user.id
                     return make_response(user.to_dict(), 201)
             else:
-                return make_response({"error" : str(e)}, 422)
+                return make_response({"error" : "invalid username or password"}, 401)
         except Exception as e:
-            pass
-
+                return make_response({"error" : str(e)}, 422)
+        
+class Logout(Resource):
+    def delete(self):
+        try:
+            if session.get("user_id"):
+                del session['user_id']
+                return make_response({}, 204)
+            else:
+                return make_response({}, 401)
+        except Exception as e:
+            return 401
 
         
 
 api.add_resource(Orders, '/orders')
 api.add_resource(Signup, '/signup')
+api.add_resource(Login, '/login')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
