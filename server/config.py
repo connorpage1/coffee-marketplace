@@ -40,6 +40,5 @@ flask_bcrypt = Bcrypt(app)
 # flask-session configuration
 app.config["SESSION_TYPE"] = "sqlalchemy"
 app.config["SESSION_SQLALCHEMY"] = db
-
 app.secret_key = environ.get("SESSION_SECRET")
-# Session(app)
+Session(app)

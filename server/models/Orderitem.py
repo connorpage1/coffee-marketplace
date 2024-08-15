@@ -1,6 +1,4 @@
-from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.ext.associationproxy import association_proxy
-
+from models.__init__ import SerializerMixin, validates, db, datetime
 from config import db
 
 
@@ -17,6 +15,16 @@ class OrderItem(db.Model):
 
     order = db.relationship('Order', back_populates='order_items')
     # product = db.relationship('Product', back_populates='order_items')
+
+
+    @validates('quantity')
+    def validates_total(self, _, quantity):
+        if not isinstance(quantity, int):
+            raise TypeError("Total price must be of data type integer")
+        elif quantity < 1:
+            raise ValueError("Quantity must be at least 1")
+        else:
+            return quantity
 
 
 
