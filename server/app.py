@@ -6,7 +6,8 @@
 from flask import Flask, request, make_response, session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
-from models import db, Order
+from models.Order import db, Order
+from models.Orderitem import db, OrderItem
 import os
 from ipdb import set_trace
 
@@ -34,7 +35,6 @@ from config import app, db, api
 class Orders(Resource):
     def get(self):
         try:
-            set_trace()
             return make_response([order.to_dict() for order in Order.query], 200)
         except Exception as e:
             return make_response({"error" : str(e)}, 404)

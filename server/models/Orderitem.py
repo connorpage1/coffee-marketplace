@@ -3,20 +3,6 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from config import db
 
-class Order(db.Model, SerializerMixin):
-    __tablename__ = "orders"
-
-    id = db.Column(db.Integer, primary_key=True)
-    order_date = db.Column(db.Integer)
-    total = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String)
-    discount = db.Column(db.Float)
-    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-
-
-    # user = db.relationship('User', back_populates='orders')
-    order_items = db.relationship('OrderItem', back_populates='order')
-    # serialize_rules = ('order_items.order',)
 
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
@@ -25,6 +11,8 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price_at_order = db.Column(db.Float, nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id"))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     # product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
     order = db.relationship('Order', back_populates='order_items')

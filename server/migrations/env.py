@@ -5,7 +5,8 @@ from flask import current_app
 
 from alembic import context
 
-from models import Order, OrderItem
+# from models import  Orders
+# from models import OrderItem
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
