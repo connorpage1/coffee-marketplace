@@ -1,13 +1,5 @@
-from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.ext.hybrid import hybrid_property
-# from sqlalchemy.ext.associationproxy import association_prox
-from sqlalchemy.orm import validates
-import re
 
-
-
-from config import db, flask_bcrypt
-
+from models.__init__ import db, SerializerMixin, hybrid_property, flask_bcrypt, validates, re
 class User(db.Model, SerializerMixin):
     
     __tablename__ = 'users'
@@ -15,13 +7,19 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String)
-    email = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column('password', db.String, nullable=False)
     role = db.Column(db.String, nullable=False)
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
+    def __init__(self, email, password_hash=None, **kwargs):
+        super().__init__(email=email, **kwargs)
+        if password_hash:
+            self.password_hash = password_hash
+
+
     serialize_rules = ("-_password_hash",)
     
     @hybrid_property
