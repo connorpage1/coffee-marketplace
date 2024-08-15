@@ -3,17 +3,19 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from config import db
 
-class Order(db.Model):
+class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    order_date = db.Column(db.Date)
+    order_date = db.Column(db.Integer)
     total = db.Column(db.Float, nullable=False)
     status = db.Column(db.String)
     discount = db.Column(db.Float)
 
 
     order_items = db.relationship('OrderItem', back_populates='order')
+    def __repr__(self):
+        return f"<Order {self.total}, {self.status}>"
 
 
 class OrderItem(db.Model):
