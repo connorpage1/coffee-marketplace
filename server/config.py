@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from os import environ
 
 # Local imports
 
@@ -17,6 +18,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
+app.secret_key = environ.get("SESSION_SECRET")
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={
@@ -36,4 +38,7 @@ CORS(app)
 flask_bcrypt = Bcrypt(app)
 
 # flask-session configuration
-# Session(app)
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SESSION_SQLALCHEMY"] = db
+app.secret_key = environ.get("SESSION_SECRET")
+Session(app)
