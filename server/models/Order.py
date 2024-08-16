@@ -3,7 +3,6 @@ from models.__init__ import SerializerMixin, validates, db, datetime
 
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
-
     
     id = db.Column(db.Integer, primary_key=True)
     order_date = db.Column(db.Integer)
@@ -51,9 +50,3 @@ class Order(db.Model, SerializerMixin):
     #     if not isinstance(order_date, datetime):
     #         raise TypeError('Order_date must be of type datetime')
 
-
-
-
-    user = db.relationship('User', back_populates='orders')
-    order_items = db.relationship('OrderItem', back_populates='order')
-    serialize_rules = ('order_items.order',)
