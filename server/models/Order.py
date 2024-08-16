@@ -11,7 +11,7 @@ class Order(db.Model, SerializerMixin):
     discount = db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     @validates('total')
     def validates_total(self, _, total):
