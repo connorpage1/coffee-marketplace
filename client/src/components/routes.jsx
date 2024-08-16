@@ -20,4 +20,4 @@ const routes = [
 
 ]
 
-export default routes test
+export default routes 
