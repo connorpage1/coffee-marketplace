@@ -8,7 +8,7 @@ import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
 import { createBrowserRouter } from "react-router-dom";
 
-export const  router = createBrowserRouter([
+export const router = createBrowserRouter([
 {
     path: '/',
     element: <App/>,
@@ -41,7 +41,7 @@ export const  router = createBrowserRouter([
             path: "/login",
             element: <Login />
         }
-     ]
+    ]
 }
 
 ])
