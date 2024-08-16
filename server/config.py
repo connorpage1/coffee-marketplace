@@ -38,7 +38,7 @@ app.config["SESSION_SQLALCHEMY"] = db
 api = Api(app)
 
 # Instantiate CORS
-CORS(app)
+# CORS(app)
 
 # flask-bcrypt configuration
 flask_bcrypt = Bcrypt(app)

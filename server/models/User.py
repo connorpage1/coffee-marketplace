@@ -22,7 +22,7 @@ class User(db.Model, SerializerMixin):
             self.password_hash = password_hash
 
 
-    serialize_rules = ("-_password_hash", "-orders.user")
+    serialize_rules = ("-_password_hash", "-orders")
     
     @hybrid_property
     def password_hash(self):

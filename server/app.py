@@ -15,17 +15,6 @@ from ipdb import set_trace
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.json.compact = False
-
-migrate = Migrate(app, db)
-
-db.init_app(app)
-
-api = Api(app)
-
 # Local imports
 from config import app, db, api
 # Add your model imports
@@ -79,7 +68,7 @@ class Login(Resource):
         try:
             data = request.get_json()
             user = User.query.filter_by(email=data.get("email")).first()
-            if user and user.authenticate(data.get("password")):
+            if user and user.authenticate(data.get("password_hash")):
                     session["user_id"] = user.id
                     return make_response(user.to_dict(), 201)
             else:
