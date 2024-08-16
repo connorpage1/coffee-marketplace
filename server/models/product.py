@@ -5,7 +5,7 @@ class Product(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    stock = db.Column(db.String)
+    stock = db.Column(db.Integer)
     type = db.Column(db.String)
     sku = db.Column(db.String)
     image_url = db.Column(db.String)
@@ -14,7 +14,7 @@ class Product(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship("User", back_populates="products")
+    # user = db.relationship("User", back_populates="products")
 
     
     serialize_rules = ("-user",)
@@ -41,10 +41,10 @@ class Product(db.Model, SerializerMixin):
         
     @validates("stock")
     def validate_stock(self, key, value):
-        if not isinstance(value, str) or not value.strip():
-            raise TypeError(f"{key} must be a non-empty string")
-        elif value not in ["in stock", "out of stock"]:
-            raise ValueError(f"{key} must be either 'in stock' of 'out of stock'")
+        if not isinstance(value, int):
+            raise TypeError(f"{key} must be a non-empty integer")
+        elif value < 0:
+            raise ValueError(f"{key} must be greater than 0")
         return value
         
     @validates("type")

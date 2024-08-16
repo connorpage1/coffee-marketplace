@@ -132,11 +132,11 @@ class ProductById(Resource):
         try:
             product = db.session.get(Product, id)
             if product:
+                data = request.get_json()
                 for attr, value in data.items():
-                    if value is not None:
-                        setattr(product, attr, value)
-                    db.session.commit()
-                    return product.to_dict(), 200
+                    setattr(product, attr, value)
+                db.session.commit()
+                return product.to_dict(), 200
             return {"error": "Product not found"}, 404
         except Exception as e:
             db.session.rollback()
@@ -160,7 +160,7 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check-session')
-api.add_resource(Product, '/products')
+api.add_resource(Products, '/products')
 api.add_resource(ProductById, '/products/<int:id>')
 
 if __name__ == '__main__':

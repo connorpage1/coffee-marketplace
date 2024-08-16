@@ -18,26 +18,26 @@ if __name__ == '__main__':
     with app.app_context():
         print("Starting seed...")
         # Seed code goes here!
-        try: 
-            Product.query.delete()
+        # try: 
+        #     Product.query.delete()
             
-            stock_choices = ["in stock", "out of stock"]
-            type_choices = ["coffee", "tea"]
+        #     stock_choices = ["in stock", "out of stock"]
+        #     type_choices = ["coffee", "tea"]
             
-            for _ in range(5):
-                product = Product(
-                    name = fake.name(),
-                    stock = rc(stock_choices),
-                    type = rc(type_choices),
-                    sku = fake.unique.ean8(),
-                    image_url = fake.image_url(),
-                    description = fake.text(),
-                    user_id = randint(1, 10) 
-                )
+        #     for _ in range(5):
+        #         product = Product(
+        #             name = fake.name(),
+        #             stock = rc(stock_choices),
+        #             type = rc(type_choices),
+        #             sku = fake.unique.ean8(),
+        #             image_url = fake.image_url(),
+        #             description = fake.text(),
+        #             user_id = randint(1, 10) 
+        #         )
                 
-                db.session.add(product)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            print(f"Failed to create Product: {e}")
+        #         db.session.add(product)
+        #     db.session.commit()
+        # except Exception as e:
+        #     db.session.rollback()
+        #     print(f"Failed to create Product: {e}")
 
