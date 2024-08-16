@@ -1,8 +1,8 @@
-"""new init
+"""add tables after pull
 
-Revision ID: 2cd8c127acbc
+Revision ID: b21753fed3a4
 Revises: 
-Create Date: 2024-08-15 15:26:48.467539
+Create Date: 2024-08-15 21:26:04.833016
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2cd8c127acbc'
+revision = 'b21753fed3a4'
 down_revision = None
 branch_labels = None
 depends_on = None

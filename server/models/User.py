@@ -6,7 +6,7 @@ class User(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
-    last_name = db.Column(db.String)
+    last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column('password', db.String, nullable=False)
     role = db.Column(db.String, nullable=False)
@@ -22,7 +22,7 @@ class User(db.Model, SerializerMixin):
             self.password_hash = password_hash
 
 
-    serialize_rules = ("-_password_hash", "-orders.user")
+    serialize_rules = ("-_password_hash", "-orders")
     
     @hybrid_property
     def password_hash(self):
@@ -30,6 +30,10 @@ class User(db.Model, SerializerMixin):
     
     @password_hash.setter
     def password_hash(self, new_pw):
+        if not isinstance(new_pw, str):
+            raise TypeError("Passwords must be a string")
+        elif len(new_pw) < 8:
+            raise ValueError("Passwords must be at least 8 characters")
         hashed_pw = flask_bcrypt.generate_password_hash(new_pw).decode("utf-8")
         self._password_hash = hashed_pw
         

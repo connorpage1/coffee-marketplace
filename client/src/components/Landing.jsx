@@ -1,6 +1,7 @@
 function Landing() {
     return <div>
-        <h1>fsdfsdfsd</h1>
+        <h1 className="test">Placeholder Name</h1>
+        
     </div>;
   }
 
