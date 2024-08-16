@@ -30,17 +30,18 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SESSION_SQLALCHEMY"] = db
+
+
 # Instantiate REST API
 api = Api(app)
 
 # Instantiate CORS
-CORS(app)
+# CORS(app)
 
 # flask-bcrypt configuration
 flask_bcrypt = Bcrypt(app)
 
 # flask-session configuration
-app.config["SESSION_TYPE"] = "sqlalchemy"
-app.config["SESSION_SQLALCHEMY"] = db
-app.secret_key = environ.get("SESSION_SECRET")
 Session(app)
