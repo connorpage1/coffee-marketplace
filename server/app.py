@@ -176,7 +176,7 @@ api.add_resource(GetOrderById, '/orders/<int:id>')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
-api.add_resource(CheckSession, '/check-session')
+api.add_resource(Profile, '/profile')
 api.add_resource(Product, '/products')
 api.add_resource(ProductById, '/products/<int:id>')
 
