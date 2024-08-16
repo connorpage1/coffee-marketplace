@@ -15,17 +15,6 @@ from ipdb import set_trace
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.json.compact = False
-
-migrate = Migrate(app, db)
-
-db.init_app(app)
-
-api = Api(app)
-
 # Local imports
 from config import app, db, api
 # Add your model imports
@@ -78,8 +67,8 @@ class Login(Resource):
     def post(self):
         try:
             data = request.get_json()
-            user = User.query.filter_by(username=data.get("username").first())
-            if user and user.authenticate(data.get("password")):
+            user = User.query.filter_by(email=data.get("email")).first()
+            if user and user.authenticate(data.get("password_hash")):
                     session["user_id"] = user.id
                     return make_response(user.to_dict(), 201)
             else:
@@ -98,24 +87,52 @@ class Logout(Resource):
         except Exception as e:
             return 401
         
-class CheckSession(Resource):
+class Profile(Resource):
+    
     def get(self):
         try:
-            user_id = session.get('user_id')
-            user = db.session.get(User, user_id)
-            return make_response(user.to_dict(), 200)
+            if user_id := session.get('user_id'):
+                user = db.session.get(User, user_id)
+                return make_response(user.to_dict(), 200)
+            return make_response({'error': 'No logged in user'}, 401)
         except Exception as e:
-            return make_response({'error' : str(e)}, 401)
+            return make_response({'error' : str(e)}, 422)
+    def patch(self):
+        try: 
+            if user_id := session.get('user_id'):
+                data = request.get_json()
+                user = db.session.get(User, user_id)
+                for attr, value in data.items():
+                    setattr(user, attr, value)
+                db.session.commit()
+                return make_response(user.to_dict(), 200)
+            else:             
+                return make_response({'error': 'No logged in user'}, 401)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 422)
+    def delete(self):
+        try: 
+            if user_id := session.get('user_id'):
+                user = db.session.get(User, user_id)
+                db.session.delete(user)
+                db.session.commit()
+                del session['user_id']
+                return make_response({}, 204)
+            else:
+                return make_response({'error': 'No logged in user'}, 401)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 422)
 
 
-        
 
 api.add_resource(Orders, '/orders')
 api.add_resource(GetOrderById, '/orders/<int:id>')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
-api.add_resource(CheckSession, '/check-session')
+api.add_resource(Profile, '/profile')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

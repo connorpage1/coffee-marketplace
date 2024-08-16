@@ -11,6 +11,7 @@ from flask_bcrypt import Bcrypt
 from flask_session import Session
 from os import environ
 
+from os import environ
 
 # Local imports
 
@@ -19,6 +20,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
+app.secret_key = environ.get("SESSION_SECRET")
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={
@@ -28,17 +30,18 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SESSION_SQLALCHEMY"] = db
+
+
 # Instantiate REST API
 api = Api(app)
 
 # Instantiate CORS
-CORS(app)
+# CORS(app)
 
 # flask-bcrypt configuration
 flask_bcrypt = Bcrypt(app)
 
 # flask-session configuration
-app.config["SESSION_TYPE"] = "sqlalchemy"
-app.config["SESSION_SQLALCHEMY"] = db
-app.secret_key = environ.get("SESSION_SECRET")
 Session(app)
