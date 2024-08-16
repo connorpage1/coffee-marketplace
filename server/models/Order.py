@@ -1,5 +1,6 @@
 from models.__init__ import SerializerMixin, validates, db, datetime
 
+
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
@@ -11,8 +12,13 @@ class Order(db.Model, SerializerMixin):
     discount = db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
+    user = db.relationship('User', back_populates='orders')
+    order_items = db.relationship('OrderItem', back_populates='order')
+    serialize_rules = ('-order_items.order', "-user.orders")
+
+    
     @validates('total')
     def validates_total(self, _, total):
         if not isinstance(total, float):
@@ -40,14 +46,14 @@ class Order(db.Model, SerializerMixin):
             raise ValueError('Discount cannot be negative')
         else:
             return discount
-    @validates('order_date')
-    def validates_order_date(self, _, order_date):
-        if not isinstance(order_date, datetime):
-            raise TypeError('Order_date must be of type datetime')
+    # @validates('order_date')
+    # def validates_order_date(self, _, order_date):
+    #     if not isinstance(order_date, datetime):
+    #         raise TypeError('Order_date must be of type datetime')
 
 
 
 
-    # user = db.relationship('User', back_populates='orders')
+    user = db.relationship('User', back_populates='orders')
     order_items = db.relationship('OrderItem', back_populates='order')
-    # serialize_rules = ('order_items.order',)
+    serialize_rules = ('order_items.order',)
