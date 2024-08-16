@@ -135,7 +135,7 @@ class ProductById(Resource):
                 data = request.get_json()
                 for attr, value in data.items():
                     setattr(product, attr, value)
-                db.session.commit()
+                gdb.session.commit()
                 return product.to_dict(), 200
             return {"error": "Product not found"}, 404
         except Exception as e:
