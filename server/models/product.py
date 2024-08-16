@@ -84,4 +84,3 @@ class Product(db.Model, SerializerMixin):
         if not isinstance(value, int):
             raise TypeError(f"{key} must be of type int")
         return value
-        

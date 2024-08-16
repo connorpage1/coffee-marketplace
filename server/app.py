@@ -9,6 +9,7 @@ from flask_restful import Resource, Api
 from models.Order import db, Order
 from models.Orderitem import db, OrderItem
 from models.User import User
+from models.product import Product 
 import os
 from ipdb import set_trace
 
@@ -106,9 +107,52 @@ class CheckSession(Resource):
             return make_response(user.to_dict(), 200)
         except Exception as e:
             return make_response({'error' : str(e)}, 401)
-
-
         
+class Products(Resource):
+    def get(self):
+        try:
+            serialized_products = [product.to_dict(rules=("-user",)) for product in Product.query]
+            return make_response(serialized_products, 200)
+        except Exception as e:
+            return {"error": str(e)}, 400
+    
+    def post(self):
+        try:
+            data = request.get_json()
+            new_product = Product(**data)
+            db.session.add(new_product)
+            db.session.commit()
+            return (new_product.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 400
+
+class ProductById(Resource):            
+    def patch(self, id):
+        try:
+            product = db.session.get(Product, id)
+            if product:
+                for attr, value in data.items():
+                    if value is not None:
+                        setattr(product, attr, value)
+                    db.session.commit()
+                    return product.to_dict(), 200
+            return {"error": "Product not found"}, 404
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 422
+            
+    def delete(self, id):
+        try:
+            if product := db.session.get(Product, id):
+                db.session.delete(product)
+                db.session.commit()
+                return {}, 204
+            return {"error": "Product not found"}, 404
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 422
+            
 
 api.add_resource(Orders, '/orders')
 api.add_resource(GetOrderById, '/orders/<int:id>')
@@ -116,6 +160,8 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check-session')
+api.add_resource(Product, '/products')
+api.add_resource(ProductById, '/products/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
