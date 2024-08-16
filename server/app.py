@@ -9,6 +9,7 @@ from flask_restful import Resource, Api
 from models.Order import db, Order
 from models.Orderitem import db, OrderItem
 from models.User import User
+from models.product import Product 
 import os
 from ipdb import set_trace
 
