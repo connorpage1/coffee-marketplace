@@ -6,8 +6,9 @@ import Signup from "./Signup";
 import Login from "./Login";
 import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
+import { createBrowserRouter } from "react-router-dom";
 
-const routes = [
+const routes = createBrowserRouter([
 {
      path: '/',
      element: <App/>,
@@ -21,8 +22,8 @@ const routes = [
             element: <ProductPage />
         },
         {
-            path: '/products/:id',
-            element: <ProductDetails />
+            path: '/products/:productId',
+            element: <ProductDetails/>
         },
         {
             path: '/vendor/:id',
@@ -43,6 +44,6 @@ const routes = [
      ]
 }
 
-]
+])
 
 export default routes 

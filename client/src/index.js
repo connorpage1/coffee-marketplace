@@ -1,14 +1,11 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import './index.css'
-import routes from './components/Routes.jsx'
+import routes from './components/routes.jsx'
+import { createRoot } from 'react-dom/client';
 
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-root.render(<App />);
+root.render(<RouterProvider router={ routes }/>);
 
-// test
-
-//test
