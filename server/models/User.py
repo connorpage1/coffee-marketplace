@@ -1,5 +1,6 @@
 
 from models.__init__ import db, SerializerMixin, hybrid_property, flask_bcrypt, validates, re
+
 class User(db.Model, SerializerMixin):
     
     __tablename__ = 'users'
