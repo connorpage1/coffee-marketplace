@@ -14,7 +14,7 @@ class OrderItem(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
     order = db.relationship('Order', back_populates='order_items')
-    # product = db.relationship('Product', back_populates='order_items')
+    product = db.relationship('Product', back_populates='order_items')
 
 
     @validates('quantity')

@@ -4,18 +4,29 @@ from models.__init__ import db, SerializerMixin, hybrid_property, flask_bcrypt, 
 class User(db.Model, SerializerMixin):
     
     __tablename__ = 'users'
+    ROLE_BUYER = 1
+    ROLE_SELLER = 2
     
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column('password', db.String, nullable=False)
-    role = db.Column(db.String, nullable=False)
+    role_id = db.Column(db.Integer, nullable=False, default=1)
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
     orders = db.relationship('Order', back_populates="user")
+    selling_products = db.relationship("Product", back_populates='seller')
+    purchased_products = db.relationship(
+        "Product",
+        secondary="order_items",
+        primaryjoin="User.id == Order.user_id",
+        secondaryjoin="OrderItem.product_id == Product.id",
+        viewonly=True,
+        # back_populates="buyers",
+    )
     
     def __init__(self, email, password_hash=None, **kwargs):
         super().__init__(email=email, **kwargs)

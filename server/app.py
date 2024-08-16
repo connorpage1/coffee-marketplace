@@ -147,14 +147,15 @@ class Products(Resource):
 class ProductById(Resource):            
     def patch(self, id):
         try:
+            data = request.get_json()
             product = db.session.get(Product, id)
-            if product:
-                for attr, value in data.items():
-                    if value is not None:
-                        setattr(product, attr, value)
-                    db.session.commit()
-                    return product.to_dict(), 200
-            return {"error": "Product not found"}, 404
+            if not product:
+                return {"error": "Product not found"}, 404
+            for attr, value in data.items():
+                if value:
+                    setattr(product, attr, value)
+            db.session.commit()
+            return product.to_dict(), 200
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 422

@@ -15,6 +15,8 @@ class Order(db.Model, SerializerMixin):
 
     user = db.relationship('User', back_populates='orders')
     order_items = db.relationship('OrderItem', back_populates='order')
+    products = db.relationship('OrderItem.product', back_populates='order')
+    
     serialize_rules = ('-order_items.order', "-user.orders")
 
     
