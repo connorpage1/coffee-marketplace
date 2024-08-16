@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage} from "formik";
+import { useState } from 'react';
 
 
 const schema = yup.object().shape({
@@ -12,46 +12,57 @@ const schema = yup.object().shape({
 
 const Login = () => {
 
+    const [user, setUser] = useState(null)
+
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch(loginUrl, {
+        fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(formData)
         })
-        .then(res => console.log(res.json()))
-        .then(resetForm)
+        .then(res => {
+            if (res.ok) {
+                res.json()
+                .then(userObj => setUser(userObj))}
+            else {
+                console.log(res)
+            }
+            })
         .catch(console.log)
     }
     return(
-        <div className = 'login-container'>
-            <Formik
-                initialValues={{email: "", password_hash: ""}}
-                validationSchema = {schema}
-                onSubmit={handleFormSubmit}
-            >
-                <Form>
-                    <label htmlFor="email">Email</label>
-                    <Field name='email' type='text'/>
-                    <ErrorMessage 
-                        name="email"
-                        component="div"
-                        className = "field-error"
-                    />
+        <>
+            <h1>Test</h1>
+            <div className = 'login-container'>
+                <Formik
+                    initialValues={{email: "", password_hash: ""}}
+                    validationSchema = {schema}
+                    onSubmit={handleFormSubmit}
+                >
+                    <Form>
+                        <label htmlFor="email">Email</label>
+                        <Field name='email' type='text'/>
+                        <ErrorMessage 
+                            name="email"
+                            component="div"
+                            className = "field-error"
+                        />
 
-                    <label htmlFor="password_hash">Password</label>
-                    <Field name='password_hash' type='password'/>
-                    <ErrorMessage 
-                        name="password_hash"
-                        component="div"
-                        className = "field-error"
-                    />
-                    <button type='submit'>Login</button>
-                </Form>
-            </Formik>
-        </div>
-
+                        <label htmlFor="password_hash">Password</label>
+                        <Field name='password_hash' type='password'/>
+                        <ErrorMessage 
+                            name="password_hash"
+                            component="div"
+                            className = "field-error"
+                        />
+                        <button type='submit'>Login</button>
+                    </Form>
+                </Formik>
+            </div>
+        </>
+        
     )
 }
 

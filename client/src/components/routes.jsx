@@ -6,12 +6,13 @@ import Signup from "./Signup";
 import Login from "./Login";
 import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
+import { createBrowserRouter } from "react-router-dom";
 
-const routes = [
+export const  router = createBrowserRouter([
 {
-     path: '/',
-     element: <App/>,
-     children:[
+    path: '/',
+    element: <App/>,
+    children:[
         {
             index: true,
             element: <Landing />
@@ -43,6 +44,4 @@ const routes = [
      ]
 }
 
-]
-
-export default routes 
+])
