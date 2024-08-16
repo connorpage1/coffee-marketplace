@@ -19,7 +19,10 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 # Local imports
 from config import app, db, api
 # Add your model imports
-
+from models.Order import db, Order
+from models.Orderitem import db, OrderItem
+from models.User import User
+from models.product import Product 
 
 # Views go here!
 
@@ -123,9 +126,79 @@ class Profile(Resource):
             else:
                 return make_response({'error': 'No logged in user'}, 401)
         except Exception as e:
+            return make_response({'error' : str(e)}, 422)
+    def patch(self):
+        try: 
+            if user_id := session.get('user_id'):
+                data = request.get_json()
+                user = db.session.get(User, user_id)
+                for attr, value in data.items():
+                    setattr(user, attr, value)
+                db.session.commit()
+                return make_response(user.to_dict(), 200)
+            else:             
+                return make_response({'error': 'No logged in user'}, 401)
+        except Exception as e:
             db.session.rollback()
             return make_response({'error': str(e)}, 422)
+    def delete(self):
+        try: 
+            if user_id := session.get('user_id'):
+                user = db.session.get(User, user_id)
+                db.session.delete(user)
+                db.session.commit()
+                del session['user_id']
+                return make_response({}, 204)
+            else:
+                return make_response({'error': 'No logged in user'}, 401)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 422)
+        
+class Products(Resource):
+    def get(self):
+        try:
+            serialized_products = [product.to_dict(rules=("-user",)) for product in Product.query]
+            return make_response(serialized_products, 200)
+        except Exception as e:
+            return {"error": str(e)}, 400
 
+    def post(self):
+        try:
+            data = request.get_json()
+            new_product = Product(**data)
+            db.session.add(new_product)
+            db.session.commit()
+            return (new_product.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 400
+
+class ProductById(Resource):            
+    def patch(self, id):
+        try:
+            product = db.session.get(Product, id)
+            if product:
+                for attr, value in data.items():
+                    if value is not None:
+                        setattr(product, attr, value)
+                    db.session.commit()
+                    return product.to_dict(), 200
+            return {"error": "Product not found"}, 404
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 422
+
+    def delete(self, id):
+        try:
+            if product := db.session.get(Product, id):
+                db.session.delete(product)
+                db.session.commit()
+                return {}, 204
+            return {"error": "Product not found"}, 404
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 422
 
 
 api.add_resource(Orders, '/orders')
@@ -134,6 +207,8 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Profile, '/profile')
+api.add_resource(Product, '/products')
+api.add_resource(ProductById, '/products/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

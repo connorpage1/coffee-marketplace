@@ -5,11 +5,10 @@ import './index.css'
 import routes from './components/Routes.jsx'
 
 
-const router = createBrowserRouter(routes)
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(<App />);
 
+// test
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+//test
