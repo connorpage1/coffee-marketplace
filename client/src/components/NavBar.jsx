@@ -30,19 +30,6 @@ useEffect(() =>{
     })
     },[]);
 
-    if (session){
-        logintext = "Log Out"
-    }
-    else {
-        logintext = "Log In"
-    }
-
-    
-
-
-
-
-
 return(
 
 <>
