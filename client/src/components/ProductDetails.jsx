@@ -15,6 +15,7 @@ function ProductDetails() {
           if (resp.ok) {
             return resp.json();
           } else {
+            //! Fix Error
             throw new Error('Error fetching data');
           }
         })
@@ -23,6 +24,7 @@ function ProductDetails() {
           setVendor(data.user);
         })
         .catch((error) => {
+        //! Fix Error
           console.log(error);
         });
     }, [productId]);
