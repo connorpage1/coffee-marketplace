@@ -14,10 +14,11 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 
 # Local imports
 from config import app, db, api
+
 # Add your model imports
-from models.Order import db, Order
-from models.Orderitem import db, OrderItem
-from models.User import User
+from models.order import Order
+from models.order_item import OrderItem
+from models.user import User
 from models.product import Product 
 
 # Views go here!
@@ -105,7 +106,7 @@ class Profile(Resource):
                 for attr, value in data.items():
                     setattr(user, attr, value)
                 db.session.commit()
-                return make_response(user.to_dict(), 200)
+                return make_response(user.to_dict(rules=("-selling_products",)), 200)
             else:             
                 return make_response({'error': 'No logged in user'}, 401)
         except Exception as e:
@@ -124,6 +125,16 @@ class Profile(Resource):
         except Exception as e:
             db.session.rollback()
             return make_response({'error': str(e)}, 422)
+        
+class CheckSession(Resource):
+    def get(self):
+        try:
+            if user_id := session.get('user_id'):
+                user = db.session.get(User, user_id)
+                return make_response(user.to_dict(), 200)
+            return make_response({'error': 'No logged in user'}, 401)
+        except Exception as e:
+            return make_response({'error' : str(e)}, 422)
         
 class Products(Resource):
     def get(self):
@@ -178,6 +189,7 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Profile, '/profile')
+api.add_resource(CheckSession, '/check-session')
 api.add_resource(Products, '/products')
 api.add_resource(ProductById, '/products/<int:id>')
 
