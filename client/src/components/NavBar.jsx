@@ -4,7 +4,6 @@ import { Link, NavLink } from "react-router-dom"
 function NavBar(){
 // if session.get, display logout, else display login
 const [session, setSession] = useState(false)
-let logintext
 useEffect(() =>{
     fetch('/get-session')
     .then((res) => {

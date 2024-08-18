@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import toast, { Toaster } from "react-router-dom";
+
 
 function ProductDetails() {
     const [product, setProduct] = useState();
@@ -16,17 +18,13 @@ function ProductDetails() {
             return resp.json();
           } else {
             //! Fix Error
-            throw new Error('Error fetching data');
-          }
+            (errorObj => toast.error(errorObj.message))}
         })
         .then((data) => {
           setProduct(data);
           setVendor(data.user);
         })
-        .catch((error) => {
-        //! Fix Error
-          console.log(error);
-        });
+        .catch(errorObj => toast.error(errorObj.message))
     }, [productId]);
 
     if (vendor) {
