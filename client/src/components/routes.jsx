@@ -26,7 +26,7 @@ const routes = createBrowserRouter([
             element: <ProductDetails/>
         },
         {
-            path: '/vendor/:id',
+            path: '/vendor/:vendorId',
             element: <VendorDetails />
         },
         {
