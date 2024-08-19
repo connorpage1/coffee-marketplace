@@ -2,8 +2,8 @@ from models.__init__ import SerializerMixin, validates, db, datetime
 from config import db
 
 
-class OrderItem(db.Model):
-    __tablename__ = 'order_items'
+class OrderItem(db.Model, SerializerMixin):
+    __tablename__ = "order_items"
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
@@ -13,11 +13,12 @@ class OrderItem(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
 
-    order = db.relationship('Order', back_populates='order_items')
-    # product = db.relationship('Product', back_populates='order_items')
+    order = db.relationship("Order", back_populates="order_items")
+    product = db.relationship("Product", back_populates="order_items")
 
+    serialize_rules = ("-order", "-product.order_items")
 
-    @validates('quantity')
+    @validates("quantity")
     def validates_total(self, _, quantity):
         if not isinstance(quantity, int):
             raise TypeError("Total price must be of data type integer")
@@ -25,16 +26,12 @@ class OrderItem(db.Model):
             raise ValueError("Quantity must be at least 1")
         else:
             return quantity
-    @validates('price_at_order')
+
+    @validates("price_at_order")
     def validates_total(self, _, price_at_order):
         if not isinstance(price_at_order, float):
             raise TypeError("Price must be of data type float")
-        elif price_at_order < .01:
+        elif price_at_order < 0.01:
             raise ValueError("Price cannot be less that one cent")
         else:
             return price_at_order
-
-
-
-
-
