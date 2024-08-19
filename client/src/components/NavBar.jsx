@@ -40,6 +40,7 @@ return(
 <Link to={'/myprofile'}> My Profile</Link>
 <Link to={'/' + session.toLowerCase()}> ${session.slice(0, 3) + ' ' + session.slice(3)}</Link>
 <Link to={'/signup'}> Signup </Link>
+<Link to={'/checkout'}> Check Out</Link>
 </nav>
 </>
 )
