@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-router-dom";
+import { Container } from 'semantic-ui-react';
 
 
 function ProductDetails() {
@@ -37,6 +38,9 @@ function ProductDetails() {
 return <div>
     <h1>{product ? product.id : 'No product found'}</h1>
     <h1>{vendorName}</h1>
+    <Container text>
+      
+    </Container>
 </div>;
   }
 
