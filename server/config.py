@@ -35,7 +35,7 @@ app.config["SESSION_SQLALCHEMY"] = db
 
 
 # Instantiate REST API
-api = Api(app)
+api = Api(app, prefix='/api/v1')
 
 # Instantiate CORS
 # CORS(app)

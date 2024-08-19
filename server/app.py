@@ -95,7 +95,7 @@ class Logout(Resource):
             else:
                 return make_response({}, 401)
         except Exception as e:
-            return 401
+            return make_response({}, 401)
 
 
 class Profile(Resource):
@@ -173,7 +173,7 @@ class CheckSession(Resource):
         try:
             if user_id := session.get("user_id"):
                 user = db.session.get(User, user_id)
-                return make_response(user.to_dict(rules="id"), 200)
+                return make_response(user.to_dict(rules=("id", "email", "role_id", "first_name")), 200)
             return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             return make_response({"error": str(e)}, 422)

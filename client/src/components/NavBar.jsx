@@ -1,36 +1,20 @@
 import { useEffect, useState } from "react"
 import { Link, NavLink } from "react-router-dom"
 
-function NavBar(){
+function NavBar({ user, updateUser }){
 // if session.get, display logout, else display login
-const [endpoint, setEndpoint] = useState(false)
-const [navText, setNavText]  = useState()
-useEffect(() =>{
-    fetch('/get-session')
-    .then((res) => {
-        if (res.status_code == 200 ) {
-            return res.json();
-        }
-        //! Fix Error
-        else {
-            console.log('er')
-        }
+
+const handleLogout = () =>{
+    fetch('/logout',{
+        method: 'DELETE'
     })
-    .then((data) => {
-        if (data){
-            setEndpoint('logput')
-            setNavText('Log Out')
-        }
-        else {
-            setEndpoint('login')
-            setNavText('Log In')
-        }
-    })
-    .catch((error) => {
-        //! Fix Error
-        console.log(error);
-    })
-    },[]);
+        .then(res => {
+            if (res.status == 204){
+                updateUser(null)
+            }
+        })
+}
+
 
 return(
 
@@ -39,10 +23,20 @@ return(
 <nav>
 <Link to={'/'}> Home </Link>
 <Link to={'/products'}> Shop </Link>
+
+
+{user ? <>
 <Link to={'/myprofile'}> My Profile</Link>
-<Link to={`/${endpoint}`}> {navText} </Link>
-<Link to={'/signup'}> Signup </Link>
 <Link to={'/checkout'}> Check Out</Link>
+<Link to={'/login'}> <button onClick={handleLogout}> Log Out </button></Link>
+</>
+:
+<>
+<Link to={`/login`}> Log in </Link>
+<Link to={'/signup'}> Signup </Link>
+</>}
+
+
 </nav>
 </>
 )
