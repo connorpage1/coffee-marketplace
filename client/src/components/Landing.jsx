@@ -1,9 +1,11 @@
 function Landing() {
-    return <div>
+    return (
+    <div>
         <h1 className="test">Placeholder Name</h1>
         
-    </div>;
-  }
+    </div>
+    );
+}
 
 
-  export default Landing;
+export default Landing;
