@@ -8,11 +8,11 @@ import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
 import { createBrowserRouter } from "react-router-dom";
 
-const routes = createBrowserRouter([
+export const router = createBrowserRouter([
 {
-     path: '/',
-     element: <App/>,
-     children:[
+    path: '/',
+    element: <App/>,
+    children:[
         {
             index: true,
             element: <Landing />
@@ -41,9 +41,7 @@ const routes = createBrowserRouter([
             path: "/login",
             element: <Login />
         }
-     ]
+    ]
 }
 
 ])
-
-export default routes 
