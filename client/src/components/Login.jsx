@@ -11,7 +11,7 @@ const schema = yup.object().shape({
 
 
 const Login = () => {
-
+    // This will need to be moved up a couple of levels 
     const [user, setUser] = useState(null)
 
     const handleFormSubmit = (formData, { resetForm }) => {
@@ -26,7 +26,7 @@ const Login = () => {
             if (res.ok) {
                 res.json()
                 .then(userObj => setUser(userObj))
-                .then(console.log("success"))
+                .then(console.log(user))
             }
             else {
                 console.log(res)
@@ -34,7 +34,7 @@ const Login = () => {
             })
         .catch(console.log)
     }
-    return(
+    return (
         <>
             <h1>Test</h1>
             <div className = 'login-container'>
