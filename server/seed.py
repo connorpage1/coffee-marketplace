@@ -26,12 +26,12 @@ if __name__ == '__main__':
             
             for _ in range(5):
                 product = Product(
-                    name = fake.name(),
+                    name = faker.name(),
                     stock = rc(stock_choices),
                     type = rc(type_choices),
-                    sku = fake.unique.ean8(),
-                    image_url = fake.image_url(),
-                    description = fake.text(),
+                    sku = faker.unique.ean8(),
+                    image_url = faker.image_url(),
+                    description = faker.text(),
                     user_id = randint(1, 10) 
                 )
                 
