@@ -16,25 +16,32 @@ const initialValues = {
     last_name: "",
     role: "",
     email: "",
-    password_hash: ""
+    password_hash: "",
+    confirmPassword: ""
 
 }
 
 const Signup = () => {
 
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch('/signup', {
+        fetch('api/v1//signup', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify({
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                role_id: formData.role,
+                email: formData.email,
+                password_hash: formData.password_hash
+            })
         })
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(console.log)
-                .then(resetForm)
+                .then(userObj => console.log(userObj.id))
+                // .then(resetForm)
             } else {
                 console.log(res)
             }

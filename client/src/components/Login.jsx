@@ -15,7 +15,7 @@ const Login = () => {
     const [user, setUser] = useState(null)
 
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch("/login", {
+        fetch("/api/v1/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -25,7 +25,9 @@ const Login = () => {
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(userObj => setUser(userObj))}
+                .then(userObj => setUser(userObj))
+                .then(console.log("success"))
+            }
             else {
                 console.log(res)
             }
