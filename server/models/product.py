@@ -16,10 +16,11 @@ class Product(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship("User", back_populates="products")
-    order_items = db.relationship("Orderitem", back_populates="products")
+    user = db.relationship("User", back_populates="product")
+    order_items = db.relationship("OrderItem", back_populates="product")
+    # orders = db.relationship("Order", back_populates="products")
     
-    serialize_rules = ("-user",)
+    serialize_rules = ("-user", "-order_items")
 
     def __repr__(self):
         return f"""
@@ -102,7 +103,7 @@ class Product(db.Model, SerializerMixin):
     def validate_sku(self, key, value):
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
-        elif not re.match(r"^[A-Z0-9]{8,12}$", value):
+        elif not re.match(r"^[A-Za-z0-9]{8,12}$", value):
             raise ValueError(f"{key} must be 8-12 alphanumeric characters long")
         return value
 
