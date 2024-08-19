@@ -1,11 +1,11 @@
-from models.__init__ import SerializerMixin, validates, db, datetime
+from models.__init__ import SerializerMixin, validates, db, datetime, association_proxy
 
 
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    order_date = db.Column(db.Integer)
+    order_date = db.Column(db.DateTime)
     total = db.Column(db.Float, nullable=False)
     status = db.Column(db.String)
     discount = db.Column(db.Float)
@@ -15,10 +15,11 @@ class Order(db.Model, SerializerMixin):
 
     users = db.relationship("User", back_populates="orders")
     order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+    products = association_proxy("order_items", "product")
     # products = db.relationship("Product", secondary="order_items", back_populates="orders", viewonly=True)
 
     # serialize_rules = ("-users", "-order_items", "-products")
-    serialize_rules = ("-users", "-order_items")
+    serialize_rules = ("-users", "-order_items.order")
 
     @validates("total")
     def validates_total(self, _, total):
@@ -49,7 +50,8 @@ class Order(db.Model, SerializerMixin):
         else:
             return discount
 
-    # @validates('order_date')
-    # def validates_order_date(self, _, order_date):
-    #     if not isinstance(order_date, datetime):
-    #         raise TypeError('Order_date must be of type datetime')
+    @validates('order_date')
+    def validates_order_date(self, _, order_date):
+        if not isinstance(order_date, datetime):
+            raise TypeError('Order_date must be of type datetime')
+        return order_date

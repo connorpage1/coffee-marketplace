@@ -82,15 +82,14 @@ def seed_data():
         orders = []
         for _ in range(15):
             order = Order(
-                order_date=int(fake.date_time_this_decade().timestamp()),
                 total=fake.pyfloat(right_digits=2, positive=True, max_value=1000),
                 status=fake.random_element(elements=("pending", "ordered", "shipped", "delivered")),
                 discount=fake.pyfloat(right_digits=2, positive=True, max_value=100),
                 user_id=fake.random_element(elements=[user.id for user in users if user.role_id == User.ROLE_BUYER]),
-                created_at=fake.date_time_this_decade()
+                order_date=fake.date_time_this_decade()
             )
             orders.append(order)
-            db.session.add(order)
+        db.session.add_all(orders)
 
         db.session.commit()
 

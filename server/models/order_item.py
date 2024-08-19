@@ -2,7 +2,7 @@ from models.__init__ import SerializerMixin, validates, db, datetime
 from config import db
 
 
-class OrderItem(db.Model):
+class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +16,7 @@ class OrderItem(db.Model):
     order = db.relationship("Order", back_populates="order_items")
     product = db.relationship("Product", back_populates="order_items")
 
-    serialize_rules = ("-order", "-product")
+    serialize_rules = ("-order", "-product.order_items")
 
     @validates("quantity")
     def validates_total(self, _, quantity):

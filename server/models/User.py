@@ -25,7 +25,7 @@ class User(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     orders = db.relationship("Order", back_populates="users", cascade="all, delete-orphan")
-    product = db.relationship("Product", back_populates="user")
+    selling_products = db.relationship("Product", back_populates="seller")
     purchased_products = db.relationship(
         "Product",
         secondary="order_items",
@@ -35,12 +35,13 @@ class User(db.Model, SerializerMixin):
         # back_populates="buyers",
     )
 
+
     def __init__(self, email, password_hash=None, **kwargs):
         super().__init__(email=email, **kwargs)
         if password_hash:
             self.password_hash = password_hash
 
-    serialize_rules = ("-_password_hash", "-orders", "-product")
+    serialize_rules = ("-_password_hash", "-orders", "-selling_products", "-purchased_products")
     
     @hybrid_property
     def password_hash(self):

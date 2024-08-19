@@ -16,7 +16,7 @@ class Product(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship("User", back_populates="product")
+    seller = db.relationship("User", back_populates="selling_products")
     order_items = db.relationship("OrderItem", back_populates="product")
     # orders = db.relationship("Order", back_populates="products")
     

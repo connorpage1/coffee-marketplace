@@ -98,7 +98,10 @@ class Profile(Resource):
         try:
             if user_id := session.get("user_id"):
                 user = db.session.get(User, user_id)
-                return make_response(user.to_dict(), 200)
+                if user.role_id == 1:
+                    return make_response(user.to_dict(rules=("purchased_products", "orders")), 200)
+                else:
+                    return make_response(user.to_dict(rules=("selling_products", "orders")), 200)
             return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             return make_response({"error": str(e)}, 422)
