@@ -34,11 +34,10 @@ return <div>
     <h1>{vendor ? vendor.first_name + ' ' + vendor.last_name : 'Loading'} </h1>
     <Container textAlign="center">
     
-      {product ? product.description : 'Loading'}
-      {vendor ? vendor.selling_products : 'Loading'}
+      {product ? product.description : ''}
+      {vendor ? vendor.selling_products : ''}
 
     </Container>
-    <h2>{vendor ? vendor.description : 'Loading'}</h2>
 </div>;
   }
 
