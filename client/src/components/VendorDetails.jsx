@@ -23,7 +23,9 @@ function VendorDetails() {
             console.log(error);
           });
       }, [vendorId]);
-    return <div>
+   
+   
+   return <div>
         <h1>7</h1>
     </div>;
   
