@@ -1,8 +1,10 @@
 function MyProfile() {
-    return <div>
+    return (
+    <div>
         <h1>3</h1>
-    </div>;
-  }
+    </div>
+    );
+}
 
 
-  export default MyProfile;
+export default MyProfile;
