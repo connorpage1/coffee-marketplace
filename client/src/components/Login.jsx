@@ -11,11 +11,11 @@ const schema = yup.object().shape({
 
 
 const Login = () => {
-
+    // This will need to be moved up a couple of levels 
     const [user, setUser] = useState(null)
 
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch("/login", {
+        fetch("/api/v1/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -25,16 +25,17 @@ const Login = () => {
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(userObj => setUser(userObj))}
+                .then(userObj => setUser(userObj))
+                .then(console.log(user))
+            }
             else {
                 console.log(res)
             }
             })
         .catch(console.log)
     }
-    return(
+    return (
         <>
-            <h1>Test</h1>
             <div className = 'login-container'>
                 <Formik
                     initialValues={{email: "", password_hash: ""}}

@@ -7,10 +7,11 @@ from flask import Flask, request, make_response, session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 from models.Order import db, Order
-from models.Orderitem import db, OrderItem
+# from models.Orderitem import db, OrderItem
 from models.User import User
 from models.product import Product 
 import os
+from ipdb import set_trace
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -19,9 +20,9 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 from config import app, db, api
 
 # Add your model imports
-from models.order import Order
+from models.Order import Order
 from models.order_item import OrderItem
-from models.user import User
+from models.User import User
 from models.product import Product
 
 # Views go here!
@@ -181,6 +182,7 @@ class CheckSession(Resource):
 class Products(Resource):
     def get(self):
         try:
+            set_trace()
             serialized_products = [
                 product.to_dict(rules=("-user", "-order_items")) for product in Product.query
             ]
@@ -199,8 +201,21 @@ class Products(Resource):
             db.session.rollback()
             return {"error": str(e)}, 400
 
-
+                # if user.role_id == 1:
+                #     return make_response(user.to_dict(rules=("purchased_products", "orders")), 200)
+                # else:
+                #     return make_response(user.to_dict(rules=("selling_products", "orders")), 200)
 class ProductById(Resource):
+    def get(self, id):
+        try:
+            product = db.session.get(Product, id)
+
+            if product is None:
+                return make_response({"error": str(e)}, 404)
+            else:
+                return make_response(product.to_dict(), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
     def patch(self, id):
         try:
             data = request.get_json()

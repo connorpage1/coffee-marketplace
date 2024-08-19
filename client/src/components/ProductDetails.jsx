@@ -1,44 +1,42 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+// import toast, { Toaster } from "react-router-dom";
+import { Container } from 'semantic-ui-react';
+
 
 function ProductDetails() {
     const [product, setProduct] = useState();
     const [vendor, setVendor] = useState();
     const { productId }  = useParams();
     
-    let vendorName
-    
-    console.log(productId)
+
     useEffect(() => {
-      fetch(`/orders/${productId}`)
+      fetch(`/products/${productId}`)
         .then((resp) => {
           if (resp.ok) {
             return resp.json();
           } else {
             //! Fix Error
-            throw new Error('Error fetching data');
-          }
+            (console.log())}
         })
         .then((data) => {
           setProduct(data);
-          setVendor(data.user);
+          setVendor(data.seller);
+          console.log(vendor)
         })
-        .catch((error) => {
-        //! Fix Error
-          console.log(error);
-        });
+        .catch(console.log())
     }, [productId]);
 
-    if (vendor) {
-      vendorName = `${vendor.first_name} ${vendor.last_name}`;
-    } else {
-      vendorName = 'No vendor found';
-    }
 
 
 return <div>
-    <h1>{product ? product.id : 'No product found'}</h1>
-    <h1>{vendorName}</h1>
+    <h1>{product ? product.name : 'Loading'} </h1>
+    <h1>{vendor ? vendor.first_name + ' ' + vendor.last_name : 'Loading'} </h1>
+    <Container textAlign="center">
+      {product ? product.description : ''}
+      {vendor ? vendor.selling_products : ''}
+
+    </Container>
 </div>;
   }
 

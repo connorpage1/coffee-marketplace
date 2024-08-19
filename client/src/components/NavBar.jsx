@@ -3,12 +3,12 @@ import { Link, NavLink } from "react-router-dom"
 
 function NavBar(){
 // if session.get, display logout, else display login
-const [session, setSession] = useState(false)
-let logintext
+const [endpoint, setEndpoint] = useState(false)
+const [navText, setNavText]  = useState()
 useEffect(() =>{
     fetch('/get-session')
     .then((res) => {
-        if (res.ok) {
+        if (res.status_code == 200 ) {
             return res.json();
         }
         //! Fix Error
@@ -18,10 +18,12 @@ useEffect(() =>{
     })
     .then((data) => {
         if (data){
-            setSession('LogOut')
+            setEndpoint('logput')
+            setNavText('Log Out')
         }
         else {
-            setSession('LogIn')
+            setEndpoint('login')
+            setNavText('Log In')
         }
     })
     .catch((error) => {
@@ -38,7 +40,7 @@ return(
 <Link to={'/'}> Home </Link>
 <Link to={'/products'}> Shop </Link>
 <Link to={'/myprofile'}> My Profile</Link>
-<Link to={'/' + session.toLowerCase()}> ${session.slice(0, 3) + ' ' + session.slice(3)}</Link>
+<Link to={`/${endpoint}`}> {navText} </Link>
 <Link to={'/signup'}> Signup </Link>
 <Link to={'/checkout'}> Check Out</Link>
 </nav>
