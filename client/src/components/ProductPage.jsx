@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
 // import { Container } from 'semantic-ui-react';
 import ProductDetails from "./ProductDetails";
 import toast, { Toaster } from "react-hot-toast"
+import SearchBar from "./SearchBar";
 
 
 const ProductPage = () => {
@@ -23,7 +23,7 @@ const ProductPage = () => {
     }, []);
 
     // const handleAddToCart = () => {
-    //     // add functionality here
+    //     !add functionality here
     //     alert(`Added ${quantity} of ${product.name} to cart!`);
     // };
 
@@ -34,7 +34,7 @@ const ProductPage = () => {
     return (
         <main>
             <h1>Coffee and Tea Shop</h1>
-            {/* <SearchBar searchQuery={ searchQuery } handleSearch = { handleSearch} /> */}
+            <SearchBar searchQuery={ searchQuery } handleSearch = { handleSearch} />
             <div>
                 {products && products.map(product => <ProductDetails key={product.id} product={product} />)}
             </div>
