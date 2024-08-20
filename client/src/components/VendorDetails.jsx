@@ -5,7 +5,6 @@ import ProductCard from './ProductCard'
 
 function VendorDetails() {
     const [vendor, setVendor] = useState(null);
-    const [sellerProducts, setSellerProducts] = useState();
     const { vendorId } = useParams();
     
     
@@ -13,45 +12,48 @@ function VendorDetails() {
         fetch(`/user/${vendorId}`)
           .then((res) => {
             if (res.ok) {
-              return res.json();
+              return res.json()
+              .then((data) => {
+                setVendor(data)
+              })
             } else {
               //! Fix Error
               console.log('ok')
             }
           })
-            .then((data) => {
-              setVendor(data);
-            })
           .catch((error) => {
           //! Fix Error
-            console.log(error);
-          });
+            console.log(error)
+          })
+    }, [vendorId]);
 
-        fetch(`/products/user/${vendorId}`)
-        .then((res) => {
-            if (res.ok ) {
-                return res.json()
-                .then(setSellerProducts)
-            }
-            //! Fix Error
-            else {
-                console.log('er')
-            }
-        })
-        .catch((error) => {
-            //! Fix Error
-            console.log(error);
-        })
-        },[vendorId]);
+        // fetch(`/products/user/${vendorId}`)
+        // .then((res) => {
+        //     if (res.ok ) {
+        //         return res.json()
+        //         .then(setSellerProducts)
+        //     }
+        //     //! Fix Error
+        //     else {
+        //         console.log('er')
+        //     }
+        // })
+        // .catch((error) => {
+        //     //! Fix Error
+        //     console.log(error);
+        // })
+        // },[vendorId]);
 
 
-
-      console.log(sellerProducts)
+  if (!vendor){ 
+    return <h1>loading</h1>
+  }
+      
    
    
    return <div>
         
-            <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>
+            <ul>{vendor.selling_products.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>
         
     </div>;
   

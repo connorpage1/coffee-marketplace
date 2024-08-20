@@ -6,10 +6,6 @@
 from flask import Flask, request, make_response, session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
-from models.Order import db, Order
-# from models.Orderitem import db, OrderItem
-from models.User import User
-from models.product import Product 
 import os
 from ipdb import set_trace
 
@@ -20,9 +16,9 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 from config import app, db, api
 
 # Add your model imports
-from models.Order import Order
+from models.order import Order
 from models.order_item import OrderItem
-from models.User import User
+from models.user import User
 from models.product import Product
 
 # Views go here!
@@ -172,12 +168,12 @@ class UserById(Resource):
         try:
             user = db.session.get(User, id)
 
-            if user is None:
-                return make_response({"error": str(e)}, 404)
+            if not user or user.role_id == 1:
+                return make_response({"error": "This user does not exist or is not a seller"}, 404)
             else:
-                return make_response(user.to_dict(only=("first_name", "last_name")), 200)
+                return make_response(user.to_dict(only=("first_name", "last_name", "selling_products")), 200)
         except Exception as e:
-            return make_response({"error": str(e)}, 404)
+            return make_response({"error": str(e)}, 400)
 
 
 class CheckSession(Resource):
