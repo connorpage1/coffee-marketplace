@@ -31,6 +31,7 @@ function ProductDetails() {
 if (!product){
   return <h3>Loading</h3>
 }
+
 const { name, description, seller, image_url } = product
 return <div>
     <h1>{name} </h1>
@@ -43,3 +44,7 @@ return <div>
 
 
 export default ProductDetails;
+
+
+{/* <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>  */}
+// replace sellerProducts with product -> seller -> selling details 
