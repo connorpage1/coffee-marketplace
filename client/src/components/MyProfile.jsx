@@ -1,24 +1,57 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import dateFormat from 'dateformat';
+
 
 function MyProfile() {
+    const [profile, setProfile] = useState(null);
+    const navigate = useNavigate()
+
     useEffect(() => {
-        fetch('/api/v1/profile')
+        fetch('/profile')
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(profileObj => console.log(profileObj))
+                .then(setProfile)
             } else {
-                throw Error("response not ok")
+                debugger
+                throw Error(res.status, res.statusText)
             }
-        }).catch(err => console.log(`error caught ${err}`))
+        }).catch(err => {
+            console.log(`error caught ${err}`)
+            navigate('/login')
+        })
     }    
     , [])
+    const { first_name, last_name, email, role_id, created_at } = profile
     
-    return (
-    <div>
-        <h1>3</h1>
-    </div>
-    );
+    if(role_id === 1){
+        return (
+        <div>
+            <h1>Hello, {first_name}. Thanks for being a loyal customer.</h1>
+            <p>Customer since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
+            <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
+            <p><b>Email: </b>{email}</p>
+            <button>Update information</button> <button>Change password</button>
+
+        </div>
+        );
+    } else if (role_id ===2) {
+        return (
+            <div>
+                <h1>Hello, {first_name}. Welcome to your vendor profile.</h1>
+                <p>Vendor since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
+                <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
+                <p><b>Email: </b>{email}</p>
+                <button>Update information</button> <button>Change password</button>
+
+            </div>
+    )
+
+    }
+    else {
+        return <h3>Loading...</h3>
+    }
 }
 
 
