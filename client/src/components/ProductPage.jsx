@@ -36,8 +36,16 @@ const ProductPage = () => {
             <h1>Coffee and Tea Shop</h1>
             <SearchBar searchQuery={ searchQuery } handleSearch = { handleSearch} />
             <div>
-                {products && products.map(product => <ProductDetails key={product.id} product={product} />)}
+                {products.length > 0 ? (
+                    products.map(product => <ProductDetails key={product.id} product={product} />)
+                ) : (
+                    <p>No products available</p>
+                )}
             </div>
+
+            {/* <div>
+                {products && products.map(product => <ProductDetails key={product.id} product={product} />)}
+            </div> */}
         </main>
     );
 };
