@@ -3,8 +3,7 @@ import { Outlet } from 'react-router-dom'
 import NavBar from "./NavBar";
 
 function App() {
-// const [endpoint, setEndpoint] = useState(false)
-const [user, setUser] =useState(null)
+const [user, setUser] = useState(null)
 useEffect(() =>{
     fetch('/check-session')
     .then((res) => {

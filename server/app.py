@@ -201,10 +201,7 @@ class Products(Resource):
             db.session.rollback()
             return {"error": str(e)}, 400
 
-                # if user.role_id == 1:
-                #     return make_response(user.to_dict(rules=("purchased_products", "orders")), 200)
-                # else:
-                #     return make_response(user.to_dict(rules=("selling_products", "orders")), 200)
+
 class ProductById(Resource):
     def get(self, id):
         try:
