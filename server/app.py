@@ -95,7 +95,7 @@ class Logout(Resource):
             else:
                 return make_response({}, 401)
         except Exception as e:
-            return 401
+            return make_response({}, 401)
 
 
 class Profile(Resource):
@@ -166,6 +166,18 @@ class Profile(Resource):
         except Exception as e:
             db.session.rollback()
             return make_response({"error": str(e)}, 422)
+        
+class UserById(Resource):
+    def get(self, id):
+        try:
+            user = db.session.get(User, id)
+
+            if user is None:
+                return make_response({"error": str(e)}, 404)
+            else:
+                return make_response(user.to_dict(only=("first_name", "last_name")), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
 
 
 class CheckSession(Resource):
@@ -173,7 +185,7 @@ class CheckSession(Resource):
         try:
             if user_id := session.get("user_id"):
                 user = db.session.get(User, user_id)
-                return make_response(user.to_dict(rules="id"), 200)
+                return make_response(user.to_dict(rules=("id", "email", "role_id", "first_name")), 200)
             return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             return make_response({"error": str(e)}, 422)
@@ -201,10 +213,7 @@ class Products(Resource):
             db.session.rollback()
             return {"error": str(e)}, 400
 
-                # if user.role_id == 1:
-                #     return make_response(user.to_dict(rules=("purchased_products", "orders")), 200)
-                # else:
-                #     return make_response(user.to_dict(rules=("selling_products", "orders")), 200)
+
 class ProductById(Resource):
     def get(self, id):
         try:
@@ -242,6 +251,17 @@ class ProductById(Resource):
             db.session.rollback()
             return {"error": str(e)}, 422
 
+class ProductByUser(Resource):
+    def get(self, id):
+        try:
+            if user := db.session.get(User, id):
+                products = [product.to_dict(rules=("-created_at", "-id", "-sku", "-order_items", "-user_id", "-seller", "-updated_at")) for product in user.selling_products]
+                return (products, 200)
+        except Exception as e:
+                return {"error": "User not found"}, 404
+
+
+
 
 api.add_resource(Orders, "/orders")
 api.add_resource(GetOrderById, "/orders/<int:id>")
@@ -249,9 +269,11 @@ api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
 api.add_resource(Profile, "/profile")
+api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
+api.add_resource(ProductByUser, "/products/user/<int:id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
