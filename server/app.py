@@ -239,11 +239,11 @@ class ProductById(Resource):
             db.session.rollback()
             return {"error": str(e)}, 422
 
-class ProductByUser(Resource):
+class ProductBySeller(Resource):
     def get(self, id):
         try:
             if user := db.session.get(User, id):
-                products = [product.to_dict(rules=("-created_at", "-id", "-sku", "-order_items", "-user_id", "-seller")) for product in user.selling_products]
+                products = [product.to_dict(rules=("-created_at", "-id", "-sku", "-order_items", "-user_id", "-seller", "-updated_at")) for product in user.selling_products]
                 return (products, 200)
         except Exception as e:
                 return {"error": "User not found"}, 404
@@ -260,7 +260,7 @@ api.add_resource(Profile, "/profile")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
-api.add_resource(ProductByUser, "/products/user/<int:id>")
+api.add_resource(ProductBySeller, "/products/user/<int:id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
