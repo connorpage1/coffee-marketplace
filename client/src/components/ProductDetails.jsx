@@ -16,11 +16,12 @@ function ProductDetails() {
             return resp.json()
             .then((data) => {
               setProduct(data);
+              console.log()
             })
           } else {
             return resp.json()
-            .then((errorObj) => {
-              console.log(errorObj.error);
+            .then(() => {
+              console.log();
             })
         }})
         .catch(console.log)
