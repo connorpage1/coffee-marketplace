@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 import { Container } from 'semantic-ui-react';
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom"
 
 const schema = yup.object().shape({
   image_url: yup.string().required("Image is required"),
@@ -19,7 +20,7 @@ function ProductDetails() {
   const { productId } = useParams();
   const { user } = useOutletContext();
 
-
+  const navigate = useNavigate()
 
   const handleFormSubmit = (FormData) => {
     fetch(`/products/${productId}`, {
@@ -54,6 +55,7 @@ function ProductDetails() {
             .then((data) => {
               setProduct(data);
 
+
             })
         } else {
           return resp.json()
@@ -77,7 +79,9 @@ function ProductDetails() {
     })
       .then((res) => {
         if (res.ok) {
+          navigate('/products')  
           return res.json();
+         
         } else {
           return res.json().then((errorObj) => {
             toast.error(errorObj.error);
