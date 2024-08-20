@@ -166,6 +166,18 @@ class Profile(Resource):
         except Exception as e:
             db.session.rollback()
             return make_response({"error": str(e)}, 422)
+        
+class UserById(Resource):
+    def get(self, id):
+        try:
+            user = db.session.get(User, id)
+
+            if user is None:
+                return make_response({"error": str(e)}, 404)
+            else:
+                return make_response(user.to_dict(only=("first_name", "last_name")), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
 
 
 class CheckSession(Resource):
@@ -239,7 +251,7 @@ class ProductById(Resource):
             db.session.rollback()
             return {"error": str(e)}, 422
 
-class ProductBySeller(Resource):
+class ProductByUser(Resource):
     def get(self, id):
         try:
             if user := db.session.get(User, id):
@@ -257,10 +269,11 @@ api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
 api.add_resource(Profile, "/profile")
+api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
-api.add_resource(ProductBySeller, "/products/user/<int:id>")
+api.add_resource(ProductByUser, "/products/user/<int:id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

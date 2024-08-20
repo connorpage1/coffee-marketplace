@@ -16,7 +16,7 @@ function ProductDetails() {
             return resp.json()
             .then((data) => {
               setProduct(data);
-              console.log()
+              console.log(data)
             })
           } else {
             return resp.json()
@@ -26,6 +26,7 @@ function ProductDetails() {
         }})
         .catch(console.log)
     }, [productId]);
+
 
 if (!product){
   return <h3>Loading</h3>
