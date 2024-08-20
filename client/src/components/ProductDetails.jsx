@@ -5,8 +5,7 @@ import { Container } from 'semantic-ui-react';
 
 
 function ProductDetails() {
-    const [product, setProduct] = useState();
-    const [vendor, setVendor] = useState();
+    const [product, setProduct] = useState(null);
     const { productId }  = useParams();
     
 
@@ -14,31 +13,38 @@ function ProductDetails() {
       fetch(`/products/${productId}`)
         .then((resp) => {
           if (resp.ok) {
-            return resp.json();
+            return resp.json()
+            .then((data) => {
+              setProduct(data);
+              console.log(data)
+            })
           } else {
-            //! Fix Error
-            (console.log())}
-        })
-        .then((data) => {
-          setProduct(data);
-          setVendor(data.seller);
-          console.log(vendor)
-        })
-        .catch(console.log())
+            return resp.json()
+            .then(() => {
+              console.log();
+            })
+        }})
+        .catch(console.log)
     }, [productId]);
 
 
+if (!product){
+  return <h3>Loading</h3>
+}
 
+const { name, description, seller, image_url } = product
 return <div>
-    <h1>{product ? product.name : 'Loading'} </h1>
-    <h1>{vendor ? vendor.first_name + ' ' + vendor.last_name : 'Loading'} </h1>
+    <h1>{name} </h1>
+    <h3>{seller.first_name + ' ' + seller.last_name} </h3>
     <Container textAlign="center">
-      {product ? product.description : ''}
-      {vendor ? vendor.selling_products : ''}
-
+      {description}
     </Container>
 </div>;
   }
 
 
 export default ProductDetails;
+
+
+{/* <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>  */}
+// replace sellerProducts with product -> seller -> selling details 

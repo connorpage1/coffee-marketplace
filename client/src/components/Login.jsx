@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage} from "formik";
 import { useState } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 
 const schema = yup.object().shape({
@@ -12,10 +13,10 @@ const schema = yup.object().shape({
 
 const Login = () => {
     // This will need to be moved up a couple of levels 
-    const [user, setUser] = useState(null)
-
+    const {updateUser} =  useOutletContext() 
+    const navigate = useNavigate()
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch("/api/v1/login", {
+        fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -25,13 +26,14 @@ const Login = () => {
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(userObj => setUser(userObj))
-                .then(console.log(user))
+                .then(userObj => updateUser(userObj))
+                .then(() => navigate('/products'))  
             }
             else {
-                console.log(res)
+                (res.json())
+                .then(error => console.log(error.error))
             }
-            })
+        })
         .catch(console.log)
     }
     return (
