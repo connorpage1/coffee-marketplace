@@ -1,76 +1,135 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-// import toast, { Toaster } from "react-router-dom";
+import toast from "react-hot-toast"
 import { Container } from 'semantic-ui-react';
+import * as yup from 'yup';
+import { Formik, Field, Form, ErrorMessage } from "formik";
+
+const schema = yup.object().shape({
+  image_url: yup.string().required("Image is required"),
+  description: yup.string().required("Description is required").min(50).max(1000),
+  price: yup.number().required("Price is Required").min(1)
+
+})
 
 
 function ProductDetails() {
-    const [product, setProduct] = useState(null);
-    const { productId }  = useParams();
-    const { user } = useOutletContext();
-    
+  const [product, setProduct] = useState(null);
+  const [editMode, setEditMode] = useState(false)
+  const { productId } = useParams();
+  const { user } = useOutletContext();
 
-    useEffect(() => {
-      fetch(`/products/${productId}`)
-        .then((resp) => {
-          if (resp.ok) {
-            return resp.json()
+
+
+  const handleFormSubmit = (FormData) => {
+    fetch(`/products/${productId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json().then((data) => {
+            setProduct(data);
+          });
+        } else {
+          return resp.json().then((errorObj) => {
+            toast.error(errorObj.error);
+          });
+        }
+      })
+      .catch((errorObj) => {
+        toast.error(errorObj.error);
+      });
+  };
+
+
+  useEffect(() => {
+    fetch(`/products/${productId}`)
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json()
             .then((data) => {
               setProduct(data);
+
             })
-          } else {
-            return resp.json()
+        } else {
+          return resp.json()
             .then(() => {
-              console.log();
+              resp.json().then((errorObj) => toast.error(errorObj.error))
             })
-        }})
-        .catch(console.log)
-    }, [productId]);
+        }
+      })
+      .catch((errorObj) => toast.error(errorObj.error))
+  }, [productId]);
 
 
-if (!product){
-  return <h3>Loading</h3>
-}
+  if (!product) {
+    return <h3>Loading</h3>
+  }
 
 
-const handleDelete = (id) =>{
-  fetch('/products/<int:id>', id, {
-      method : 'DELETE',
-  })
+  const handleDelete = (productId) => {
+    fetch(`/products/${productId}`, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((errorObj) => {
+            toast.error(errorObj.error);
+          });
+        }
+      })
+      .catch((errorObj) => toast.error(errorObj.error))
+      };
+  
 
-}
-
-const handleUpdate = (id) =>{
-  fetch('/products/<int:id>', id)
-
-}
-
-const handleAddToCart = (id) =>{
-
-}
 
 
-const { name, description, seller, image_url, id, user_id } = product
-return <div>
+
+  const { name, description, seller, image_url, id, user_id, price, stock } = product
+
+
+
+
+
+  return <div>
     <h1>{name} </h1>
     <h3>{seller.first_name + ' ' + seller.last_name} </h3>
-    <Container> 
-      <img src={image_url} alt={name}/>
+    <Container>
+      <img src={image_url} alt={name} />
+      <h3>${price}</h3>
+      <h3>{stock}</h3>
     </Container>
     <Container textAlign="center">
-      {description}
+      {editMode ? description : ''}
     </Container>
-    { user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button> }
-    { user && user.id === user_id && <button onClick={() => handleUpdate(id)}> Delete </button> }
-    { user && user.role_id === 1 && product.stock > 0 && <button onClick={() => handleAddToCart(id)}> Add to Cart </button> }
-</div>;
-  }
+    {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
+    {/* {user && user.id === user_id && <button onClick={() => handleUpdate(id)}> Edit </button>}
+    {user && user.role_id === 1 && product.stock > 0 && <button onClick={() => handleAddToCart(id)}> Add to Cart </button>} */}
+  </div>;
+
+
+
+
+
+
+
+}
+
+
+
+
 
 
 export default ProductDetails;
 
 
-{/* <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>  */}
+{/* <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>  */ }
 // replace sellerProducts with product -> seller -> selling details 
 
 //if user.id = seller.id
