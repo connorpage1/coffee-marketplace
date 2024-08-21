@@ -24,7 +24,7 @@ const initialValues = {
 const Signup = () => {
 
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch('api/v1//signup', {
+        fetch('/signup', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

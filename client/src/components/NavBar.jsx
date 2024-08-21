@@ -15,7 +15,7 @@ const handleLogout = () =>{
         })
 }
 
-
+// REMOVE LINE 26 AFTER TESTING LINK TO CHECKOUT 
 return(
 
 <>
@@ -23,7 +23,6 @@ return(
 <nav>
 <Link to={'/'}> Home </Link>
 <Link to={'/products'}> Shop </Link>
-
 
 {user ? <>
 <Link to={'/myprofile'}> My Profile</Link>
