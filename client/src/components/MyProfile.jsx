@@ -39,7 +39,7 @@ function MyProfile() {
     
             </div>
             );
-        } else if (role_id ===2) {
+        } else if (role_id === 2) {
             return (
                 <div>
                     <h1>Hello, {first_name}. Welcome to your vendor profile.</h1>
