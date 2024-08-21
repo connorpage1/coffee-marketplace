@@ -6,7 +6,7 @@ const SearchBar = ({ handleSearch, searchQuery }) => {
         type="text"
         id="search"
         className="search-bar"
-        placeholder="Type a name to search..."
+        placeholder="Type a name or tag to search..."
         onChange={handleSearch}
         value={searchQuery}
         />

@@ -6,8 +6,8 @@ class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
 
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, nullable=False)
-    price_at_order = db.Column(db.Float, nullable=False)
+    quantity = db.Column(db.Integer)
+    price_at_order = db.Column(db.Float)
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id"))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())

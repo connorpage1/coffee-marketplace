@@ -1,8 +1,8 @@
-""".
+"""initial migration
 
-Revision ID: 05edb4050bf3
+Revision ID: fff189653de5
 Revises: 
-Create Date: 2024-08-19 12:04:08.736403
+Create Date: 2024-08-21 02:50:02.230325
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '05edb4050bf3'
+revision = 'fff189653de5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,7 @@ def upgrade():
     op.create_table('orders',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('order_date', sa.DateTime(), nullable=True),
-    sa.Column('total', sa.Float(), nullable=False),
+    sa.Column('total', sa.Float(), nullable=True),
     sa.Column('status', sa.String(), nullable=True),
     sa.Column('discount', sa.Float(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
@@ -60,8 +60,8 @@ def upgrade():
     )
     op.create_table('order_items',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('price_at_order', sa.Float(), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=True),
+    sa.Column('price_at_order', sa.Float(), nullable=True),
     sa.Column('order_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),

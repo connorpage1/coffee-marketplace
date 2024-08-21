@@ -6,7 +6,7 @@ class Order(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     order_date = db.Column(db.DateTime)
-    total = db.Column(db.Float, nullable=False)
+    total = db.Column(db.Float)
     status = db.Column(db.String)
     discount = db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -34,10 +34,10 @@ class Order(db.Model, SerializerMixin):
     def validates_total(self, _, status):
         if not isinstance(status, str):
             raise TypeError("Value must be of data type string")
-        elif status not in ["pending", "ordered", "shipped", "delivered"]:
+        elif status.lower() not in ["pending", "ordered", "shipped", "delivered"]:
             raise ValueError("Value must be pending, ordered, shipped, or delivered")
         else:
-            return status
+            return status.lower()
 
     @validates("discount")
     def validates_discount(self, _, discount):
