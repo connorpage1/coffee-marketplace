@@ -2,6 +2,7 @@ import React from 'react'
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import toast from "react-hot-toast"
+import { nanoid } from 'nanoid';
 import {
   ModalHeader,
   ModalDescription,
@@ -12,7 +13,7 @@ import {
   Image,
   Modal,
 } from 'semantic-ui-react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const validTags = [
     "light roast",
@@ -53,14 +54,18 @@ const schema = yup.object().shape({
   
   })
 
+const generateCode = () => nanoid(8)
 
-function NewProductModal() {
+  function NewProductModal({}) {
     const [open, setOpen] = React.useState(false)
     const navigate = useNavigate()
+    const { user } = useOutletContext()
     const handleFormSubmit = (FormData) => {
-        console.log(JSON.stringify(FormData))
+        console.log(generateCode())
         FormData.price = parseFloat(FormData.price);
         FormData.stock = parseInt(FormData.stock);
+        FormData.sku = generateCode()
+        FormData.user_id = user.id
         debugger
         fetch(`/products`, {
           method: "POST",
@@ -97,12 +102,13 @@ function NewProductModal() {
                 <Formik
                     initialValues={{
                     name: ``,
-                    type: ``,
+                    type: `coffee`,
                     stock: ``,
                     image_url: ``,
                     price: ``,
-                    tag: '',
-                    description: ``
+                    tag: 'light roast',
+                    description: ``,
+                    sku:''
                     }}
                     validationSchema={schema}
                     onSubmit={handleFormSubmit}
@@ -135,8 +141,9 @@ function NewProductModal() {
                                 
                                 <label htmlFor="description">Description: </label>
                                 <Field name="description" type='text' placeholder="Description"/> 
-                                
-                                <button type="submit">Add New Product</button>
+                                <ModalActions>
+                                <button type="submit" primary>Add New Product</button>
+                                </ModalActions>
                             </Form>
                         )}
                 </Formik>
