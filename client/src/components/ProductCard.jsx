@@ -1,23 +1,28 @@
+import { Link, useOutletContext } from "react-router-dom";
+import {  useState } from "react";
 
+function ProductCard({ name, image_url, price, stock, tag, type, id}) { 
+    const {addToCart, user} = useOutletContext()
+    const [cart, setCart] = useState([]);
 
-function ProductCard({ name, image_url, price, stock, tag, type }) {
+    const [disable, setDisable] = useState(false)
 
-
-
-
-
+    const handleClick = () => {
+        addToCart({ name, image_url, price, stock, tag, type, id });
+        setDisable(true)
+    } 
 
     return (
-        <li className="card">
-            <h1>{name}</h1>
+        <div className="card">
+            <Link to={`/products/${id}`}><h1>{name}</h1></Link>
             <img src={image_url} alt={name}/>
             <h2> {price} </h2>
-            {stock ? '' : <>Out of Stock</>}
-            {/* <button onClick={() => handleAddToCart(id)}> Add to Cart </button> */}
+            {stock ? <>{stock} remaining</> : <>Out of Stock</>}
+            {user && <button disabled={disable} onClick={handleClick}> Add to Cart </button>}
             <h3>{type}: {tag}</h3>
-        </li>
+        </div>
 
     )
 }
 
-export default ProductCard
+export default ProductCard;
