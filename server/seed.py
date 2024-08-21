@@ -9,9 +9,9 @@ from faker import Faker
 
 # # Local imports
 from app import app, db
-from server.models.order import Order
+from models.order import Order
 from models.order_item import OrderItem
-from server.models.user import User
+from models.user import User
 from models.product import Product
 
 fake = Faker()
