@@ -104,7 +104,7 @@ function ProductDetails() {
 
 
 
-  const { name, description, seller, image_url, id, user_id, price, stock } = product
+  const { name, description, seller, image_url, id, user_id, price, stock, type } = product
 
 
 
@@ -131,6 +131,9 @@ else{
     <h1>Edit Product</h1>
     <Formik
     initialValues={{
+      name: `${name}`,
+      type: `${type}`,
+      stock: `${stock}`,
       image_url: `${image_url}`,
       price: `${price}`,
       description: `${description}`
@@ -139,12 +142,27 @@ else{
       onSubmit={handleFormSubmit}
     >
       <Form>
+        <label htmlFor="name">Name: </label>
+        <Field name="name" type='text' placeholder="New Product Name"/> 
+        
+        <label htmlFor="type">Type: </label>
+        <Field as="select" name="type">
+        <option value='Coffee'> Coffee </option>
+        <option value='Tea'> Tea </option>
+        </Field> 
+        
+        <label htmlFor="stock">Stock: </label>
+        <Field name="stock" type='text' placeholder="Current Stock"/> 
+        
         <label htmlFor="image_url">Image Link: </label>
         <Field name="image_url" type='text' placeholder="New Image Link"/> 
+        
         <label htmlFor="price">Price: </label>
         <Field name="price" type='float' placeholder="Adjusted Price"/> 
+        
         <label htmlFor="description">Description: </label>
         <Field name="description" type='text' placeholder="New Description"/> 
+        
         <button type="submit">Confirm Changes</button>
       </Form>
     </Formik>

@@ -27,8 +27,7 @@ return(
         <Menu.Item as={Link} to="/" header> Home </Menu.Item>
         <Menu.Item as={Link} to="/products" header> Shop </Menu.Item>
         
-        {/* <Link to={'/'}> Home </Link> */}
-        {/* <Link to={'/products'}> Shop </Link> */}
+
 
 
         {user ? <>
