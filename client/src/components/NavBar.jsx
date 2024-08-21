@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, NavLink } from "react-router-dom"
+import { Menu } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 
 function NavBar({ user, updateUser }){
 // if session.get, display logout, else display login
@@ -20,24 +22,29 @@ return(
 
 <>
 
-<nav>
-<Link to={'/'}> Home </Link>
-<Link to={'/products'}> Shop </Link>
+<div class="ui top fixed menu">
+    <Menu fixed='top' inverted>
+        <Menu.Item as={Link} to="/" header> Home </Menu.Item>
+        <Menu.Item as={Link} to="/products" header> Shop </Menu.Item>
+        
+        {/* <Link to={'/'}> Home </Link> */}
+        {/* <Link to={'/products'}> Shop </Link> */}
 
 
-{user ? <>
-<Link to={'/myprofile'}> My Profile</Link>
-<Link to={'/checkout'}> Check Out</Link>
-<Link to={'/login'}> <button onClick={handleLogout}> Log Out </button></Link>
-</>
-:
-<>
-<Link to={`/login`}> Log in </Link>
-<Link to={'/signup'}> Signup </Link>
-</>}
+        {user ? <>
+        <Menu.Item as={Link} to="/myprofile" header> My Profile </Menu.Item>
+        <Menu.Item as={Link} to="/checkout" header> Check Out </Menu.Item>
+        <Menu.Item as={Link} to="/login" onClick={handleLogout}> Log Out </Menu.Item>   
+        </>
+        :
+        <>
+        <Menu.Item as={Link} to="/login" header> Log In</Menu.Item>
+        <Menu.Item as={Link} to="/signup" header> Sign Up </Menu.Item>
+        </>}
+    </Menu>
 
 
-</nav>
+</div>
 </>
 )
 
@@ -45,4 +52,3 @@ return(
 
 
 export default NavBar
-
