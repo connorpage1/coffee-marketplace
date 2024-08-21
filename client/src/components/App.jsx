@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from 'react-router-dom'
 import NavBar from "./NavBar";
+import 'semantic-ui-css/semantic.min.css'
 
 function App() {
 const [user, setUser] = useState(null);

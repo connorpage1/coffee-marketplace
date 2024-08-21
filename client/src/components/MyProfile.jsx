@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dateFormat from 'dateformat';
+import DeleteConfirm from "./DeleteConfirm";
+
 
 
 function MyProfile() {
@@ -14,7 +16,6 @@ function MyProfile() {
                 res.json()
                 .then(setProfile)
             } else {
-                debugger
                 throw Error(res.status, res.statusText)
             }
         }).catch(err => {
@@ -34,7 +35,7 @@ function MyProfile() {
                 <p>Customer since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
                 <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                 <p><b>Email: </b>{email}</p>
-                <button>Update information</button> <button>Change password</button> <button>Delete Account</button>
+                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
     
             </div>
             );
@@ -45,7 +46,7 @@ function MyProfile() {
                     <p>Vendor since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
                     <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
-                <button>Update information</button> <button>Change password</button> <button>Delete Account</button>
+                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
     
     
                 </div>
