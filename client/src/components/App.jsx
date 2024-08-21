@@ -4,6 +4,13 @@ import NavBar from "./NavBar";
 
 function App() {
 const [user, setUser] = useState(null);
+const [cart, setCart] = useState([]);
+
+const addToCart = (order_item) => {
+    setCart(currentCart => [...currentCart, order_item])
+}
+
+const resetCart = () => setCart([])
 
 useEffect(() =>{
     fetch('/check-session')
@@ -33,7 +40,7 @@ useEffect(() =>{
 return( 
 <div className="app">
     <header><NavBar user={user} updateUser={updateUser} /></header>
-    <Outlet context = { {user, updateUser} }/>
+    <Outlet context = { {user, updateUser, addToCart, cart, resetCart} }/>
 </div>
 )}
 
