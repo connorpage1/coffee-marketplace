@@ -32,12 +32,19 @@ if (!product){
   return <h3>Loading</h3>
 }
 
-const { name, description, seller, image_url } = product
+const { name, description, seller, image_url, stock, type, tag, sku, price } = product
 return <div>
     <h1>{name} </h1>
-    <h3>{seller.first_name + ' ' + seller.last_name} </h3>
+    <h3>Seller: {seller.first_name + ' ' + seller.last_name} </h3>
     <Container textAlign="center">
-      {description}
+      <div className="product-detail" key={product.id}><img src={image_url} alt={name}/></div>
+      <h5>Price: ${price}/12oz bag</h5>
+      <h5>Stock: {stock}</h5>
+      <h5>Type: {type}</h5>
+      <h5>Tag: {tag}</h5>
+      <h5>SKU: {sku}</h5>
+      <h5>{description}</h5>
+
     </Container>
 </div>;
   }
