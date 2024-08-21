@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dateFormat from 'dateformat';
 import DeleteConfirm from "./DeleteConfirm";
+import UpdateProfile from "./UpdateProfile";
 
 
 
@@ -27,7 +28,7 @@ function MyProfile() {
             navigate('/login')
         })
     }    
-    , [profile])
+    , [])
 
     if (profile) {
     const { first_name, last_name, email, role_id, created_at, selling_products, orders } = profile
@@ -40,7 +41,7 @@ function MyProfile() {
                 <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                 <p><b>Email: </b>{email}</p>
                 <p>{String(orders)}</p>
-                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
+                <UpdateProfile profile={profile} newProfile={newProfile}/> <button>Change password</button> <DeleteConfirm />
     
             </div>
             );
@@ -52,8 +53,7 @@ function MyProfile() {
                     <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
                     <p>{String(selling_products)}</p>
-                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
-    
+                    <UpdateProfile profile={profile} newProfile={newProfile}/>  <button>Change password</button> <DeleteConfirm />
     
                 </div>
         )
