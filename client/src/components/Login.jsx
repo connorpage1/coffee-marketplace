@@ -12,7 +12,6 @@ const schema = yup.object().shape({
 
 
 const Login = () => {
-    // This will need to be moved up a couple of levels 
     const {updateUser} =  useOutletContext() 
     const navigate = useNavigate()
     const handleFormSubmit = (formData, { resetForm }) => {

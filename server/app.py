@@ -139,20 +139,7 @@ class Profile(Resource):
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             return make_response({'error' : str(e)}, 422)
-    def patch(self):
-        try: 
-            if user_id := session.get('user_id'):
-                data = request.get_json()
-                user = db.session.get(User, user_id)
-                for attr, value in data.items():
-                    setattr(user, attr, value)
-                db.session.commit()
-                return make_response(user.to_dict(), 200)
-            else:             
-                return make_response({'error': 'No logged in user'}, 401)
-        except Exception as e:
-            db.session.rollback()
-            return make_response({'error': str(e)}, 422)
+
     def delete(self):
         try: 
             if user_id := session.get('user_id'):
@@ -262,7 +249,6 @@ class ProductByUser(Resource):
 
 
 
-
 api.add_resource(Orders, "/orders")
 api.add_resource(GetOrderById, "/orders/<int:id>")
 api.add_resource(Signup, "/signup")
@@ -274,6 +260,7 @@ api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
 api.add_resource(ProductByUser, "/products/user/<int:id>")
+
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

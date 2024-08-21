@@ -25,10 +25,9 @@ useEffect(() =>{
 
 
 
-        const updateUser = (value) =>{
-            setUser(value)
-      
-          }
+    const updateUser = (value) => {
+        setUser(value)
+    }
     
 
   return( 

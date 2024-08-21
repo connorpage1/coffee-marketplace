@@ -84,7 +84,7 @@ def seed_data():
             order = Order(
                 total=fake.pyfloat(right_digits=2, positive=True, max_value=1000),
                 status=fake.random_element(elements=("pending", "ordered", "shipped", "delivered")),
-                discount=fake.pyfloat(right_digits=2, positive=True, max_value=100),
+                discount=fake.pyfloat(right_digits=2, positive=True, max_value=.99),
                 user_id=fake.random_element(elements=[user.id for user in users if user.role_id == User.ROLE_BUYER]),
                 order_date=fake.date_time_this_decade()
             )
