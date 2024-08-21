@@ -94,58 +94,12 @@ if (!editMode){
       {editMode ? description : ''}
     </Container>
     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-    <EditModal product={ product} setProduct={setProduct} productId={productId} />
+    {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
   </div>;
 
 
 }
-// else{
-//   return <div>
-//     <h1>Edit Product</h1>
-//     <Formik
-//     initialValues={{
-//       name: `${name}`,
-//       type: `${type}`,
-//       stock: `${stock}`,
-//       image_url: `${image_url}`,
-//       price: `${price}`,
-//       description: `${description}`
-//       }}
-//       validationSchema={schema}
-//       onSubmit={handleFormSubmit}
-//     >
-//       <Form>
-//         <label htmlFor="name">Name: </label>
-//         <Field name="name" type='text' placeholder="New Product Name"/> 
-        
-//         <label htmlFor="type">Type: </label>
-//         <Field as="select" name="type">
-//         <option value='coffee'> Coffee </option>
-//         <option value='tea'> Tea </option>
-//         </Field> 
-        
-//         <label htmlFor="stock">Stock: </label>
-//         <Field name="stock" type='text' placeholder="Current Stock"/> 
-        
-//         <label htmlFor="image_url">Image Link: </label>
-//         <Field name="image_url" type='text' placeholder="New Image Link"/> 
-        
-//         <label htmlFor="price">Price: </label>
-//         <Field name="price" type='float' placeholder="Adjusted Price"/> 
-        
-//         <label htmlFor="description">Description: </label>
-//         <Field name="description" type='text' placeholder="New Description"/> 
-        
-//         <button type="submit">Confirm Changes</button>
-//       </Form>
-//     </Formik>
 
-
-
-
-//   </div>
-
-// }
 
 }
 
@@ -158,4 +112,3 @@ export default ProductDetails;
 
 
 
-//if user.id = seller.id

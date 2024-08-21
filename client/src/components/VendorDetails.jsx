@@ -33,9 +33,9 @@ function VendorDetails() {
       
    
    
-   return <div>
+   return  <div class="ui grid">
         
-            <ul>{vendor.selling_products.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>
+            <div>{vendor.selling_products.map((product) => (<ProductCard key={product.id} {...product}/> ))}</div>
         
     </div>;
   

@@ -65,6 +65,7 @@ function EditModal({ product, setProduct, productId }) {
             if (resp.ok) {
               return resp.json().then((data) => {
                 setProduct(data);
+                setOpen(false);
               });
             } else {
               return resp.json().then((errorObj) => {

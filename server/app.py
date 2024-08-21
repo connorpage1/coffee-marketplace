@@ -184,7 +184,7 @@ class UserById(Resource):
                 return make_response({"error": "This user does not exist or is not a seller"}, 404)
             else:
                 return make_response(
-                    user.to_dict(only=("first_name", "last_name")), 200
+                    user.to_dict(only=("first_name", "last_name", "selling_products")), 200
                 )
         except Exception as e:
             return make_response({"error": str(e)}, 400)
