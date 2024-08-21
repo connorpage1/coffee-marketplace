@@ -1,57 +1,41 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCard from './ProductCard'
+import toast from "react-hot-toast";
 
 
 function VendorDetails() {
     const [vendor, setVendor] = useState(null);
-    const [sellerProducts, setSellerProducts] = useState();
     const { vendorId } = useParams();
     
     
     useEffect(() => {
         fetch(`/user/${vendorId}`)
-          .then((res) => {
-            if (res.ok) {
-              return res.json();
+          .then((resp) => {
+            if (resp.ok) {
+              return resp.json()
+              .then((data) => {
+                setVendor(data)
+              })
             } else {
-              //! Fix Error
-              console.log('ok')
+              resp.json().then((errorObj) => toast.error(errorObj.error))
             }
           })
-            .then((data) => {
-              setVendor(data);
-            })
-          .catch((error) => {
-          //! Fix Error
-            console.log(error);
-          });
-
-        fetch(`/products/user/${vendorId}`)
-        .then((res) => {
-            if (res.ok ) {
-                return res.json()
-                .then(setSellerProducts)
-            }
-            //! Fix Error
-            else {
-                console.log('er')
-            }
-        })
-        .catch((error) => {
-            //! Fix Error
-            console.log(error);
-        })
-        },[vendorId]);
+          .catch (errorObj => toast.error(errorObj.message))
+    }, [vendorId]);
 
 
 
-      console.log(sellerProducts)
+
+  if (!vendor){ 
+    return <h1>loading</h1>
+  }
+      
    
    
-   return <div>
+   return  <div class="ui grid">
         
-            <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>
+            <div>{vendor.selling_products.map((product) => (<ProductCard key={product.id} {...product}/> ))}</div>
         
     </div>;
   

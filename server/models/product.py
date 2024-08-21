@@ -103,7 +103,7 @@ class Product(db.Model, SerializerMixin):
     def validate_sku(self, key, value):
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
-        elif not re.match(r"^[A-Za-z0-9]{8,12}$", value):
+        elif not re.match(r"^[A-Za-z0-9_-]{8,12}$", value):
             raise ValueError(f"{key} must be 8-12 alphanumeric characters long")
         return value
 
