@@ -26,7 +26,7 @@ return(
 
 {user ? <>
 <Link to={'/myprofile'}> My Profile</Link>
-<Link to={'/checkout'}> Check Out</Link>
+<Link to={'/checkout'}> Checkout</Link>
 <Link to={'/login'}> <button onClick={handleLogout}> Log Out </button></Link>
 </>
 :
