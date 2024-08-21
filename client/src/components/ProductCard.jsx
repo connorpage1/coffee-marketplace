@@ -1,13 +1,16 @@
 import { Link, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
-function ProductCard({ name, image_url, price, stock, tag, type, id }) {
+function ProductCard({ name, image_url, price, stock: initialStock, tag, type, id }) {
   const { addToCart, user } = useOutletContext();
 
   const [disable, setDisable] = useState(false);
+  const [stock, setStock] = useState(initialStock);
 
   const handleClick = () => {
     addToCart({ name, image_url, price, stock, tag, type, id });
+    const updatedStock = stock - 1;
+    setStock(updatedStock);
     setDisable(true);
   };
 

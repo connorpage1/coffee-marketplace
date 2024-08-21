@@ -6,17 +6,12 @@ import 'semantic-ui-css/semantic.min.css'
 function App() {
 const [user, setUser] = useState(null);
 const [cart, setCart] = useState([]);
-// const [quantity, setQuantity] = useState(quantity);
 
 const addToCart = (order_item) => {
     setCart(currentCart => [...currentCart, order_item])
 }
 
 const resetCart = () => setCart([])
-
-// const updateQuantity = () => {
-//     setQuantity(cu =>)
-// }
 
 useEffect(() =>{
     fetch('/check-session')
