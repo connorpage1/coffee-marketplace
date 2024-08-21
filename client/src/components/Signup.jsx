@@ -1,11 +1,12 @@
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage} from "formik";
-import { useState } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+
 
 const schema = yup.object().shape({
     first_name: yup.string().required("Name is required").min(1).max(50),
     last_name: yup.string().required("Name is required").min(1).max(50),
-    role: yup.string().required("Role is required"),
+    role: yup.string(),
     email: yup.string().email("Please enter a valid email").required("Email is required"),  
     password_hash: yup.string().required("Password is required").min(8, 'Password must be at least 8 characters'),
     confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref('password_hash'), null], "Passwords must match")
@@ -14,7 +15,7 @@ const schema = yup.object().shape({
 const initialValues = {
     first_name: "",
     last_name: "",
-    role: "",
+    role: "1",
     email: "",
     password_hash: "",
     confirmPassword: ""
@@ -22,6 +23,8 @@ const initialValues = {
 }
 
 const Signup = () => {
+    const { user, updateUser } = useOutletContext();
+    const navigate = useNavigate()
 
     const handleFormSubmit = (formData, { resetForm }) => {
         fetch('/signup', {
@@ -40,10 +43,15 @@ const Signup = () => {
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(userObj => console.log(userObj.id))
-                // .then(resetForm)
+                .then(userObj => {
+                    console.log(userObj)
+                    updateUser(userObj)
+                })
+                .then(navigate('/products'))
             } else {
-                console.log(res)
+                return res.json().then(err => {
+                    throw new Error(err.error)
+                })
             }
         })
         .catch(console.log)

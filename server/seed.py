@@ -18,6 +18,14 @@ fake = Faker()
 
 def seed_data():
     with app.app_context():
+        # Delete old data
+        OrderItem.query.delete()
+        Order.query.delete()
+        Product.query.delete()
+        User.query.delete()
+        
+        
+        
         # Create fake users
         users = []
         for _ in range(10):
@@ -25,7 +33,7 @@ def seed_data():
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.unique.email(),
-                _password_hash=generate_password_hash(fake.password()),
+                password_hash="password",
                 role_id=fake.random_element(elements=(User.ROLE_BUYER, User.ROLE_SELLER)),
                 created_at=fake.date_time_this_decade()
             )
@@ -84,7 +92,7 @@ def seed_data():
             order = Order(
                 total=fake.pyfloat(right_digits=2, positive=True, max_value=1000),
                 status=fake.random_element(elements=("pending", "ordered", "shipped", "delivered")),
-                discount=fake.pyfloat(right_digits=2, positive=True, max_value=100),
+                discount=fake.pyfloat(right_digits=2, positive=True, max_value=.99),
                 user_id=fake.random_element(elements=[user.id for user in users if user.role_id == User.ROLE_BUYER]),
                 order_date=fake.date_time_this_decade()
             )
