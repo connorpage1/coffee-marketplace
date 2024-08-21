@@ -10,6 +10,51 @@
   color: #282c34;
 }
 
+.landing-page {
+  font-family: 'Arial', sans-serif;
+}
+
+.hero-section {
+  background-image: url('https://blog.englishteastore.com/wp-content/uploads/2017/11/coffee_vs_tea_health_benefits_singapore_-1.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 100px 0;
+  color: white;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: 1.5em;
+  margin-bottom: 30px;
+}
+
+.about-section {
+  padding: 50px 0;
+  background-color: #F2F2F2;
+}
+
+.about-section h3 {
+  font-size: 2em;
+  margin-top: 20px;
+}
+
+.about-section p {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 20px 0;
+}
+
+
 .ui top fixed menu {
 
   color: #5a8c0f;
