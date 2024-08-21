@@ -26,7 +26,7 @@ function MyProfile() {
     , [])
 
     if (profile) {
-    const { first_name, last_name, email, role_id, created_at } = profile
+    const { first_name, last_name, email, role_id, created_at, selling_products, orders } = profile
         
         if(role_id === 1){
             return (
@@ -35,6 +35,7 @@ function MyProfile() {
                 <p>Customer since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
                 <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                 <p><b>Email: </b>{email}</p>
+                <p>{String(orders)}</p>
                 <button>Update information</button> <button>Change password</button> <DeleteConfirm />
     
             </div>
@@ -46,6 +47,7 @@ function MyProfile() {
                     <p>Vendor since {dateFormat(created_at, "mmmm, dS, yyyy")}</p>
                     <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
+                    <p>{String(selling_products)}</p>
                 <button>Update information</button> <button>Change password</button> <DeleteConfirm />
     
     
