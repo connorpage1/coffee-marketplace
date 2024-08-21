@@ -1,8 +1,8 @@
-"""remove nullable=False from Order model
+"""initial migration
 
-Revision ID: 7ddaedc34971
+Revision ID: fff189653de5
 Revises: 
-Create Date: 2024-08-21 01:31:14.821292
+Create Date: 2024-08-21 02:50:02.230325
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7ddaedc34971'
+revision = 'fff189653de5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -60,8 +60,8 @@ def upgrade():
     )
     op.create_table('order_items',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('price_at_order', sa.Float(), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=True),
+    sa.Column('price_at_order', sa.Float(), nullable=True),
     sa.Column('order_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),

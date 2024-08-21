@@ -54,6 +54,28 @@ class GetOrderById(Resource):
         except Exception as e:
             return make_response({"error": str(e)}, 404)
 
+class OrderItems(Resource):
+    def get(self):
+        try: 
+            serialized_order_items = [
+                order_item.to_dict(rules=("-order", "-product.order_items"))
+                for order_item in OrderItem.query
+            ]
+            return make_response(serialized_order_items, 200)
+        except Exception as e:
+            return {"error": str(e)}, 400
+        
+    def post(self):
+        try:
+            data = request.get_json()
+            new_order_item = OrderItem(**data)
+            db.session.add(new_order_item)
+            db.session.commit()
+            return (new_order_item.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 400
+
 
 class Signup(Resource):
     def post(self):
@@ -209,6 +231,7 @@ class Products(Resource):
             return make_response(serialized_products, 200)
         except Exception as e:
             return {"error": str(e)}, 400
+        
 
     def post(self):
         try:
@@ -286,6 +309,7 @@ class ProductByUser(Resource):
 
 api.add_resource(Orders, "/orders")
 api.add_resource(GetOrderById, "/orders/<int:id>")
+api.add_resource(OrderItems, "/order_items")
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
