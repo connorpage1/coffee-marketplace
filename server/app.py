@@ -54,6 +54,7 @@ class GetOrderById(Resource):
         except Exception as e:
             return make_response({"error": str(e)}, 404)
 
+
 class OrderItems(Resource):
     def get(self):
         try:
@@ -64,11 +65,16 @@ class OrderItems(Resource):
             return make_response(serialized_order_items, 200)
         except Exception as e:
             return {"error": str(e)}, 400
-        
+
     def post(self):
         try:
             if user_id := session.get("user_id"):
-                new_order = Order(order_date=datetime.now(), status="pending", discount=0.0, user_id=user_id)
+                new_order = Order(
+                    order_date=datetime.now(),
+                    status="pending",
+                    discount=0.0,
+                    user_id=user_id,
+                )
                 db.session.add(new_order)
                 db.session.commit()
                 data = request.get_json()
@@ -77,11 +83,14 @@ class OrderItems(Resource):
                     new_order_item = OrderItem(**order_item, order_id=new_order.id)
                     db.session.add(new_order_item)
                     db.session.commit()
-                    total+=(new_order_item.price_at_order * new_order_item.quantity)
+                    total += new_order_item.price_at_order * new_order_item.quantity
                 new_order.status = "ordered"
-                new_order.total = total 
+                new_order.total = total
                 db.session.commit()
-                return (f"Thank you for your purchase, your total is: ${total}, see you soon!", 201)
+                return (
+                    f"Thank you for your purchase, your total is: ${total}, see you soon!",
+                    201,
+                )
             else:
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
@@ -173,8 +182,9 @@ class Profile(Resource):
             else:
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
-            return make_response({'error' : str(e)}, 422)
-        
+            return make_response({"error": str(e)}, 422)
+
+
 class UserById(Resource):
     def get(self, id):
         try:
@@ -213,7 +223,6 @@ class Products(Resource):
             return make_response(serialized_products, 200)
         except Exception as e:
             return {"error": str(e)}, 400
-        
 
     def post(self):
         try:
