@@ -15,7 +15,6 @@ const handleLogout = () =>{
         })
 }
 
-// REMOVE LINE 26 AFTER TESTING LINK TO CHECKOUT 
 return(
 
 <>

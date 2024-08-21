@@ -1,17 +1,54 @@
-const Checkout = () => {
-// once user logs in, check table orders for an Order obj in pending status for that user id, if exist, display in Checkout (Login)
-// if nothing, instantiate an order with id and status of pending
-// useState to keep track of user is logged in 
-// if not exist, wait until addToCart button is clicked
-// once clicked, orderItem is updated by order id (ProductCard)
-// map clicked_product to display in checkout
+import { useOutletContext } from "react-router-dom";
+import toast from "react-hot-toast";
 
-// display pending order if exist by user_id
-// display order_item.user_id and pending status
-// total() = sum of price_at_order 
-// button for purchase order and display a message of "Thank you for your business!"
+const Checkout = () => {
+
+    const {cart, resetCart} = useOutletContext()
+    const mappedCart = cart.map(item => (
+        <div className="cart-item" >
+            <div className="cart-image"><img src={item.image_url} alt={item.name}/></div> 
+            <div className="cart-detail">
+                <h2>{item.name}</h2> 
+                <h3>{item.price}</h3>
+                <input data-product-id={item.id} type="number" min="1" max={item.stock} step="1"/>
+            </div>
+        </div>
+    ))
+
+    const handleCheckout = () => {
+        // Create a new order_item in the database
+        const orderItems = Array.from(document.querySelectorAll(".cart-detail")).map(card => {
+            const productPrice = card.querySelector("h3").textContent
+                const productQuantity = card.querySelector("input").value
+                const productId = card.querySelector("input").dataset.productId
+                return {"quantity":productQuantity, "product_id":productId, "price_at_order":Number(productPrice)}
+            })
+        
+        fetch("/order_items", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderItems)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); 
+            } else {
+                throw new Error('Failed to create order');
+            }
+        })
+        .then(message => {
+            toast.success(message)
+            resetCart()
+        })
+        .catch(error => console.error('Error:', error));
+    };
 return(
-    <></>
+    <div className="checkout">
+        {mappedCart}
+        <button disabled={cart.length === 0} onClick={handleCheckout}>Checkout Now</button> 
+    </div>
 )
 }
 
