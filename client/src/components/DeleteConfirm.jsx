@@ -17,7 +17,7 @@ const DeleteConfirm = () => {
             if (res.ok) {
                 updateUser(null)
                 navigate('/')
-            }
+                }
             else {
                 console.log(res.json())
             }
