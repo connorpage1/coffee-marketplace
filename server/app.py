@@ -68,8 +68,9 @@ class OrderItems(Resource):
     def post(self):
         try:
             data = request.get_json()
-            new_order_item = OrderItem(**data)
-            db.session.add(new_order_item)
+            for order_item in data:
+                new_order_item = OrderItem(**order_item)
+                db.session.add(new_order_item)
             db.session.commit()
             return (new_order_item.to_dict(), 201)
         except Exception as e:
