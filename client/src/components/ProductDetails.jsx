@@ -6,12 +6,12 @@ import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom"
 
-const schema = yup.object().shape({
-  image_url: yup.string().required("Image is required"),
-  description: yup.string().required("Description is required").min(50).max(1000),
-  price: yup.number().required("Price is Required").min(1)
+// const schema = yup.object().shape({
+//   image_url: yup.string().required("Image is required"),
+//   description: yup.string().required("Description is required").min(50).max(1000),
+//   price: yup.number().required("Price is Required").min(1)
 
-})
+// })
 
 
 function ProductDetails() {
@@ -23,33 +23,34 @@ function ProductDetails() {
   const navigate = useNavigate()
 
   
-  const handleFormSubmit = (FormData) => {
-    console.log(JSON.stringify(FormData))
-    FormData.price = parseFloat(FormData.price);
-    fetch(`/products/${productId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(FormData),
-    })
-      .then((resp) => {
-        if (resp.ok) {
-          return resp.json().then((data) => {
-            debugger
-            navigate('/products')
-            setProduct(data);
-          });
-        } else {
-          return resp.json().then((errorObj) => {
-            toast.error(errorObj.error);
-          });
-        }
-      })
-      .catch((errorObj) => {
-        toast.error(errorObj.error);
-      });
-  };
+  // const handleFormSubmit = (FormData) => {
+  //   console.log(JSON.stringify(FormData))
+  //   FormData.price = parseFloat(FormData.price);
+  //   FormData.stock = parseInt(FormData.stock);
+  //   fetch(`/products/${productId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(FormData),
+  //   })
+  //     .then((resp) => {
+  //       if (resp.ok) {
+  //         return resp.json().then((data) => {
+  //           debugger
+  //           navigate('/products')
+  //           setProduct(data);
+  //         });
+  //       } else {
+  //         return resp.json().then((errorObj) => {
+  //           toast.error(errorObj.error);
+  //         });
+  //       }
+  //     })
+  //     .catch((errorObj) => {
+  //       toast.error(errorObj.error);
+  //     });
+  // };
 
 
   useEffect(() => {
@@ -126,53 +127,53 @@ if (!editMode){
 
 
 }
-else{
-  return <div>
-    <h1>Edit Product</h1>
-    <Formik
-    initialValues={{
-      name: `${name}`,
-      type: `${type}`,
-      stock: `${stock}`,
-      image_url: `${image_url}`,
-      price: `${price}`,
-      description: `${description}`
-      }}
-      validationSchema={schema}
-      onSubmit={handleFormSubmit}
-    >
-      <Form>
-        <label htmlFor="name">Name: </label>
-        <Field name="name" type='text' placeholder="New Product Name"/> 
+// else{
+//   return <div>
+//     <h1>Edit Product</h1>
+//     <Formik
+//     initialValues={{
+//       name: `${name}`,
+//       type: `${type}`,
+//       stock: `${stock}`,
+//       image_url: `${image_url}`,
+//       price: `${price}`,
+//       description: `${description}`
+//       }}
+//       validationSchema={schema}
+//       onSubmit={handleFormSubmit}
+//     >
+//       <Form>
+//         <label htmlFor="name">Name: </label>
+//         <Field name="name" type='text' placeholder="New Product Name"/> 
         
-        <label htmlFor="type">Type: </label>
-        <Field as="select" name="type">
-        <option value='Coffee'> Coffee </option>
-        <option value='Tea'> Tea </option>
-        </Field> 
+//         <label htmlFor="type">Type: </label>
+//         <Field as="select" name="type">
+//         <option value='coffee'> Coffee </option>
+//         <option value='tea'> Tea </option>
+//         </Field> 
         
-        <label htmlFor="stock">Stock: </label>
-        <Field name="stock" type='text' placeholder="Current Stock"/> 
+//         <label htmlFor="stock">Stock: </label>
+//         <Field name="stock" type='text' placeholder="Current Stock"/> 
         
-        <label htmlFor="image_url">Image Link: </label>
-        <Field name="image_url" type='text' placeholder="New Image Link"/> 
+//         <label htmlFor="image_url">Image Link: </label>
+//         <Field name="image_url" type='text' placeholder="New Image Link"/> 
         
-        <label htmlFor="price">Price: </label>
-        <Field name="price" type='float' placeholder="Adjusted Price"/> 
+//         <label htmlFor="price">Price: </label>
+//         <Field name="price" type='float' placeholder="Adjusted Price"/> 
         
-        <label htmlFor="description">Description: </label>
-        <Field name="description" type='text' placeholder="New Description"/> 
+//         <label htmlFor="description">Description: </label>
+//         <Field name="description" type='text' placeholder="New Description"/> 
         
-        <button type="submit">Confirm Changes</button>
-      </Form>
-    </Formik>
+//         <button type="submit">Confirm Changes</button>
+//       </Form>
+//     </Formik>
 
 
 
 
-  </div>
+//   </div>
 
-}
+// }
 
 }
 
