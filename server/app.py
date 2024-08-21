@@ -139,20 +139,6 @@ class Profile(Resource):
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             return make_response({'error' : str(e)}, 422)
-
-    def delete(self):
-        try: 
-            if user_id := session.get('user_id'):
-                user = db.session.get(User, user_id)
-                db.session.delete(user)
-                db.session.commit()
-                del session['user_id']
-                return make_response({}, 204)
-            else:
-                return make_response({'error': 'No logged in user'}, 401)
-        except Exception as e:
-            db.session.rollback()
-            return make_response({"error": str(e)}, 422)
         
 class UserById(Resource):
     def get(self, id):
