@@ -1,7 +1,10 @@
+import NewProductModal from "./NewProductModal";
+
 function MyProfile() {
     return (
-    <div>
+    <div className="poop">
         <h1>3</h1>
+        <NewProductModal/>
     </div>
     );
 }
