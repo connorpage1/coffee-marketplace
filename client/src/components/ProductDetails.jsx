@@ -22,7 +22,10 @@ function ProductDetails() {
 
   const navigate = useNavigate()
 
+  
   const handleFormSubmit = (FormData) => {
+    console.log(JSON.stringify(FormData))
+    FormData.price = parseFloat(FormData.price);
     fetch(`/products/${productId}`, {
       method: "PATCH",
       headers: {
@@ -33,6 +36,7 @@ function ProductDetails() {
       .then((resp) => {
         if (resp.ok) {
           return resp.json().then((data) => {
+            debugger
             navigate('/products')
             setProduct(data);
           });
@@ -138,7 +142,7 @@ else{
         <label htmlFor="image_url">Image Link: </label>
         <Field name="image_url" type='text' placeholder="New Image Link"/> 
         <label htmlFor="price">Price: </label>
-        <Field name="price" type='text' placeholder="Adjusted Price"/> 
+        <Field name="price" type='float' placeholder="Adjusted Price"/> 
         <label htmlFor="description">Description: </label>
         <Field name="description" type='text' placeholder="New Description"/> 
         <button type="submit">Confirm Changes</button>
