@@ -33,6 +33,7 @@ function ProductDetails() {
       .then((resp) => {
         if (resp.ok) {
           return resp.json().then((data) => {
+            navigate('/products')
             setProduct(data);
           });
         } else {
@@ -90,6 +91,10 @@ function ProductDetails() {
       })
       .catch((errorObj) => toast.error(errorObj.error))
       };
+
+      const handleEditMode = () =>{
+        setEditMode(true)
+      }
   
 
 
@@ -99,8 +104,7 @@ function ProductDetails() {
 
 
 
-
-
+if (!editMode){
   return <div>
     <h1>{name} </h1>
     <h3>{seller.first_name + ' ' + seller.last_name} </h3>
@@ -113,15 +117,40 @@ function ProductDetails() {
       {editMode ? description : ''}
     </Container>
     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-    {/* {user && user.id === user_id && <button onClick={() => handleUpdate(id)}> Edit </button>}
-    {user && user.role_id === 1 && product.stock > 0 && <button onClick={() => handleAddToCart(id)}> Add to Cart </button>} */}
+    {user && user.id === user_id && <button onClick={() => handleEditMode(id)}> Edit </button>}
   </div>;
 
 
+}
+else{
+  return <div>
+    <h1>Edit Product</h1>
+    <Formik
+    initialValues={{
+      image_url: `${image_url}`,
+      price: `${price}`,
+      description: `${description}`
+      }}
+      validationSchema={schema}
+      onSubmit={handleFormSubmit}
+    >
+      <Form>
+        <label htmlFor="image_url">Image Link: </label>
+        <Field name="image_url" type='text' placeholder="New Image Link"/> 
+        <label htmlFor="price">Price: </label>
+        <Field name="price" type='text' placeholder="Adjusted Price"/> 
+        <label htmlFor="description">Description: </label>
+        <Field name="description" type='text' placeholder="New Description"/> 
+        <button type="submit">Confirm Changes</button>
+      </Form>
+    </Formik>
 
 
 
 
+  </div>
+
+}
 
 }
 
@@ -133,7 +162,5 @@ function ProductDetails() {
 export default ProductDetails;
 
 
-{/* <ul>{sellerProducts.map((product) => (<ProductCard key={product.id} {...product}/> ))}</ul>  */ }
-// replace sellerProducts with product -> seller -> selling details 
 
 //if user.id = seller.id
