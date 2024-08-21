@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dateFormat from 'dateformat';
 import DeleteConfirm from "./DeleteConfirm";
+import UpdateProfile from "./UpdateProfile";
 import NewProductModal from "./NewProductModal";
 
 
@@ -9,12 +10,16 @@ function MyProfile() {
     const [profile, setProfile] = useState(null);
     const navigate = useNavigate()
 
+    const newProfile = (profile) => {
+        setProfile(profile)
+    }
+
     useEffect(() => {
         fetch('/profile')
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(setProfile)
+                .then(newProfile)
             } else {
                 throw Error(res.status, res.statusText)
             }
@@ -36,7 +41,7 @@ function MyProfile() {
                 <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                 <p><b>Email: </b>{email}</p>
                 <p>{String(orders)}</p>
-                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
+                <UpdateProfile profile={profile} newProfile={newProfile}/> <button>Change password</button> <DeleteConfirm />
     
             </div>
             );
@@ -48,9 +53,8 @@ function MyProfile() {
                     <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
                     <p>{String(selling_products)}</p>
-                <NewProductModal/>
-                <button>Update information</button> <button>Change password</button> <DeleteConfirm />
-    
+                    <NewProductModal/>
+                <UpdateProfile profile={profile} newProfile={newProfile}/>  <button>Change password</button> <DeleteConfirm />
     
                 </div>
         )
