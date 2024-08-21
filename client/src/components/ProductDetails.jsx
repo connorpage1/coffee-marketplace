@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react';
 import * as yup from 'yup';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom"
+import EditModal from "./EditModal";
 
 // const schema = yup.object().shape({
 //   image_url: yup.string().required("Image is required"),
@@ -93,7 +94,7 @@ if (!editMode){
       {editMode ? description : ''}
     </Container>
     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-    {user && user.id === user_id && <button onClick={() => handleEditMode(id)}> Edit </button>}
+    <EditModal product={ product} setProduct={setProduct} productId={productId} />
   </div>;
 
 

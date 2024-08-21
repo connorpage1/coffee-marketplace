@@ -1,4 +1,6 @@
 import React from 'react'
+import * as yup from 'yup';
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import {
     ModalHeader,
     ModalDescription,
@@ -9,6 +11,32 @@ import {
     Image,
     Modal,
 } from 'semantic-ui-react'
+import toast from "react-hot-toast"
+
+const validTags = [
+  "light roast",
+  "medium roast",
+  "dark roast",
+  "espresso",
+  "origin",
+  "flavor",
+  "washed processed",
+  "natural process",
+  "honey process",
+  "arabica",
+  "robusta",
+  "blend",
+  "organic",
+  "single-origin",
+  "black tea",
+  "green tea",
+  "white tea",
+  "herbal",
+  "rooibos", 
+  "matcha",
+  "caffeine",
+  "decaf"
+]
 
 const schema = yup.object().shape({
     image_url: yup.string().required("Image is required"),
@@ -17,7 +45,8 @@ const schema = yup.object().shape({
 
 })
 
-function EditModal() {
+function EditModal({ product, setProduct, productId }) {
+  const [open, setOpen] = React.useState(false)
 
 
   
@@ -35,8 +64,6 @@ function EditModal() {
           .then((resp) => {
             if (resp.ok) {
               return resp.json().then((data) => {
-                debugger
-                navigate('/products')
                 setProduct(data);
               });
             } else {
@@ -59,18 +86,18 @@ function EditModal() {
             onOpen={() => setOpen(true)}
             open={open}
             size='large'
-            trigger={<Button>Add New Product</Button>}>
+            trigger={<Button>Edit Product</Button>}>
             <ModalContent>
                 <Formik
                     initialValues={{
-                        name: `${}`,
-                        type: `${}`,
-                        stock: `${}`,
-                        image_url: `${}`,
-                        price: `${}`,
-                        tag: `${}`,
-                        description: `${}`,
-                        sku: `${}`
+                        name: `${product.name}`,
+                        type: `${product.type}`,
+                        stock: `${product.stock}`,
+                        image_url: `${product.image_url}`,
+                        price: `${product.price}`,
+                        tag: `${product.tag}`,
+                        description: `${product.description}`,
+                        sku: `${product.sku}`
                     }}
                     validationSchema={schema}
                     onSubmit={handleFormSubmit}
@@ -104,7 +131,7 @@ function EditModal() {
                             <label htmlFor="description">Description: </label>
                             <Field name="description" type='text' placeholder="Description" />
                             <ModalActions>
-                                <button type="submit" primary>Add New Product</button>
+                                <button type="submit" primary>Edit Product</button>
                             </ModalActions>
                         </Form>
                     )}
