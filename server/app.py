@@ -7,7 +7,7 @@ from flask import Flask, request, make_response, session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 import os
-from ipdb import set_trace
+from datetime import datetime
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -56,7 +56,7 @@ class GetOrderById(Resource):
 
 class OrderItems(Resource):
     def get(self):
-        try: 
+        try:
             serialized_order_items = [
                 order_item.to_dict(rules=("-order", "-product.order_items"))
                 for order_item in OrderItem.query
@@ -67,12 +67,23 @@ class OrderItems(Resource):
         
     def post(self):
         try:
-            data = request.get_json()
-            for order_item in data:
-                new_order_item = OrderItem(**order_item)
-                db.session.add(new_order_item)
-            db.session.commit()
-            return (new_order_item.to_dict(), 201)
+            if user_id := session.get("user_id"):
+                new_order = Order(order_date=datetime.now(), status="pending", discount=0.0, user_id=user_id)
+                db.session.add(new_order)
+                db.session.commit()
+                data = request.get_json()
+                total = 0
+                for order_item in data:
+                    new_order_item = OrderItem(**order_item, order_id=new_order.id)
+                    db.session.add(new_order_item)
+                    db.session.commit()
+                    total+=(new_order_item.price_at_order * new_order_item.quantity)
+                new_order.status = "ordered"
+                new_order.total = total 
+                db.session.commit()
+                return (f"Thank you for your purchase, your total is: ${total}, see you soon!", 201)
+            else:
+                return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 400
