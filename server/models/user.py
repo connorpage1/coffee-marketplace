@@ -25,7 +25,7 @@ class User(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     orders = db.relationship("Order", back_populates="users", cascade="all, delete-orphan")
-    selling_products = db.relationship("Product", back_populates="seller")
+    selling_products = db.relationship("Product", back_populates="seller", cascade="all, delete-orphan")
     purchased_products = db.relationship(
         "Product",
         secondary="order_items",

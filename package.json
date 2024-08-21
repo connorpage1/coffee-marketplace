@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "uuid": "^10.0.0"
+    "dateformat": "^5.0.3"
   }
 }
