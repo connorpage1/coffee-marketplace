@@ -22,35 +22,6 @@ function ProductDetails() {
 
   const navigate = useNavigate()
 
-  
-  // const handleFormSubmit = (FormData) => {
-  //   console.log(JSON.stringify(FormData))
-  //   FormData.price = parseFloat(FormData.price);
-  //   FormData.stock = parseInt(FormData.stock);
-  //   fetch(`/products/${productId}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(FormData),
-  //   })
-  //     .then((resp) => {
-  //       if (resp.ok) {
-  //         return resp.json().then((data) => {
-  //           debugger
-  //           navigate('/products')
-  //           setProduct(data);
-  //         });
-  //       } else {
-  //         return resp.json().then((errorObj) => {
-  //           toast.error(errorObj.error);
-  //         });
-  //       }
-  //     })
-  //     .catch((errorObj) => {
-  //       toast.error(errorObj.error);
-  //     });
-  // };
 
 
   useEffect(() => {
