@@ -17,7 +17,6 @@ import EditModal from "./EditModal";
 
 function ProductDetails() {
   const [product, setProduct] = useState(null);
-  const [editMode, setEditMode] = useState(false)
   const { productId } = useParams();
   const { user } = useOutletContext();
 
@@ -69,10 +68,7 @@ function ProductDetails() {
       .catch((errorObj) => toast.error(errorObj.error))
       };
 
-      const handleEditMode = () =>{
-        setEditMode(true)
-      }
-  
+
 
 
 
@@ -81,7 +77,7 @@ function ProductDetails() {
 
 
 
-if (!editMode){
+
   return <div>
     <h1>{name} </h1>
     <h3>{seller.first_name + ' ' + seller.last_name} </h3>
@@ -91,14 +87,14 @@ if (!editMode){
       <h3>{stock}</h3>
     </Container>
     <Container textAlign="center">
-      {editMode ? description : ''}
+      {description}
     </Container>
     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
     {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
   </div>;
 
 
-}
+
 
 
 }
