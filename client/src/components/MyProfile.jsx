@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import dateFormat from 'dateformat';
 import DeleteConfirm from "./DeleteConfirm";
 import UpdateProfile from "./UpdateProfile";
-
+import NewProductModal from "./NewProductModal";
 
 
 function MyProfile() {
@@ -53,7 +53,8 @@ function MyProfile() {
                     <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
                     <p>{String(selling_products)}</p>
-                    <UpdateProfile profile={profile} newProfile={newProfile}/>  <button>Change password</button> <DeleteConfirm />
+                    <NewProductModal/>
+                <UpdateProfile profile={profile} newProfile={newProfile}/>  <button>Change password</button> <DeleteConfirm />
     
                 </div>
         )
