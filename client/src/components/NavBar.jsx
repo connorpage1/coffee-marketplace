@@ -15,7 +15,6 @@ const handleLogout = () =>{
         })
 }
 
-
 return(
 
 <>
@@ -24,10 +23,9 @@ return(
 <Link to={'/'}> Home </Link>
 <Link to={'/products'}> Shop </Link>
 
-
 {user ? <>
 <Link to={'/myprofile'}> My Profile</Link>
-<Link to={'/checkout'}> Check Out</Link>
+<Link to={'/checkout'}> Checkout</Link>
 <Link to={'/login'}> <button onClick={handleLogout}> Log Out </button></Link>
 </>
 :

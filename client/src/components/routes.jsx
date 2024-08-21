@@ -6,6 +6,7 @@ import Signup from "./Signup";
 import Login from "./Login";
 import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
+import Checkout from "./Checkout";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
         {
             path: "/login",
             element: <Login />
+        },
+        {
+            path: "/checkout",
+            element: <Checkout />
         }
     ]
 }
