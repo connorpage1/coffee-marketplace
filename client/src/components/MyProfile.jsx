@@ -9,12 +9,16 @@ function MyProfile() {
     const [profile, setProfile] = useState(null);
     const navigate = useNavigate()
 
+    const newProfile = (profile) => {
+        setProfile(profile)
+    }
+
     useEffect(() => {
         fetch('/profile')
         .then(res => {
             if (res.ok) {
                 res.json()
-                .then(setProfile)
+                .then(newProfile)
             } else {
                 throw Error(res.status, res.statusText)
             }
@@ -23,7 +27,7 @@ function MyProfile() {
             navigate('/login')
         })
     }    
-    , [])
+    , [profile])
 
     if (profile) {
     const { first_name, last_name, email, role_id, created_at, selling_products, orders } = profile
