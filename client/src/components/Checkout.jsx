@@ -40,11 +40,6 @@ const Checkout = () => {
         const productPrice = div.querySelector("h3").textContent;
         const productQuantity = div.querySelector("input").value || 1;
         const productId = div.querySelector("div.ui.input").dataset.productId;
-        // const item = cart.find((item) => item.id === productId);
-        // if (item) {
-        //   const updatedStock = item.stock - productQuantity;
-        //   updateStock(productId, updatedStock);
-        // }
         return {
           quantity: productQuantity,
           product_id: productId,
