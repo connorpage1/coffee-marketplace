@@ -107,13 +107,6 @@ function NewProductModal({ }) {
         <Modal.Header>Add a New Product</Modal.Header>
         <Modal.Content>
           <Container text>
-            <Segment raised>
-              <Image src='https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/logo512.png' size='small' centered style={{ marginBottom: '20px' }} />
-
-              <Header as='h2' textAlign='center'>
-                Add a New Product
-              </Header>
-
               <Formik
                 initialValues={initialValues}
                 validationSchema={schema}
@@ -175,7 +168,6 @@ function NewProductModal({ }) {
                   </Form>
                 )}
               </Formik>
-            </Segment>
           </Container>
         </Modal.Content>
         <Modal.Actions>
