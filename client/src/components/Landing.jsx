@@ -6,7 +6,7 @@ const Landing = () => {
             <div className="hero-section">
                 <Container textAlign="center">
                     <Header as="h1" className="hero-title">
-                        Welcome to Coffee Bean & Tea Leaves Shop
+                        Welcome to Coffee and Tea Marketplace
                     </Header>
                     <p className="hero-subtitle">
                         Discover the finest coffee beans and premium tea leaves sourced from around the world.
@@ -37,7 +37,7 @@ const Landing = () => {
             </div>
             <div className="footer">
                 <Container textAlign="center">
-                    <p>&copy; 2024 Coffee Bean & Tea Leaves Shop. All Rights Reserved.</p>
+                    <p>&copy; 2024 Coffee and Tea Marketplace. All Rights Reserved.</p>
                 </Container>
             </div>
         </div>

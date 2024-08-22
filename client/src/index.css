@@ -55,10 +55,10 @@
 }
 
 
-.ui top fixed menu {
+.ui.top.fixed.menu {
 
-  color: #5a8c0f;
-  padding-bottom: 100px;
+  background-color: #5a8c0f;
+  padding-bottom: 0px;
   
 }
 
