@@ -7,14 +7,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom"
 import EditModal from "./EditModal";
 
-// const schema = yup.object().shape({
-//   image_url: yup.string().required("Image is required"),
-//   description: yup.string().required("Description is required").min(50).max(1000),
-//   price: yup.number().required("Price is Required").min(1)
-
-// })
-
-
 function ProductDetails() {
   const [product, setProduct] = useState(null);
   const { productId } = useParams();
@@ -73,18 +65,21 @@ function ProductDetails() {
 
 
 
-  const { name, description, seller, image_url, id, user_id, price, stock, type } = product
+  const { name, description, seller, image_url, id, user_id, price, stock, type, tag, sku } = product
 
 
 
 
   return <div>
     <h1>{name} </h1>
-    <h3>{seller.first_name + ' ' + seller.last_name} </h3>
+    <h3>Seller: {seller.first_name + ' ' + seller.last_name} </h3>
     <Container>
       <img src={image_url} alt={name} />
-      <h3>${price}</h3>
-      <h3>{stock}</h3>
+      <h3>{tag} : {type}</h3>
+      <h3>${price}/12oz bag</h3>
+      <h3>Stock Remaining: {stock}</h3>
+      <h3>SKU: {sku}</h3>
+      <br></br>
     </Container>
     <Container textAlign="center">
       {description}
@@ -92,17 +87,7 @@ function ProductDetails() {
     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
     {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
   </div>;
-
-
-
-
-
 }
-
-
-
-
-
 
 export default ProductDetails;
 
