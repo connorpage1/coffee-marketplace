@@ -110,6 +110,10 @@ class Signup(Resource):
             db.session.commit()
             session["user_id"] = new_user.id
             return make_response(new_user.to_dict(), 201)
+        except IntegrityError as e:
+            db.session.rollback()
+            if "UNIQUE constraint failed: user.email" in str(e):
+                return make_response({"error": "Email already exists"}, 400)
         except Exception as e:
             db.session.rollback()
             return make_response({"error": str(e)}, 400)
@@ -124,7 +128,7 @@ class Login(Resource):
                 session["user_id"] = user.id
                 return make_response(user.to_dict(), 201)
             else:
-                return make_response({"error": "invalid username or password"}, 401)
+                return make_response({"error": "Incorrect email or password"}, 401)
         except Exception as e:
             return make_response({"error": str(e)}, 422)
 
