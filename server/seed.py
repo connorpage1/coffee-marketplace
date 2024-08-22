@@ -16,6 +16,8 @@ from models.product import Product
 
 fake = Faker()
 
+coffee_pics = ['../client/public/coffee-pics/Coffee 1.webp']
+
 def seed_data():
     with app.app_context():
         # Delete old data
