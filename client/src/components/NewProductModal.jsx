@@ -119,7 +119,7 @@ function NewProductModal({ }) {
                 validationSchema={schema}
                 onSubmit={async (values, actions) => {
                   await handleFormSubmit(values, actions);
-                  setOpen(false);  // Close modal after form submission
+                  setOpen(false);
                 }}
               >
                 {({ isSubmitting }) => (
