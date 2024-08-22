@@ -35,21 +35,20 @@ const Checkout = () => {
   ));
 
   const handleCheckout = () => {
-    const orderItems = Array.from(document.querySelectorAll(".ui.input")).map(
-      (input) => {
-        const productPrice = input.previousElementSibling.textContent;
-        const productQuantity = input.querySelector("input").value || 1;
-        const productId = input.querySelector("input").dataset.productId;
-
-        const item = cart.find((item) => item.id === productId);
-        if (item) {
-          const updatedStock = item.stock - productQuantity;
-          updateStock(productId, updatedStock);
-        }
+    const orderItems = Array.from(document.querySelectorAll(".row")).map(
+      (div) => {
+        const productPrice = div.querySelector("h3").textContent;
+        const productQuantity = div.querySelector("input").value || 1;
+        const productId = div.querySelector("div.ui.input").dataset.productId;
+        // const item = cart.find((item) => item.id === productId);
+        // if (item) {
+        //   const updatedStock = item.stock - productQuantity;
+        //   updateStock(productId, updatedStock);
+        // }
         return {
           quantity: productQuantity,
           product_id: productId,
-          price_at_order: Number(productPrice),
+          price_at_order: Number(productPrice.replace("$", "")),
         };
       }
     );

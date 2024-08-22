@@ -134,7 +134,7 @@ def seed_data():
                 image_url=rc(coffee_pics),
                 description=fake.sentence(80),
                 tag=rc(tag_choices),
-                price=fake.pyfloat(right_digits=2, positive=True, max_value=1000),
+                price=fake.pyfloat(right_digits=2, positive=True, max_value=200),
                 user_id=fake.random_element(
                     elements=[
                         user.id for user in users if user.role_id == User.ROLE_SELLER

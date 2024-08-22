@@ -12,7 +12,7 @@ class Product(db.Model, SerializerMixin):
     image_url = db.Column(db.String)
     description = db.Column(db.String)
     tag = db.Column(db.String)
-    price = db.Column(db.Float)
+    price = db.Column(db.Float) 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -94,11 +94,13 @@ class Product(db.Model, SerializerMixin):
 
     @validates("price")
     def validates_price(self, key, value):
-        if not isinstance(value, float):
+        if isinstance(value, int) and value > 0.01:
+            return float(value)
+        elif not isinstance(value, float):
             raise TypeError(f"{key} must be of data type float")
         elif value < 0.01:
             raise ValueError(f"{key} cannot be less that one cent")
-        return value
+        return round(value, 2)
 
     @validates("sku")
     def validate_sku(self, key, value):
@@ -120,8 +122,8 @@ class Product(db.Model, SerializerMixin):
     def validate_description(self, key, value):
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
-        elif not (50 <= len(value) <= 1000):
-            raise ValueError("Description must be between 50 and 1000 characters long")
+        elif not (10 <= len(value) <= 1000):
+            raise ValueError("Description must be between 10 and 1000 characters long")
         return value
 
     @validates("user_id")
