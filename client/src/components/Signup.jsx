@@ -1,16 +1,17 @@
 import * as yup from 'yup';
-import { Formik, Field, Form, ErrorMessage} from "formik";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useNavigate, useOutletContext } from 'react-router-dom';
-
+import { Button, Form as SemanticForm, Segment, Header, Message, Container, Image } from 'semantic-ui-react';
+import toast from 'react-hot-toast';
 
 const schema = yup.object().shape({
-    first_name: yup.string().required("Name is required").min(1).max(50),
-    last_name: yup.string().required("Name is required").min(1).max(50),
+    first_name: yup.string().required("First Name is required").min(1).max(50),
+    last_name: yup.string().required("Last Name is required").min(1).max(50),
     role: yup.string(),
-    email: yup.string().email("Please enter a valid email").required("Email is required"),  
+    email: yup.string().email("Please enter a valid email").required("Email is required"),
     password_hash: yup.string().required("Password is required").min(8, 'Password must be at least 8 characters'),
     confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref('password_hash'), null], "Passwords must match")
-})
+});
 
 const initialValues = {
     first_name: "",
@@ -19,14 +20,13 @@ const initialValues = {
     email: "",
     password_hash: "",
     confirmPassword: ""
-
-}
+};
 
 const Signup = () => {
-    const { user, updateUser } = useOutletContext();
-    const navigate = useNavigate()
+    const { updateUser } = useOutletContext();
+    const navigate = useNavigate();
 
-    const handleFormSubmit = (formData, { resetForm }) => {
+    const handleFormSubmit = (formData, { setSubmitting, setErrors }) => {
         fetch('/signup', {
             method: 'POST',
             headers: {
@@ -40,83 +40,86 @@ const Signup = () => {
                 password_hash: formData.password_hash
             })
         })
-        .then(res => {
+        .then(res => res.json().then(data => {
             if (res.ok) {
-                res.json()
-                .then(userObj => {
-                    console.log(userObj)
-                    updateUser(userObj)
-                })
-                .then(navigate('/products'))
+                updateUser(data);
+                navigate('/products');
             } else {
-                return res.json().then(err => {
-                    throw new Error(err.error)
-                })
+                if (data.error === "Email already exists") {
+                    setErrors({ email: "Email already exists" });
+                } else {
+                    toast.error(data.error || "An unexpected error occurred");
+                }
             }
-        })
-        .catch(console.log)
-    }
+        }))
+        .catch(() => toast.error("Network error. Please try again later."))
+        .finally(() => setSubmitting(false));
+    };
+
 
     return (
-    <div className='signup-form'>
-            <Formik
-                initialValues={initialValues}
-                validationSchema = {schema}
-                onSubmit={handleFormSubmit}
+        <Container text>
+            <Segment raised>
+                <Image src='https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/logo512.png' size='small' centered style={{ marginBottom: '20px' }} />
+                
+                <Header as='h2' textAlign='center'>
+                    Create an Account
+                </Header>
+
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={schema}
+                    onSubmit={handleFormSubmit}
                 >
-                <Form>
-                    <label htmlFor="first_name">First Name</label>
-                    <Field name='first_name' type='text'/>
-                    <ErrorMessage 
-                        name="first_name"
-                        component="div"
-                        className = "field-error"
-                        />
-                    <br/>
-                    <label htmlFor="last_name">Last Name</label>
-                    <Field name='last_name' type='text'/>
-                    <ErrorMessage 
-                        name="last_name"
-                        component="div"
-                        className = "field-error"
-                        />
-                    <br/>
-                    <label htmlFor="role">Role</label>
-                    <Field as="select" name='role'>
-                        <option value='1'>Customer</option>
-                        <option value='2'>Seller</option>
-                    </Field>
-                    <br/>
-                    <label htmlFor="email">Email</label>
-                    <Field name='email' type='email'/>
-                    <ErrorMessage 
-                        name="email"
-                        component="div"
-                        className = "field-error"
-                        />
-                    <br/>
-                    <label htmlFor="password_hash">Password</label>
-                    <Field name='password_hash' type='password'/>
-                    <ErrorMessage 
-                        name="password_hash"
-                        component="div"
-                        className = "field-error"
-                        />
-                    <br/>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <Field name='confirmPassword' type='password'/>
-                    <ErrorMessage 
-                        name="confirmPassword"
-                        component="div"
-                        className = "field-error"
-                        />
-                    <br/>
-                    <button type='submit'>Sign Up</button>
-                </Form>
-            </Formik>    
-    </div>);
-    }
+                    {({ isSubmitting }) => (
+                        <Form>
+                            <SemanticForm.Field>
+                                <label htmlFor="first_name">First Name</label>
+                                <Field name='first_name' type='text' as={SemanticForm.Input} fluid />
+                                <ErrorMessage name="first_name" component={Message} negative />
+                            </SemanticForm.Field>
 
+                            <SemanticForm.Field>
+                                <label htmlFor="last_name">Last Name</label>
+                                <Field name='last_name' type='text' as={SemanticForm.Input} fluid />
+                                <ErrorMessage name="last_name" component={Message} negative />
+                            </SemanticForm.Field>
 
+                            <SemanticForm.Field>
+                                <label htmlFor="role">Role</label>
+                                <Field as="select" name='role' className="ui dropdown" fluid>
+                                    <option value='1'>Customer</option>
+                                    <option value='2'>Seller</option>
+                                </Field>
+                            </SemanticForm.Field>
+
+                            <SemanticForm.Field>
+                                <label htmlFor="email">Email</label>
+                                <Field name='email' type='email' as={SemanticForm.Input} fluid />
+                                <ErrorMessage name="email" component={Message} negative />
+                            </SemanticForm.Field>
+
+                            <SemanticForm.Field>
+                                <label htmlFor="password_hash">Password</label>
+                                <Field name='password_hash' type='password' as={SemanticForm.Input} fluid />
+                                <ErrorMessage name="password_hash" component={Message} negative />
+                            </SemanticForm.Field>
+
+                            <SemanticForm.Field>
+                                <label htmlFor="confirmPassword">Confirm Password</label>
+                                <Field name='confirmPassword' type='password' as={SemanticForm.Input} fluid />
+                                <ErrorMessage name="confirmPassword" component={Message} negative />
+                            </SemanticForm.Field>
+
+                            <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
+                                Sign Up
+                            </Button>
+                        </Form>
+                    )}
+                </Formik>
+            </Segment>
+        </Container>
+    );
+};
 
 export default Signup;
