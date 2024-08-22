@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet } from 'react-router-dom'
 import NavBar from "./NavBar";
 import 'semantic-ui-css/semantic.min.css'
+import { Toaster } from "react-hot-toast";
 
 function App() {
 const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ useEffect(() =>{
 
 return( 
 <div className="app">
+    <Toaster />
     <header><NavBar user={user} updateUser={updateUser} /></header>
     <Outlet context = { {user, updateUser, addToCart, cart, resetCart} }/>
 </div>
