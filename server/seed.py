@@ -16,6 +16,59 @@ from models.product import Product
 
 fake = Faker()
 
+coffee_pics = [f'https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/coffee-pics/Coffee-{i}.webp' for i in range(17)]
+
+coffee_titles = [
+    "Ethiopian Yirgacheffe Light Roast",
+    "Sumatra Mandheling Dark Roast",
+    "Colombian Supremo Medium Roast",
+    "Jamaican Blue Mountain Reserve",
+    "Costa Rican Tarrazu Gourmet Coffee",
+    "Kenyan AA Single Origin",
+    "Brazilian Santos Coffee Beans",
+    "Guatemalan Antigua Shade Grown",
+    "Honduras Marcala Organic Coffee",
+    "Peruvian Chanchamayo Fair Trade",
+    "Papua New Guinea Sigri Estate",
+    "Nicaraguan Matagalpa Coffee",
+    "Tanzanian Peaberry Coffee",
+    "Mexican Chiapas Fair Trade",
+    "El Salvador Pacamara Micro Lot",
+    "Hawaiian Kona Extra Fancy",
+    "Sulawesi Toraja Coffee Beans",
+    "Rwanda Bourbon Coffee",
+    "Bolivian Yungas Organic Coffee",
+    "Malawi Mzuzu Coffee Cooperative",
+    "Panama Boquete Estate Coffee",
+    "Vietnamese Robusta Strong Roast",
+    "Indian Monsooned Malabar Coffee",
+    "Zambian AA Washed Coffee",
+    "Ugandan Bugisu Coffee",
+    "Yemeni Mocha Sanani Coffee",
+    "Dominican Republic Barahona Coffee",
+    "Zimbabwe AA Coffee Beans",
+    "Burundi Kayanza Bourbon Coffee",
+    "St. Helena Island Napoleon Coffee",
+    "Ecuadorian Galapagos Coffee",
+    "Haitian Blue Mountain Coffee",
+    "Cuban Serrano Superior Coffee",
+    "Laos Bolaven Plateau Coffee",
+    "Ivory Coast Robusta Coffee",
+    "Puerto Rican Yauco Selecto Coffee",
+    "Timor-Leste Maubisse Coffee",
+    "Galapagos San Cristobal Coffee",
+    "Java Estate Coffee Beans",
+    "Sulawesi Kalosi Coffee",
+    "Colombian Decaf Coffee",
+    "Organic Breakfast Blend Coffee",
+    "Espresso Italiano Dark Roast",
+    "French Vanilla Flavored Coffee",
+    "Caramel Macchiato Gourmet Coffee",
+    "Hazelnut Crème Coffee",
+    "Mocha Java Blend Coffee",
+    "Pumpkin Spice Seasonal Coffee",
+    "Chocolate Raspberry Coffee"
+]
 def seed_data():
     with app.app_context():
         # Delete old data
@@ -70,11 +123,11 @@ def seed_data():
         products = []
         for _ in range(20):
             product = Product(
-                name=fake.word().capitalize(),
+                name=rc(coffee_titles),
                 stock=fake.random_int(min=0, max=100),
                 type=fake.random_element(elements=("coffee", "tea")),
                 sku=fake.unique.bothify(text='????######'),
-                image_url="https://www.apemockups.com/wp-content/uploads/2023/05/Free-Coffee-Bag-and-Beans-Mockup-1.png.webp",
+                image_url=rc(coffee_pics),
                 description=fake.sentence(80),
                 tag=rc(tag_choices),
                 price=fake.pyfloat(right_digits=2, positive=True, max_value=1000),
