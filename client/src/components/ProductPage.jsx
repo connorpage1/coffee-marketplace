@@ -35,7 +35,7 @@ const ProductPage = () => {
     return (
         <main>
             <Container>
-                <h1>Coffee and Tea Shop</h1>
+                <h1>Coffee & Tea Marketplace</h1>
                 <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
                 <Grid columns={5} doubling stackable>
                     {filteredProducts.length > 0 ? (
