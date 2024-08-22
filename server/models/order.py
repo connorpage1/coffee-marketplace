@@ -25,8 +25,6 @@ class Order(db.Model, SerializerMixin):
     def validates_total(self, _, total):
         if not isinstance(total, float):
             raise TypeError("Total price must be of data type float")
-        elif total < 0.01:
-            raise ValueError("Price cannot be less that one cent")
         else:
             return total
 
