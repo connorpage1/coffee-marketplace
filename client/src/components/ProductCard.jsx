@@ -1,6 +1,6 @@
 import { Link, useOutletContext } from "react-router-dom";
 import { useState } from "react";
-import { Card, Image, Button } from "semantic-ui-react";
+import { Card, Image, Button, Icon } from "semantic-ui-react";
 
 function ProductCard({
   name,
@@ -42,7 +42,7 @@ function ProductCard({
       <Card.Content extra>
         {user && (
           <Button disabled={disable} onClick={handleClick} primary fluid>
-            Add to Cart
+            Add to Cart <Icon name="cart plus"/>
           </Button>
         )}
       </Card.Content>

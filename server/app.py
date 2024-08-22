@@ -164,6 +164,8 @@ class Profile(Resource):
             if user_id := session.get("user_id"):
                 data = request.get_json()
                 user = db.session.get(User, user_id)
+                if 'pwupdate' in request.args and not user.authenticate(data.get('current_password')):
+                    return make_response({'error': 'Incorrect password'}, 401)
                 for attr, value in data.items():
                     setattr(user, attr, value)
                 db.session.commit()

@@ -1,6 +1,6 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Container, Card, Button, Header, Image, Input, Grid } from "semantic-ui-react";
+import { Container, Button, Header, Image, Input, Grid } from "semantic-ui-react";
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -81,7 +81,7 @@ const Checkout = () => {
                 onClick={handleCheckout}
                 style={{ marginTop: '20px' }}
             >
-                Checkout Now 🛒
+                Checkout Now 
             </Button>
         </Container>
     );
