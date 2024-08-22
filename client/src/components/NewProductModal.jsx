@@ -50,7 +50,7 @@ const schema = yup.object().shape({
     stock: yup.number().min(0),
     image_url: yup.string().matches(imageUrlRegex).required("Image is required"),
     tag: yup.string().oneOf(validTags,"Must be a valid tag"),
-    description: yup.string().required("Description is required").min(50).max(1000),
+    description: yup.string().required("Description is required").min(10, "Description must be at least 10 characters long").max(1000, "Description cannot be longer than 1000 characters"),
     price: yup.number().required("Price is Required").min(1)
   })
 

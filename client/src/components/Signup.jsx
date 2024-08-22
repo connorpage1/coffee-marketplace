@@ -111,7 +111,7 @@ const Signup = () => {
                                 <ErrorMessage name="confirmPassword" component={Message} negative />
                             </SemanticForm.Field>
 
-                            <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
+                            <Button className='login-signup' type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
                                 Sign Up
                             </Button>
                         </Form>
