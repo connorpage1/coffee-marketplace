@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import { Container } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 import toast from "react-hot-toast";
 import SearchBar from "./SearchBar";
 import ProductCard from "./ProductCard";
@@ -31,21 +31,25 @@ const ProductPage = () => {
         return nameMatches || tagsMatch;
     });
 
-return (
-    <main>
-        <h1>Coffee and Tea Shop</h1>
-        <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
-        <div>
-        {filteredProducts ? (
-            filteredProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
-        ))
-        ) : (
-        <p>No products available</p>
-        )}
-        </div>
-    </main>
-);
+    return (
+        <main>
+            <Container>
+                <h1>Coffee and Tea Shop</h1>
+                <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
+                <Grid columns={5} doubling stackable>
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
+                            <Grid.Column key={product.id}>
+                                <ProductCard {...product} />
+                            </Grid.Column>
+                        ))
+                    ) : (
+                        <p>No products available</p>
+                    )}
+                </Grid>
+            </Container>
+        </main>
+    );
 };
 
 export default ProductPage;
