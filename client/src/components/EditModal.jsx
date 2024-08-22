@@ -151,3 +151,97 @@ function EditModal({ product, setProduct, productId }) {
 export default EditModal
 
 
+<div>
+            <Button onClick={() => setOpen(true)}>Add New Product</Button>
+            
+            <Modal
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
+                open={open}
+                dimmer='blurring'
+            >
+                <Modal.Header>Add a New Product</Modal.Header>
+                <Modal.Content>
+                    <Container text>
+                        <Segment raised>
+                            <Image src='https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/logo512.png' size='small' centered style={{ marginBottom: '20px' }} />
+                            
+                            <Header as='h2' textAlign='center'>
+                                Add a New Product
+                            </Header>
+                        
+                            <Formik
+                                initialValues={initialValues}
+                                validationSchema={schema}
+                                onSubmit={async (values, actions) => {
+                                    await handleFormSubmit(values, actions);
+                                    setOpen(false);  // Close modal after form submission
+                                }}
+                            >
+                                {({ isSubmitting }) => (
+                                    <Form>
+                                        <SemanticForm.Field>
+                                            <label htmlFor="name">Name: </label>
+                                            <Field name="name" type='text' placeholder="New Product Name"/> 
+                                            <ErrorMessage name="name" component={Message} negative />
+                                        </SemanticForm.Field>
+                    
+                                        <SemanticForm.Field>
+                                            <label htmlFor="type">Type: </label>
+                                            <Field as="select" name="type">
+                                                <option value='coffee'> Coffee </option>
+                                                <option value='tea'> Tea </option>
+                                            </Field>
+                                        </SemanticForm.Field>
+                                        
+                                        <SemanticForm.Field>
+                                            <label htmlFor='tag'> Tag: </label>
+                                            <Field as="select" name="tag">
+                                                {validTags.map((validTag) => ( <option key={validTag} value={validTag}> {validTag} </option> ))}
+                                            </Field>
+                                        </SemanticForm.Field>
+                                        
+                                        <SemanticForm.Field>
+                                            <label htmlFor="stock">Stock: </label>
+                                            <Field name="stock" type='number' placeholder="Current Stock"/> 
+                                            <ErrorMessage name="stock" component={Message} negative />
+                                        </SemanticForm.Field>
+                    
+                                        <SemanticForm.Field>
+                                            <label htmlFor="image_url">Image Link: </label>
+                                            <Field name="image_url" type='text' placeholder="New Image Link"/> 
+                                            <ErrorMessage name="image_url" component={Message} negative />
+                                        </SemanticForm.Field>
+                    
+                                        <SemanticForm.Field>
+                                            <label htmlFor="price">Price: </label>
+                                            <Field name="price" type='number' placeholder="Price"/> 
+                                            <ErrorMessage name="price" component={Message} negative />
+                                        </SemanticForm.Field>
+                    
+                                        <SemanticForm.Field>
+                                            <label htmlFor="description">Description: </label>
+                                            <Field name="description" type='text' placeholder="Description"/> 
+                                            <ErrorMessage name="description" component={Message} negative />
+                                        </SemanticForm.Field>
+                    
+                                        <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
+                                            Add New Product
+                                        </Button>
+                                    </Form>
+                                )}
+                            </Formik>
+                        </Segment>
+                    </Container>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='black' onClick={() => setOpen(false)}>
+                        Cancel
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        </div>
+    );
+};
+
+

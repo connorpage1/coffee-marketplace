@@ -107,7 +107,7 @@ return (
     </Card.Content>
     <Card.Content extra>
       {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-//    {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
+      {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
       </Card.Content>
     </Container>
   )
