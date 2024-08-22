@@ -7,13 +7,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom"
 import EditModal from "./EditModal";
 
-// const schema = yup.object().shape({
-//   image_url: yup.string().required("Image is required"),
-//   description: yup.string().required("Description is required").min(50).max(1000),
-//   price: yup.number().required("Price is Required").min(1)
-
-// })
-
 
 function ProductDetails() {
   const [product, setProduct] = useState(null);
