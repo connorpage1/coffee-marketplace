@@ -80,8 +80,11 @@ class OrderItems(Resource):
                 data = request.get_json()
                 total = 0
                 for order_item in data:
+                    product = db.session.get(Product, order_item["product_id"])
                     new_order_item = OrderItem(**order_item, order_id=new_order.id)
                     db.session.add(new_order_item)
+                    db.session.commit()
+                    product.stock -= int(order_item["quantity"])
                     db.session.commit()
                     total += new_order_item.price_at_order * new_order_item.quantity
                 new_order.status = "ordered"

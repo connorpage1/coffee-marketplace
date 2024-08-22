@@ -3,7 +3,8 @@ import toast from "react-hot-toast";
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const {cart, resetCart} = useOutletContext()
+    const {cart, resetCart, updateStock} = useOutletContext()
+
     const mappedCart = cart.map(item => (
         <div className="cart-item" key={item.id}>
             <div className="cart-image"><img src={item.image_url} alt={item.name}/></div> 
@@ -18,9 +19,15 @@ const Checkout = () => {
     const handleCheckout = () => {
         const orderItems = Array.from(document.querySelectorAll(".cart-detail")).map(card => {
             const productPrice = card.querySelector("h3").textContent
-                const productQuantity = card.querySelector("input").value || 1
-                const productId = card.querySelector("input").dataset.productId
-                return {"quantity":productQuantity, "product_id":productId, "price_at_order":Number(productPrice)}
+            const productQuantity = card.querySelector("input").value || 1
+            const productId = card.querySelector("input").dataset.productId
+
+            const item = cart.find(item => item.id === productId)
+            if (item) {
+                const updatedStock = item.stock = productQuantity
+                updateStock = (productId, updatedStock)
+            }
+            return {"quantity":productQuantity, "product_id":productId, "price_at_order":Number(productPrice)}
             })
         
         fetch("/order_items", {
@@ -40,7 +47,6 @@ const Checkout = () => {
         .then(message => {
             toast.success(`Thank you for your purchase, see you soon!`)
             resetCart()
-            // updateQuantity()
             navigate('/products');
         })
         .catch(error => toast.error('Error:', error.message));
