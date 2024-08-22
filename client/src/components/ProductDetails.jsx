@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import toast from "react-hot-toast"
-import * as yup from 'yup';
-import { Formik, Field, Form, ErrorMessage } from "formik";
+
 import { useNavigate } from "react-router-dom"
 import EditModal from "./EditModal";
 import { Card, Image, Container } from "semantic-ui-react";
