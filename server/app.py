@@ -8,6 +8,8 @@ from flask_migrate import Migrate
 from flask_restful import Resource, Api
 import os
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
+
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -112,7 +114,7 @@ class Signup(Resource):
             return make_response(new_user.to_dict(), 201)
         except IntegrityError as e:
             db.session.rollback()
-            if "UNIQUE constraint failed: user.email" in str(e):
+            if "UNIQUE constraint failed" in str(e):
                 return make_response({"error": "Email already exists"}, 400)
         except Exception as e:
             db.session.rollback()
