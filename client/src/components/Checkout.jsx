@@ -52,9 +52,9 @@ const Checkout = () => {
             },
             body: JSON.stringify(orderItems)
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
+        .then(resp => {
+            if (resp.ok) {
+                return resp.json();
             } else {
                 throw new Error('Failed to create order');
             }

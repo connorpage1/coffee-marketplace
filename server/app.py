@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-
-# Standard library imports
-
 # Remote library imports
 from flask import Flask, request, make_response, session
 from flask_migrate import Migrate
@@ -14,8 +10,6 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 
 # Local imports
 from config import app, db, api
-
-# Add your model imports
 from models.order import Order
 from models.order_item import OrderItem
 from models.user import User
@@ -164,8 +158,10 @@ class Profile(Resource):
             if user_id := session.get("user_id"):
                 data = request.get_json()
                 user = db.session.get(User, user_id)
-                if 'pwupdate' in request.args and not user.authenticate(data.get('current_password')):
-                    return make_response({'error': 'Incorrect password'}, 401)
+                if "pwupdate" in request.args and not user.authenticate(
+                    data.get("current_password")
+                ):
+                    return make_response({"error": "Incorrect password"}, 401)
                 for attr, value in data.items():
                     setattr(user, attr, value)
                 db.session.commit()
@@ -196,10 +192,13 @@ class UserById(Resource):
             user = db.session.get(User, id)
 
             if not user or user.role_id == 1:
-                return make_response({"error": "This user does not exist or is not a seller"}, 404)
+                return make_response(
+                    {"error": "This user does not exist or is not a seller"}, 404
+                )
             else:
                 return make_response(
-                    user.to_dict(only=("first_name", "last_name", "selling_products")), 200
+                    user.to_dict(only=("first_name", "last_name", "selling_products")),
+                    200,
                 )
         except Exception as e:
             return make_response({"error": str(e)}, 400)
@@ -246,7 +245,7 @@ class ProductById(Resource):
         try:
             product = db.session.get(Product, id)
 
-            if product is None:
+            if not product:
                 return make_response({"error": str(e)}, 404)
             else:
                 return make_response(product.to_dict(), 200)
@@ -301,7 +300,6 @@ class ProductByUser(Resource):
                 return (products, 200)
         except Exception as e:
             return {"error": "User not found"}, 404
-
 
 api.add_resource(Orders, "/orders")
 api.add_resource(GetOrderById, "/orders/<int:id>")

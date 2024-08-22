@@ -1,5 +1,6 @@
 from models.__init__ import SerializerMixin, validates, db, re
 
+
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
@@ -18,8 +19,7 @@ class Product(db.Model, SerializerMixin):
 
     seller = db.relationship("User", back_populates="selling_products")
     order_items = db.relationship("OrderItem", back_populates="product")
-    # orders = db.relationship("Order", back_populates="products")
-    
+
     serialize_rules = ("-user", "-order_items")
 
     def __repr__(self):
@@ -30,6 +30,7 @@ class Product(db.Model, SerializerMixin):
                 Type: {self.type}
                 Tag: {self.tag}
                 SKU: {self.sku}
+                Price: {self.price}
                 Image URL: {self.image_url}
                 Description: {self.description}
             />
@@ -80,23 +81,23 @@ class Product(db.Model, SerializerMixin):
             "green tea",
             "white tea",
             "herbal",
-            "rooibos", 
+            "rooibos",
             "matcha",
             "caffeine",
-            "decaf"
+            "decaf",
         ]
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
         elif value.lower() not in valid_tags:
             raise ValueError(f"Invalid tag for '{key}': '{value}'")
         return value
-    
+
     @validates("price")
     def validates_price(self, key, value):
         if not isinstance(value, float):
-            raise TypeError("Price must be of data type float")
-        elif value < .01:
-            raise ValueError("Price cannot be less that one cent")
+            raise TypeError(f"{key} must be of data type float")
+        elif value < 0.01:
+            raise ValueError(f"{key} cannot be less that one cent")
         return value
 
     @validates("sku")
