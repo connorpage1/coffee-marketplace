@@ -22,7 +22,7 @@ const UpdatePassword = () => {
     const [open, setOpen] = useState();
     
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch('/profile?pwupdate=True', {
+        fetch('/profile?pwupdate', {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
