@@ -1,5 +1,5 @@
 # Remote library imports
-from flask import Flask, request, make_response, session
+from flask import request, make_response, session
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 import os
@@ -43,12 +43,12 @@ class GetOrderById(Resource):
         try:
             order = db.session.get(Order, id)
 
-            if order is None:
+            if not order:
                 return make_response({"error": str(e)}, 404)
             else:
                 return make_response(order.to_dict(), 200)
         except Exception as e:
-            return make_response({"error": str(e)}, 404)
+            return make_response({"error": str(e)}, 400)
 
 
 class OrderItems(Resource):
