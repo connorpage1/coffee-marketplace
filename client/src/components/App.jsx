@@ -44,8 +44,12 @@ useEffect(() =>{
 return( 
 <div className="app">
     <Toaster />
-    <header><NavBar user={user} updateUser={updateUser} /></header>
-    <Outlet context = { {user, updateUser, addToCart, cart, resetCart} }/>
+    <header>
+        <NavBar user={user} updateUser={updateUser} />
+    </header>
+    <div className="content">
+        <Outlet context = { {user, updateUser, addToCart, cart, resetCart} }/>
+    </div>
 </div>
 )}
 

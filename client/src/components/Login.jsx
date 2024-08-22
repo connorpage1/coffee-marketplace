@@ -3,6 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useState } from 'react';
 import { useNavigate, useOutletContext, Link} from 'react-router-dom';
 import { Button, Form as SemanticForm, Segment, Header, Message, Container, Image } from 'semantic-ui-react';
+import toast from 'react-hot-toast';
 
 import Checkout from './Checkout';
 
@@ -17,7 +18,7 @@ const Login = () => {
     const { updateUser } = useOutletContext(); 
     const navigate = useNavigate();
 
-    const handleFormSubmit = (formData, { setSubmitting }) => {
+    const handleFormSubmit = (formData, { setSubmitting, setErrors }) => {
         fetch("/login", {
             method: "POST",
             headers: {
@@ -52,7 +53,15 @@ const Login = () => {
                     }
                 });
             } else {
-                res.json().then(error => console.log(error.error));
+                res.json().then(error => {
+                    if (error.error === "Incorrect email or password"){
+                        setErrors({
+                            password_hash: "Incorrect email or password"
+                        })
+                    } else {
+                        toast.error(error.error || "An unexpected error occured")
+                    }
+                });
             }
         })
         .catch(console.log)

@@ -128,7 +128,7 @@ class Login(Resource):
                 session["user_id"] = user.id
                 return make_response(user.to_dict(), 201)
             else:
-                return make_response({"error": "invalid username or password"}, 401)
+                return make_response({"error": "Incorrect email or password"}, 401)
         except Exception as e:
             return make_response({"error": str(e)}, 422)
 

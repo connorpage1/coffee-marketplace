@@ -60,7 +60,6 @@ const Signup = () => {
     return (
         <Container text>
             <Segment raised>
-                {/* Logo Section */}
                 <Image src='https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/logo512.png' size='small' centered style={{ marginBottom: '20px' }} />
                 
                 <Header as='h2' textAlign='center'>
