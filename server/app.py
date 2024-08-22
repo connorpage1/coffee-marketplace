@@ -158,7 +158,7 @@ class Profile(Resource):
 
     def patch(self):
         try:
-            if user_id := session.get("user_id"):
+            if user_id := session.get("user_id"):                    
                 data = request.get_json()
                 user = db.session.get(User, user_id)
                 for attr, value in data.items():
