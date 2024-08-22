@@ -45,15 +45,14 @@ const initialValues = {
 const imageUrlRegex = /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg)$/;
 
 const schema = yup.object().shape({
-  name: yup.string().required("Name is Required"),
-  type: yup.string().required(),
-  stock: yup.number().min(0),
-  image_url: yup.string().matches(imageUrlRegex).required("Image is required"),
-  tag: yup.string().oneOf(validTags, "Must be a valid tag"),
-  description: yup.string().required("Description is required").min(10, "Description must be at least 10 characters").max(1000, "You have exceeded the 1000 character limit."),
-  price: yup.number().required("Price is Required").min(1)
-
-})
+    name: yup.string().required("Name is Required"),
+    type: yup.string().required(),
+    stock: yup.number().min(0),
+    image_url: yup.string().matches(imageUrlRegex).required("Image is required"),
+    tag: yup.string().oneOf(validTags,"Must be a valid tag"),
+    description: yup.string().required("Description is required").min(50).max(1000),
+    price: yup.number().toFixed(2).required("Price is Required").min(1)
+  })
 
 const generateCode = () => nanoid(8)
 

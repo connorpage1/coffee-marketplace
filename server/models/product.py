@@ -1,5 +1,6 @@
 from models.__init__ import SerializerMixin, validates, db, re
 
+
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
@@ -11,15 +12,14 @@ class Product(db.Model, SerializerMixin):
     image_url = db.Column(db.String)
     description = db.Column(db.String)
     tag = db.Column(db.String)
-    price = db.Column(db.Float)
+    price = db.Column(db.Float) 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     seller = db.relationship("User", back_populates="selling_products")
     order_items = db.relationship("OrderItem", back_populates="product")
-    # orders = db.relationship("Order", back_populates="products")
-    
+
     serialize_rules = ("-user", "-order_items")
 
     def __repr__(self):
@@ -30,6 +30,7 @@ class Product(db.Model, SerializerMixin):
                 Type: {self.type}
                 Tag: {self.tag}
                 SKU: {self.sku}
+                Price: {self.price}
                 Image URL: {self.image_url}
                 Description: {self.description}
             />
@@ -80,24 +81,26 @@ class Product(db.Model, SerializerMixin):
             "green tea",
             "white tea",
             "herbal",
-            "rooibos", 
+            "rooibos",
             "matcha",
             "caffeine",
-            "decaf"
+            "decaf",
         ]
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
         elif value.lower() not in valid_tags:
             raise ValueError(f"Invalid tag for '{key}': '{value}'")
         return value
-    
+
     @validates("price")
     def validates_price(self, key, value):
-        if not isinstance(value, float):
-            raise TypeError("Price must be of data type float")
-        elif value < .01:
-            raise ValueError("Price cannot be less that one cent")
-        return value
+        if isinstance(value, int) and value > 0.01:
+            return float(value)
+        elif not isinstance(value, float):
+            raise TypeError(f"{key} must be of data type float")
+        elif value < 0.01:
+            raise ValueError(f"{key} cannot be less that one cent")
+        return round(value, 2)
 
     @validates("sku")
     def validate_sku(self, key, value):
@@ -119,8 +122,8 @@ class Product(db.Model, SerializerMixin):
     def validate_description(self, key, value):
         if not isinstance(value, str) or not value.strip():
             raise TypeError(f"{key} must be a non-empty string")
-        elif not (50 <= len(value) <= 1000):
-            raise ValueError("Description must be between 50 and 1000 characters long")
+        elif not (10 <= len(value) <= 1000):
+            raise ValueError("Description must be between 10 and 1000 characters long")
         return value
 
     @validates("user_id")

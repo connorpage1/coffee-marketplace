@@ -20,6 +20,7 @@ const ProductPage = () => {
         .catch((errorObj) => toast.error(errorObj.message));
     }, []);
 
+
     const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     };
@@ -34,9 +35,12 @@ const ProductPage = () => {
 
     return (
         <main>
+
             <Container>
                 <h1>Coffee & Tea Marketplace</h1>
                 <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
+                <br/>
+                <br/>
                 <Grid columns={5} doubling stackable>
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
@@ -45,7 +49,7 @@ const ProductPage = () => {
                             </Grid.Column>
                         ))
                     ) : (
-                        <p>No products available</p>
+                        <h2>No products available</h2>
                     )}
                 </Grid>
             </Container>
