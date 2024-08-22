@@ -1,17 +1,18 @@
+import { Input } from "semantic-ui-react";
+
 const SearchBar = ({ handleSearch, searchQuery }) => {
-    return (
+  return (
     <div className="searchbar">
-        <label htmlFor="search">Search Products:</label>
-        <input
-        type="text"
-        id="search"
-        className="search-bar"
+      <Input
+        icon="search"
+        iconPosition="left"
         placeholder="Type a name or tag to search..."
         onChange={handleSearch}
         value={searchQuery}
-        />
+        fluid
+      />
     </div>
-    );
+  );
 };
 
 export default SearchBar;

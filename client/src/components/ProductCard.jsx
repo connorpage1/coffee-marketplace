@@ -1,42 +1,52 @@
 import { Link, useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { Card, Image, Button, Icon } from "semantic-ui-react";
 
-function ProductCard({ name, image_url, price, stock: initialStock, tag, type, id }) {
+function ProductCard({
+  name,
+  image_url,
+  price,
+  stock,
+  tag,
+  type,
+  id,
+}) {
   const { addToCart, user } = useOutletContext();
 
   const [disable, setDisable] = useState(false);
-  const [stock, setStock] = useState(initialStock);
 
   const handleClick = () => {
     addToCart({ name, image_url, price, stock, tag, type, id });
-    const updatedStock = stock - 1;
-    setStock(updatedStock);
     setDisable(true);
   };
 
   return (
-    <div className="card">
+    <Card>
       <Link to={`/products/${id}`}>
-        <h1>{name}</h1>
+        <Card.Content>
+          <Card.Header>{name}</Card.Header>
+        </Card.Content>
       </Link>
-      <img src={image_url} alt={name} />
-      <h2>
-        {type}: {tag}
-      </h2>
-      <h2> ${price} </h2>
-      <h2>{stock ? <>{stock} remaining</> : <>Out of Stock</>}</h2>
-      <h2>
+      <Image src={image_url} alt={name} wrapped ui={false} />
+      <Card.Content>
+        <Card.Meta>
+          <span>{type}: {tag}</span>
+        </Card.Meta>
+        <Card.Description>
+          ${price}/12oz bag
+        </Card.Description>
+        <Card.Description>
+          {stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}
+        </Card.Description>
+      </Card.Content>
+      <Card.Content extra>
         {user && (
-          <button disabled={disable} onClick={handleClick}>
-            {" "}
-            Add to Cart{" "}
-          </button>
+          <Button disabled={disable} onClick={handleClick} primary fluid>
+            Add to Cart <Icon name="cart plus"/>
+          </Button>
         )}
-      </h2>
-      <>
-        <br />
-      </>
-    </div>
+      </Card.Content>
+    </Card>
   );
 }
 
