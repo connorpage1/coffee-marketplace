@@ -81,7 +81,7 @@ const Checkout = () => {
                 onClick={handleCheckout}
                 style={{ marginTop: '20px' }}
             >
-                Checkout Now 
+                Checkout Now 🛒
             </Button>
         </Container>
     );
