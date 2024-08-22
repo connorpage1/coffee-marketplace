@@ -28,7 +28,8 @@ const ProductPage = () => {
         const searchLower = searchQuery.toLowerCase();
         const nameMatches = product.name.toLowerCase().includes(searchLower);
         const tagsMatch = product.tag.toLowerCase().includes(searchLower);
-        return nameMatches || tagsMatch;
+        const typeMatch = product.type.toLowerCase().includes(searchLower);
+        return nameMatches || tagsMatch || typeMatch;
     });
 
     return (
