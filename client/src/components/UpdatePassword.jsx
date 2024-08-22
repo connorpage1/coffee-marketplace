@@ -1,34 +1,36 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Modal, Button, Form } from 'semantic-ui-react';
-import { Formik, Field, ErrorMessage } from "formik";
 import * as yup from 'yup';
+import { Formik, Field, ErrorMessage } from "formik";
+import { Modal, Button, Form } from 'semantic-ui-react';
+import { useState } from 'react';
+
+
 
 const schema = yup.object().shape({
-    first_name: yup.string().required("Name is required").min(1, "Must be at least one character").max(50, "Cannot be longer than 50 characters"),
-    last_name: yup.string().required("Name is required").min(1, "Must be at least one character").max(50, "Cannot be longer than 50 characters"),
-    email: yup.string().email("Please enter a valid email").required("Email is required"),  
+    current_password: yup.string().required("Please enter your current password"), 
+    password_hash: yup.string().required("Please enter a new password").min(8, 'Password must be at least 8 characters'),
+    confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref('password_hash'), null], "Passwords must match")
 })
 
-const UpdateProfile = ({ profile, newProfile }) => {
-    const [open, setOpen] = useState(false)
+const initialValues = {
+    current_password: "",
+    password_hash: "",
+    confirmPassword: ""
+}
 
-    const initialValues = {
-        first_name: profile.first_name,
-        last_name: profile.last_name,
-        email: profile.email
-    }
+const UpdatePassword = () => {
 
+    const [open, setOpen] = useState();
+    
     const handleFormSubmit = (formData, { resetForm }) => {
-        fetch('/profile', {
+        fetch('/profile?pwupdate', {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                first_name: formData.first_name,
-                last_name: formData.last_name,
-                email: formData.email,
+                current_password: formData.current_password,
+                password_hash: formData.password_hash,
+                confirmPassword: formData.confirmPassword,
             })
         })
         .then(res => {
@@ -36,7 +38,6 @@ const UpdateProfile = ({ profile, newProfile }) => {
                 res.json()
                 .then(userObj => {
                     console.log(userObj)
-                    newProfile(userObj)
                     setOpen(false)
                 })
             } else {
@@ -46,14 +47,15 @@ const UpdateProfile = ({ profile, newProfile }) => {
         .catch(console.log)
     }
 
+
     return(
         <>
             <Button onClick={() => {
                 setOpen(true)
-                }}>Update information</Button>
+                }}>Change password</Button>
 
             <Modal open={open} onClose={() => setOpen(false)}>
-                <Modal.Header>Update profile</Modal.Header>
+                <Modal.Header>Change password</Modal.Header>
                 <Modal.Content>
                     <Formik initialValues={initialValues} 
                             onSubmit={handleFormSubmit}
@@ -62,34 +64,34 @@ const UpdateProfile = ({ profile, newProfile }) => {
                         {({ handleSubmit, touched }) => (
                             <Form onSubmit={handleSubmit}>
                                 <Form.Field>
-                                    <label htmlFor='first_name'>First Name</label>
-                                    <Field name='first_name' as={Form.Input} />
+                                    <label htmlFor='current_password'>Current Password</label>
+                                    <Field name='current_password' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
-                                    name="first_name"
+                                    name="current_password"
                                     component="div"
                                     className = "field-error"
                                     />
                                 <Form.Field>
-                                    <label htmlFor='last_name'>Last Name</label>
-                                    <Field name='last_name' as={Form.Input} />
+                                    <label htmlFor='password_hash'>New Password</label>
+                                    <Field name='password_hash' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
-                                    name="last_name"
+                                    name="password_hash"
                                     component="div"
                                     className = "field-error"
                                     />
                                 <Form.Field>
-                                    <label htmlFor='email'>Email</label>
-                                    <Field name='email' as={Form.Input} />
+                                    <label htmlFor='confirmPassword'>Confirm New Password</label>
+                                    <Field name='confirmPassword' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
-                                    name="email"
+                                    name="confirmPassword"
                                     component="div"
                                     className = "field-error"
                                     />
-                                <Button type='submit' color='green' disabled={!touched.first_name && !touched.last_name && !touched.email}>
-                                    Update information
+                                <Button type='submit' color='green' disabled={!touched.current_password && !touched.password_hash && !touched.confirmPassword}>
+                                    Change password
                                 </Button>
                             </Form>
                         )
@@ -98,8 +100,6 @@ const UpdateProfile = ({ profile, newProfile }) => {
                 </Modal.Content>
             </Modal>
         </>
-    );
-
-};
-
-export default UpdateProfile
+    )
+}
+export default UpdatePassword
