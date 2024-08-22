@@ -304,6 +304,8 @@ class ProductByUser(Resource):
                 return (products, 200)
         except Exception as e:
             return {"error": "User not found"}, 404
+        
+
 
 api.add_resource(Orders, "/orders")
 api.add_resource(GetOrderById, "/orders/<int:id>")
@@ -317,6 +319,7 @@ api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
 api.add_resource(ProductByUser, "/products/user/<int:id>")
+
 
 
 if __name__ == "__main__":
