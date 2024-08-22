@@ -29,8 +29,8 @@ function ProductCard({
       <h2>
         {type}: {tag}
       </h2>
-      <h2> ${price} </h2>
-      <h2>{stock ? <>{stock} remaining</> : <>Out of Stock</>}</h2>
+      <h2> ${price}/12oz bag </h2>
+      <h2>{stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}</h2>
       <h2>
         {user && (
           <button disabled={disable} onClick={handleClick}>
