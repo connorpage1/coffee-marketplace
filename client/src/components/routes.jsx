@@ -8,7 +8,7 @@ import MyProfile from "./MyProfile";
 import VendorDetails from "./VendorDetails";
 import Checkout from "./Checkout";
 import { createBrowserRouter } from "react-router-dom";
-import BestSeller from "./BestSellingProduct";
+
 
 export const router = createBrowserRouter([
 {
