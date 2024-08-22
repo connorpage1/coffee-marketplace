@@ -51,7 +51,7 @@ const schema = yup.object().shape({
     image_url: yup.string().matches(imageUrlRegex).required("Image is required"),
     tag: yup.string().oneOf(validTags,"Must be a valid tag"),
     description: yup.string().required("Description is required").min(50).max(1000),
-    price: yup.number().toFixed(2).required("Price is Required").min(1)
+    price: yup.number().required("Price is Required").min(1)
   })
 
 const generateCode = () => nanoid(8)
