@@ -6,7 +6,7 @@ class Order(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     order_date = db.Column(db.DateTime)
-    total = db.Column(db.Float)
+    total = db.Column(db.Float, default=0.0)
     status = db.Column(db.String)
     discount = db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -25,8 +25,6 @@ class Order(db.Model, SerializerMixin):
     def validates_total(self, _, total):
         if not isinstance(total, float):
             raise TypeError("Total price must be of data type float")
-        elif total < 0.01:
-            raise ValueError("Price cannot be less that one cent")
         else:
             return total
 
