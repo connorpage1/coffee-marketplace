@@ -21,7 +21,7 @@ return(
 
 <>
 
-<div class="ui top fixed menu">
+<div className="ui top fixed menu">
     <Menu fixed='top' inverted>
         <Menu.Item as={Link} to="/" header> Home </Menu.Item>
         <Menu.Item as={Link} to="/products" header> Shop </Menu.Item>
