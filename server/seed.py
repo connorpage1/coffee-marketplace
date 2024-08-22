@@ -16,7 +16,7 @@ from models.product import Product
 
 fake = Faker()
 
-coffee_pics = [f'https://github.com/connorpage1/coffee-marketplace/blob/errors-and-styling/client/public/coffee-pics/Coffee-{i}.webp' for i in range(17)]
+coffee_pics = [f'https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/coffee-pics/Coffee-{i}.webp' for i in range(17)]
 
 coffee_titles = [
     "Ethiopian Yirgacheffe Light Roast",
