@@ -65,7 +65,7 @@ const UpdatePassword = () => {
                             <Form onSubmit={handleSubmit}>
                                 <Form.Field>
                                     <label htmlFor='current_password'>Current Password</label>
-                                    <Field name='current_password' as={Form.Input} />
+                                    <Field name='current_password' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
                                     name="current_password"
@@ -74,7 +74,7 @@ const UpdatePassword = () => {
                                     />
                                 <Form.Field>
                                     <label htmlFor='password_hash'>New Password</label>
-                                    <Field name='password_hash' as={Form.Input} />
+                                    <Field name='password_hash' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
                                     name="password_hash"
@@ -83,7 +83,7 @@ const UpdatePassword = () => {
                                     />
                                 <Form.Field>
                                     <label htmlFor='confirmPassword'>Confirm New Password</label>
-                                    <Field name='confirmPassword' as={Form.Input} />
+                                    <Field name='confirmPassword' type='password' as={Form.Input} />
                                 </Form.Field>
                                 <ErrorMessage 
                                     name="confirmPassword"
