@@ -9,6 +9,7 @@ import VendorDetails from "./VendorDetails";
 import Checkout from "./Checkout";
 import { createBrowserRouter } from "react-router-dom";
 
+
 export const router = createBrowserRouter([
 {
     path: '/',
