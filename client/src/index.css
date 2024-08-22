@@ -105,3 +105,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
 }
+
+div.ui.segment:first-child {
+  margin: 1rem 0;
+}
