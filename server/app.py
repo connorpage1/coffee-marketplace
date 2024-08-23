@@ -19,38 +19,6 @@ from models.product import Product
 
 
 # Views go here!
-class Orders(Resource):
-    def get(self):
-        try:
-            return make_response([order.to_dict() for order in Order.query], 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 404)
-
-    def post(self):
-        try:
-            data = request.get_json()
-            new_order = Order(**data)
-            db.session.add(new_order)
-            db.session.commit()
-            return make_response(new_order.to_dict(), 201)
-        except Exception as e:
-            db.session.rollback()
-            return make_response({"error": str(e)}, 400)
-
-
-class GetOrderById(Resource):
-    def get(self, id):
-        try:
-            order = db.session.get(Order, id)
-
-            if not order:
-                return make_response({"error": str(e)}, 404)
-            else:
-                return make_response(order.to_dict(), 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 400)
-
-
 class OrderItems(Resource):
     def get(self):
         try:
@@ -122,7 +90,7 @@ class Login(Resource):
             user = User.query.filter_by(email=data.get("email")).first()
             if user and user.authenticate(data.get("password_hash")):
                 session["user_id"] = user.id
-                return make_response(user.to_dict(), 201)
+                return make_response(user.to_dict(), 200)
             else:
                 return make_response({"error": "Incorrect email or password"}, 401)
         except Exception as e:
@@ -256,7 +224,7 @@ class ProductById(Resource):
             else:
                 return make_response(product.to_dict(), 200)
         except Exception as e:
-            return make_response({"error": str(e)}, 404)
+            return make_response({"error": str(e)}, 400)
 
     def patch(self, id):
         try:
@@ -285,32 +253,7 @@ class ProductById(Resource):
             return {"error": str(e)}, 422
 
 
-class ProductByUser(Resource):
-    def get(self, id):
-        try:
-            if user := db.session.get(User, id):
-                products = [
-                    product.to_dict(
-                        rules=(
-                            "-created_at",
-                            "-id",
-                            "-sku",
-                            "-order_items",
-                            "-user_id",
-                            "-seller",
-                            "-updated_at",
-                        )
-                    )
-                    for product in user.selling_products
-                ]
-                return (products, 200)
-        except Exception as e:
-            return {"error": "User not found"}, 404
-        
 
-
-api.add_resource(Orders, "/orders")
-api.add_resource(GetOrderById, "/orders/<int:id>")
 api.add_resource(OrderItems, "/order_items")
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
@@ -320,7 +263,6 @@ api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
-api.add_resource(ProductByUser, "/products/user/<int:id>")
 
 
 
