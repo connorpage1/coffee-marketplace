@@ -18,7 +18,7 @@ const ProductPage = () => {
         }
       })
       .catch((errorObj) => toast.error(errorObj.message));
-  });
+  },[]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);

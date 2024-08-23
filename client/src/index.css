@@ -167,3 +167,7 @@ button.ui.primary.button:hover {
 .product-card .content {
   flex: 1;
 }
+
+.vendorpics{
+  width: 500px;
+}

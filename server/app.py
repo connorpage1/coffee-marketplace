@@ -91,7 +91,7 @@ class OrderItems(Resource):
                 new_order.total = total
                 db.session.commit()
                 return make_response(
-                    f"Thank you for your purchase, your total is: ${total}, see you soon!",
+                    {'message': f"Thank you for your purchase, your total is: ${total}, see you soon!"},
                     201,
                 )
             else:
