@@ -49,6 +49,14 @@ User can:
 - vendors can add new product and update
 - look at their profile information
 
+## Contributors
+- [Alicia Yu](https://github.com/AliGxir)
+- [Connor Page](https://github.com/connorpage1)
+- [Mason Barnes](https://github.com/masonbarnes645)
+
+## Acknowledgement
+Special thanks to Flatiron School for providing the learning environment and resources that contributed to the development of this project.
+
 # Future roadmap
 
 - enhance styling
