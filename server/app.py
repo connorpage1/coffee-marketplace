@@ -28,7 +28,7 @@ class OrderItems(Resource):
             ]
             return make_response(serialized_order_items, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -54,7 +54,7 @@ class OrderItems(Resource):
                 new_order.status = "ordered"
                 new_order.total = total
                 db.session.commit()
-                return (
+                return make_response(
                     f"Thank you for your purchase, your total is: ${total}, see you soon!",
                     201,
                 )
@@ -62,7 +62,7 @@ class OrderItems(Resource):
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class Signup(Resource):
@@ -78,8 +78,6 @@ class Signup(Resource):
             db.session.rollback()
             if "UNIQUE constraint failed" in str(e):
                 return make_response({"error": "Email already exists"}, 400)
-        except Exception as e:
-            db.session.rollback()
             return make_response({"error": str(e)}, 400)
 
 
@@ -90,7 +88,7 @@ class Login(Resource):
             user = User.query.filter_by(email=data.get("email")).first()
             if user and user.authenticate(data.get("password_hash")):
                 session["user_id"] = user.id
-                return make_response(user.to_dict(), 201)
+                return make_response(user.to_dict(), 200)
             else:
                 return make_response({"error": "Incorrect email or password"}, 401)
         except Exception as e:
@@ -200,7 +198,7 @@ class Products(Resource):
             ]
             return make_response(serialized_products, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -208,10 +206,10 @@ class Products(Resource):
             new_product = Product(**data)
             db.session.add(new_product)
             db.session.commit()
-            return (new_product.to_dict(), 201)
+            return make_response(new_product.to_dict(), 201)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class ProductById(Resource):
@@ -235,11 +233,11 @@ class ProductById(Resource):
                     if value:
                         setattr(product, attr, value)
                 db.session.commit()
-                return product.to_dict(), 200
-            return {"error": "Product not found"}, 404
+                return make_response(product.to_dict(), 200)
+            return make_response({"error": "Product not found"}, 404)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return make_response({"error": str(e)}, 422)
 
     def delete(self, id):
         try:
@@ -247,33 +245,11 @@ class ProductById(Resource):
                 db.session.delete(product)
                 db.session.commit()
                 return {}, 204
-            return {"error": "Product not found"}, 404
+            return make_response({"error": "Product not found"}, 404)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return make_response({"error": str(e)}, 422)
 
-
-class ProductByUser(Resource):
-    def get(self, id):
-        try:
-            if user := db.session.get(User, id):
-                products = [
-                    product.to_dict(
-                        rules=(
-                            "-created_at",
-                            "-id",
-                            "-sku",
-                            "-order_items",
-                            "-user_id",
-                            "-seller",
-                            "-updated_at",
-                        )
-                    )
-                    for product in user.selling_products
-                ]
-                return (products, 200)
-        except Exception as e:
-            return {"error": "User not found"}, 404
         
 
 
@@ -287,7 +263,7 @@ api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
-api.add_resource(ProductByUser, "/products/user/<int:id>")
+
 
 
 
