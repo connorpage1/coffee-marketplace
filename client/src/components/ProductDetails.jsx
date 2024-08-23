@@ -78,7 +78,7 @@ function ProductDetails() {
                       <Card.Meta>
                         Seller: <Link to={`/products/vendor/${user_id}`} className="main-card" id="seller">{seller.first_name} {seller.last_name}</Link>
                       </Card.Meta>
-                      <Card.Description>
+                      <Card.Description style={{ overflowWrap: 'break-word', whiteSpace: 'normal' }}>
                         <div className="main-card" id="capitalize">{type}: {tag}</div>
                         <div className="main-card">${price}/12oz bag</div>
                         <div>{description}</div>

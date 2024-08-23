@@ -234,7 +234,7 @@ function EditModal({ product, setProduct, productId }) {
                       <Grid.Row>
                         <Grid.Column>
                           <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
-                            Edit Product
+                            Save Changes
                           </Button>
                         </Grid.Column>
                       </Grid.Row>
