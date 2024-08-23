@@ -1,17 +1,6 @@
 import React from "react";
 import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import {
-  Button,
-  Form as SemanticForm,
-  Segment,
-  Header,
-  Message,
-  Container,
-  Image,
-  Modal,
-} from "semantic-ui-react";
-import toast from "react-hot-toast";
 import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image, Segment, Header } from 'semantic-ui-react';
 import toast from "react-hot-toast"
 
