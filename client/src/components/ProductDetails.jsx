@@ -45,8 +45,8 @@ function ProductDetails() {
     })
       .then((res) => {
         if (res.ok) {
+          toast.success("Product Deleted")
           navigate('/products')
-          return res.json();
 
         } else {
           return res.json().then((errorObj) => {
