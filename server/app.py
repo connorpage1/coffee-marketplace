@@ -58,7 +58,6 @@ class OrderItems(Resource):
             return make_response(serialized_order_items, 200)
         except Exception as e:
             return make_response({"error": str(e)}, 400)
-            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
