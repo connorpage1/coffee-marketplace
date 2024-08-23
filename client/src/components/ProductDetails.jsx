@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 
 import { useNavigate } from "react-router-dom"
 import EditModal from "./EditModal";
-import { Card, Image, Container } from "semantic-ui-react";
+import { Card, Image, Container, Grid, Header, Button } from "semantic-ui-react";
 
 function ProductDetails() {
   const [product, setProduct] = useState(null);
@@ -59,61 +59,59 @@ function ProductDetails() {
 
   const { name, description, seller, image_url, id, user_id, price, stock, type, tag, sku } = product
 
-  //   return <div>
-  //     <h1>{name} </h1>
-  //     <h3>Seller: {seller.first_name + ' ' + seller.last_name} </h3>
-  //     <Container>
-  //       <img src={image_url} alt={name} />
-  //       <h3>{tag} : {type}</h3>
-  //       <h3>${price}/12oz bag</h3>
-  //       <h3>Stock Remaining: {stock}</h3>
-  //       <h3>SKU: {sku}</h3>
-  //       <br></br>
-  //     </Container>
-  //     <Container textAlign="center">
-  //       {description}
-  //     </Container>
-  //     {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-  //     {user && user.id === user_id && <EditModal product={ product} setProduct={setProduct} productId={productId} />}
-  //   </div>;
-  // }
+
 
   return (
     <Container>
-      <Card.Content>
-
-        <Card.Header>{name}</Card.Header>
-
-      </Card.Content>
-      <Card.Content>
-      Seller: 
-        <Link to={`/products/vendor/${user_id}`}>
-          {' ' + seller.first_name + ' ' + seller.last_name}
-        </Link>
-      </Card.Content>
-      <Image src={image_url} alt={name} />
-      <Card.Content>
-        <Card.Meta>
-          <span>{type}: {tag}</span>
-        </Card.Meta>
-        <Card.Description>
-          ${price}/12oz bag
-        </Card.Description>
-        <Card.Description>
-          {stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}
-        </Card.Description>
-        <Card.Description>
-          SKU: {sku}
-        </Card.Description>
-        <Card.Description>
-          {description}
-        </Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-        {user && user.id === user_id && <EditModal product={product} setProduct={setProduct} productId={productId} />}
-      </Card.Content>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={10}>
+            <Image src={image_url} alt={name} fluid />
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Card>
+                    <Card.Content>
+                      <Header as='h1'>{name}</Header>
+                      <Card.Meta>
+                        Seller: <Link to={`/products/vendor/${user_id}`} className="main-card">{seller.first_name} {seller.last_name}</Link>
+                      </Card.Meta>
+                      <Card.Description>
+                        <div className="main-card">{type}: {tag}</div>
+                        <div className="main-card">${price}/12oz bag</div>
+                        <div>{description}</div>
+                      </Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                      {user && user.id === user_id && (
+                        <>
+                          <Button onClick={() => handleDelete(id)} color='red'>Delete</Button>
+                          <Button color='blue'>Edit</Button>
+                        </>
+                      )}
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+                <Grid.Column width={16}>
+                  <Card className="stock-sku">
+                    <Card.Content>
+                      <Card.Description>
+                        {stock ? `Stock: ${stock} remaining` : 'Out of Stock'}
+                      </Card.Description>
+                      <Card.Description>
+                        SKU: {sku}
+                      </Card.Description>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Container>
-  )
-}
+  );
+};
 export default ProductDetails;

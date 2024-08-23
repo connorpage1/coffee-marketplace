@@ -116,3 +116,36 @@ button.ui.primary.button {
 button.ui.primary.button:hover {
   background-color: #5A8C0F;
 }
+
+.edit-modal{
+  padding-left: 175px;
+}
+
+#product-header{
+  font-size: xx-large;
+}
+
+#vendor-name-link{
+  font-size: x-large;
+  padding-bottom: 20px;
+}
+
+#product-pic{
+  width: 1000px;
+  height: 1000px;
+  
+
+}
+
+#card-content{
+  font: large;
+}
+
+.stock-sku{
+  font-size: xx-small;
+}
+
+.main-card{
+  font-size: large;
+  padding-bottom: 25px;
+}
