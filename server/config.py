@@ -11,7 +11,6 @@ from flask_bcrypt import Bcrypt
 from flask_session import Session
 from os import environ
 
-from os import environ
 
 # Local imports
 

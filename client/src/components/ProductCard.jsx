@@ -2,15 +2,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { Card, Image, Button, Icon } from "semantic-ui-react";
 
-function ProductCard({
-  name,
-  image_url,
-  price,
-  stock,
-  tag,
-  type,
-  id,
-}) {
+function ProductCard({ name, image_url, price, stock, tag, type, id }) {
   const { addToCart, user } = useOutletContext();
 
   const [disable, setDisable] = useState(false);
@@ -21,7 +13,7 @@ function ProductCard({
   };
 
   return (
-    <Card>
+    <Card className="product-card" fluid>
       <Link to={`/products/${id}`}>
         <Card.Content>
           <Card.Header>{name}</Card.Header>
@@ -30,19 +22,19 @@ function ProductCard({
       <Image src={image_url} alt={name} wrapped ui={false} />
       <Card.Content>
         <Card.Meta>
-          <span>{type}: {tag}</span>
+          <span>
+            {type}: {tag}
+          </span>
         </Card.Meta>
-        <Card.Description>
-          ${price}/12oz bag
-        </Card.Description>
+        <Card.Description>${price}/12oz bag</Card.Description>
         <Card.Description>
           {stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}
         </Card.Description>
       </Card.Content>
-      <Card.Content extra>
+      <Card.Content>
         {user && (
           <Button disabled={disable} onClick={handleClick} primary fluid>
-            Add to Cart <Icon name="cart plus"/>
+            Add to Cart <Icon name="cart plus" />
           </Button>
         )}
       </Card.Content>

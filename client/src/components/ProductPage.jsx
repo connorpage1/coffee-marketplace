@@ -5,56 +5,54 @@ import SearchBar from "./SearchBar";
 import ProductCard from "./ProductCard";
 
 const ProductPage = () => {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([]);
 
-    useEffect(() => {
+  useEffect(() => {
     fetch(`/products`)
-        .then((resp) => {
+      .then((resp) => {
         if (resp.ok) {
-            resp.json().then(setProducts);
+          resp.json().then(setProducts);
         } else {
-            resp.json().then((errorObj) => toast.error(errorObj.error));
+          resp.json().then((errorObj) => toast.error(errorObj.error));
         }
-    })
-        .catch((errorObj) => toast.error(errorObj.message));
-    }, []);
+      })
+      .catch((errorObj) => toast.error(errorObj.message));
+  });
 
-
-    const handleSearch = (e) => {
+  const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    };
+  };
 
-    const filteredProducts = products.filter((product) => {
-        const searchLower = searchQuery.toLowerCase();
-        const nameMatches = product.name.toLowerCase().includes(searchLower);
-        const tagsMatch = product.tag.toLowerCase().includes(searchLower);
-        const typeMatch = product.type.toLowerCase().includes(searchLower);
-        return nameMatches || tagsMatch || typeMatch;
-    });
+  const filteredProducts = products.filter((product) => {
+    const searchLower = searchQuery.toLowerCase();
+    const nameMatches = product.name.toLowerCase().includes(searchLower);
+    const tagsMatch = product.tag.toLowerCase().includes(searchLower);
+    const typeMatch = product.type.toLowerCase().includes(searchLower);
+    return nameMatches || tagsMatch || typeMatch;
+  });
 
-    return (
-        <main>
-
-            <Container>
-                <h1>Coffee & Tea Marketplace</h1>
-                <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
-                <br/>
-                <br/>
-                <Grid columns={5} doubling stackable>
-                    {filteredProducts.length > 0 ? (
-                        filteredProducts.map((product) => (
-                            <Grid.Column key={product.id}>
-                                <ProductCard {...product} />
-                            </Grid.Column>
-                        ))
-                    ) : (
-                        <h2>No products available</h2>
-                    )}
-                </Grid>
-            </Container>
-        </main>
-    );
+  return (
+    <main>
+      <Container>
+        <h1>Coffee & Tea Marketplace</h1>
+        <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
+        <br />
+        <br />
+        <Grid columns={5} doubling stackable>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <Grid.Column key={product.id}>
+                <ProductCard {...product} />
+              </Grid.Column>
+            ))
+          ) : (
+            <h2>No products available</h2>
+          )}
+        </Grid>
+      </Container>
+    </main>
+  );
 };
 
 export default ProductPage;

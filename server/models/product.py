@@ -12,7 +12,7 @@ class Product(db.Model, SerializerMixin):
     image_url = db.Column(db.String)
     description = db.Column(db.String)
     tag = db.Column(db.String)
-    price = db.Column(db.Float) 
+    price = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
