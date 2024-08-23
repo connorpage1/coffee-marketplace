@@ -18,6 +18,36 @@ from models.product import Product
 
 
 # Views go here!
+class Orders(Resource):
+    def get(self):
+        try:
+            return make_response([order.to_dict() for order in Order.query], 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
+        
+    def post(self):
+        try:
+            data = request.get_json()
+            new_order = Order(**data)
+            db.session.add(new_order)
+            db.session.commit()
+            return make_response(new_order.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({"error": str(e)}, 400)
+        
+class GetOrderById(Resource):
+    def get(self, id):
+        try:
+            order = db.session.get(Order, id)
+
+            if order is None:
+                return make_response({"error": str(e)}, 404)
+            else:
+                return make_response(order.to_dict(), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
+
 class OrderItems(Resource):
     def get(self):
         try:
@@ -27,6 +57,7 @@ class OrderItems(Resource):
             ]
             return make_response(serialized_order_items, 200)
         except Exception as e:
+            return make_response({"error": str(e)}, 400)
             return make_response({"error": str(e)}, 400)
 
     def post(self):
@@ -59,7 +90,7 @@ class OrderItems(Resource):
                 new_order.status = "ordered"
                 new_order.total = total
                 db.session.commit()
-                return (
+                return make_response(
                     f"Thank you for your purchase, your total is: ${total}, see you soon!",
                     201,
                 )
@@ -67,7 +98,7 @@ class OrderItems(Resource):
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class Signup(Resource):
@@ -83,8 +114,6 @@ class Signup(Resource):
             db.session.rollback()
             if "UNIQUE constraint failed" in str(e):
                 return make_response({"error": "Email already exists"}, 400)
-        except Exception as e:
-            db.session.rollback()
             return make_response({"error": str(e)}, 400)
 
 
@@ -95,6 +124,7 @@ class Login(Resource):
             user = User.query.filter_by(email=data.get("email")).first()
             if user and user.authenticate(data.get("password_hash")):
                 session["user_id"] = user.id
+                return make_response(user.to_dict(), 200)
                 return make_response(user.to_dict(), 200)
             else:
                 return make_response({"error": "Incorrect email or password"}, 401)
@@ -206,6 +236,7 @@ class Products(Resource):
             return make_response(serialized_products, 200)
         except Exception as e:
             return make_response({"error": str(e)}, 400)
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -218,6 +249,7 @@ class Products(Resource):
         except Exception as e:
             db.session.rollback()
             return make_response({"error": str(e)}, 400)
+            return make_response({"error": str(e)}, 400)
 
 
 class ProductById(Resource):
@@ -229,6 +261,7 @@ class ProductById(Resource):
                 return make_response({"error": "Product not found"}, 404)
             return make_response(product.to_dict(), 200)
         except Exception as e:
+            return make_response({"error": str(e)}, 400)
             return make_response({"error": str(e)}, 400)
 
     def patch(self, id):

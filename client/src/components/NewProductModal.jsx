@@ -13,6 +13,9 @@ import {
   Image,
   Modal,
 } from "semantic-ui-react";
+import toast from "react-hot-toast"
+import { nanoid } from 'nanoid';
+import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image } from 'semantic-ui-react';
 
 import { useNavigate, useOutletContext } from "react-router-dom";
 
@@ -59,13 +62,9 @@ const schema = yup.object().shape({
   stock: yup.number().min(0),
   image_url: yup.string().matches(imageUrlRegex).required("Image is required"),
   tag: yup.string().oneOf(validTags, "Must be a valid tag"),
-  description: yup
-    .string()
-    .required("Description is required")
-    .min(10, "Description must be at least 10 characters long")
-    .max(1000, "Description cannot be longer than 1000 characters"),
-  price: yup.number().required("Price is Required").min(1),
-});
+  description: yup.string().required("Description is required").min(10, "Description must be at least 10 characters long").max(1000, "Description cannot be longer than 1000 characters"),
+  price: yup.number().required("Price is Required").min(1)
+})
 
 const generateCode = () => nanoid(8);
 
@@ -78,9 +77,8 @@ function NewProductModal({}) {
     console.log(generateCode());
     FormData.price = parseFloat(FormData.price);
     FormData.stock = parseInt(FormData.stock);
-    FormData.sku = generateCode();
-    FormData.user_id = user.id;
-    debugger;
+    FormData.sku = generateCode()
+    FormData.user_id = user.id
     fetch(`/products`, {
       method: "POST",
       headers: {
@@ -107,16 +105,21 @@ function NewProductModal({}) {
 
   return (
     <div>
-      <Button onClick={() => setOpen(true)}>Add New Product</Button>
+      <Button onClick={() => setOpen(true)} primary>
+        Add New Product
+      </Button>
 
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
-        dimmer="blurring"
+        dimmer='blurring'
+        size='large'
       >
         <Modal.Header>Add a New Product</Modal.Header>
+        
         <Modal.Content>
+        <Image src='https://raw.githubusercontent.com/connorpage1/coffee-marketplace/main/client/public/logo512.png' size='small' centered style={{ marginBottom: '20px' }} />
           <Container text>
             <Formik
               initialValues={initialValues}
@@ -128,89 +131,121 @@ function NewProductModal({}) {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <SemanticForm.Field>
-                    <label htmlFor="name">Name: </label>
-                    <Field
-                      name="name"
-                      type="text"
-                      placeholder="New Product Name"
-                    />
-                    <ErrorMessage name="name" component={Message} negative />
-                  </SemanticForm.Field>
+                  <Grid columns={1} stackable>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="name">Name</label>
+                          <Field
+                            as={Input}
+                            name="name"
+                            type='text'
+                            placeholder="New Product Name"
+                            fluid
+                          />
+                          <ErrorMessage name="name" component={Message} negative />
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="type">Type: </label>
-                    <Field as="select" name="type">
-                      <option value="coffee"> Coffee </option>
-                      <option value="tea"> Tea </option>
-                    </Field>
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="type">Type: </label>
+                          <Field as="select" name="type" fluid>
+                            <option value='coffee'>Coffee</option>
+                            <option value='tea'>Tea</option>
+                          </Field>
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="tag"> Tag: </label>
-                    <Field as="select" name="tag">
-                      {validTags.map((validTag) => (
-                        <option key={validTag} value={validTag}>
-                          {" "}
-                          {validTag}{" "}
-                        </option>
-                      ))}
-                    </Field>
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor='tag'>Tag: </label>
+                          <Field as="select" name="tag" fluid>
+                            {validTags.map((validTag) => (
+                              <option key={validTag} value={validTag}>{validTag}</option>
+                            ))}
+                          </Field>
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="stock">Stock: </label>
-                    <Field
-                      name="stock"
-                      type="number"
-                      placeholder="Current Stock"
-                    />
-                    <ErrorMessage name="stock" component={Message} negative />
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="stock">Stock</label>
+                          <Field
+                            as={Input}
+                            name="stock"
+                            type='number'
+                            placeholder="Current Stock"
+                            fluid
+                          />
+                          <ErrorMessage name="stock" component={Message} negative />
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="image_url">Image Link: </label>
-                    <Field
-                      name="image_url"
-                      type="text"
-                      placeholder="New Image Link"
-                    />
-                    <ErrorMessage
-                      name="image_url"
-                      component={Message}
-                      negative
-                    />
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="image_url">Image Link</label>
+                          <Field
+                            as={Input}
+                            name="image_url"
+                            type='text'
+                            placeholder="New Image Link"
+                            fluid
+                          />
+                          <ErrorMessage name="image_url" component={Message} negative />
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="price">Price: </label>
-                    <Field name="price" type="number" placeholder="Price" />
-                    <ErrorMessage name="price" component={Message} negative />
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="price">Price</label>
+                          <Field
+                            as={Input}
+                            name="price"
+                            type='number'
+                            placeholder="Price"
+                            step='.01'
+                            fluid
+                          />
+                          <ErrorMessage name="price" component={Message} negative />
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <SemanticForm.Field>
-                    <label htmlFor="description">Description: </label>
-                    <Field
-                      name="description"
-                      type="text"
-                      placeholder="Description"
-                    />
-                    <ErrorMessage
-                      name="description"
-                      component={Message}
-                      negative
-                    />
-                  </SemanticForm.Field>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <SemanticForm.Field>
+                          <label htmlFor="description">Description</label>
+                          <Field
+                            as={Input}
+                            name="description"
+                            type='text'
+                            placeholder="Description"
+                            fluid
+                          />
+                          <ErrorMessage name="description" component={Message} negative />
+                        </SemanticForm.Field>
+                      </Grid.Column>
+                    </Grid.Row>
 
-                  <Button
-                    type="submit"
-                    fluid
-                    primary
-                    loading={isSubmitting}
-                    disabled={isSubmitting}
-                  >
-                    Add New Product
-                  </Button>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
+                          Add New Product
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
                 </Form>
               )}
             </Formik>

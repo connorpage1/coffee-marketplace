@@ -32,7 +32,6 @@ class User(db.Model, SerializerMixin):
         primaryjoin="User.id == Order.user_id",
         secondaryjoin="OrderItem.product_id == Product.id",
         viewonly=True,
-        # back_populates="buyers",
     )
 
 
