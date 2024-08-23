@@ -68,7 +68,6 @@ function NewProductModal({ }) {
     FormData.stock = parseInt(FormData.stock);
     FormData.sku = generateCode()
     FormData.user_id = user.id
-    debugger
     fetch(`/products`, {
       method: "POST",
       headers: {
