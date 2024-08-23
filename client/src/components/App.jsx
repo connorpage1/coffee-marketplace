@@ -27,7 +27,7 @@ function App() {
         }
       })
       .catch((error) => {
-        toast.error(error.message); // Use error.message for better error info
+        toast.error(error.message);
       });
   }, []);
 
