@@ -33,7 +33,7 @@ const Checkout = () => {
           const productQuantity = div.querySelector("input").value || 1;
           const productId = div.querySelector("div.ui.input").dataset.productId;
           return {
-            quantity: productQuantity,
+            quantity: Number(productQuantity),
             product_id: productId,
             price_at_order: Number(productPrice.replace("$", "")),
           };
@@ -51,7 +51,7 @@ const Checkout = () => {
           if (resp.ok) {
             return resp.json();
           } else {
-            throw new Error("Requested quantity exceeds available stock.");
+            throw new Error(resp.json());
           }
         })
         .then((message) => {
