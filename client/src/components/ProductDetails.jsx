@@ -76,10 +76,10 @@ function ProductDetails() {
                     <Card.Content>
                       <Header as='h1'>{name}</Header>
                       <Card.Meta>
-                        Seller: <Link to={`/products/vendor/${user_id}`} className="main-card">{seller.first_name} {seller.last_name}</Link>
+                        Seller: <Link to={`/products/vendor/${user_id}`} className="main-card" id="seller">{seller.first_name} {seller.last_name}</Link>
                       </Card.Meta>
                       <Card.Description>
-                        <div className="main-card">{type}: {tag}</div>
+                        <div className="main-card" id="capitalize">{type}: {tag}</div>
                         <div className="main-card">${price}/12oz bag</div>
                         <div>{description}</div>
                       </Card.Description>

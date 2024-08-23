@@ -149,3 +149,10 @@ button.ui.primary.button:hover {
   font-size: large;
   padding-bottom: 25px;
 }
+
+#capitalize{
+  text-transform: capitalize;
+}
+#seller{
+  color: #282c34;
+}
