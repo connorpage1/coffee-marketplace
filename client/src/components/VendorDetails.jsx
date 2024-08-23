@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import toast from "react-hot-toast";
-import { Grid, Header } from "semantic-ui-react";
+import { Grid, Header, Container } from "semantic-ui-react";
 
 
 function VendorDetails() {
@@ -33,20 +33,20 @@ function VendorDetails() {
    
    
   return (
-    <div>
-      <Header as="h1" textAlign="center">
-        {vendor.first_name} {vendor.last_name}'s Shop 
-      </Header>
-
-      {/* Product Grid */}
-      <Grid>
-        <Grid.Row columns={4}>
-          {vendor.selling_products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </Grid.Row>
-      </Grid>
-    </div>
+<Container style={{ maxWidth: '1200px', margin: 'auto' }}>
+  <Header as="h1" textAlign="center">
+    {vendor.first_name} {vendor.last_name}'s Shop
+  </Header>
+  <Grid>
+    <Grid.Row columns={4}>
+      {vendor.selling_products.map((product) => (
+        <Grid.Column key={product.id}>
+          <ProductCard {...product} />
+        </Grid.Column>
+      ))}
+    </Grid.Row>
+  </Grid>
+</Container>
   );
 }
 
