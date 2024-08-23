@@ -2,10 +2,7 @@ import React from "react";
 import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { nanoid } from "nanoid";
-<<<<<<< HEAD
-import toast from "react-hot-toast"
-=======
->>>>>>> df0355784ff24f11c103405575363b7ed8444174
+import toast from "react-hot-toast";
 import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image } from 'semantic-ui-react';
 import { useNavigate, useOutletContext } from "react-router-dom";
 

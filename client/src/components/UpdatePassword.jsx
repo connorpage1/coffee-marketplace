@@ -2,6 +2,7 @@ import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
 import { Modal, Button, Form } from "semantic-ui-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const schema = yup.object().shape({
   current_password: yup.string().required("Please enter your current password"),
@@ -43,10 +44,10 @@ const UpdatePassword = () => {
             setOpen(false);
           });
         } else {
-          res.json().then((error) => console.log(error.error));
+          res.json().then((error) => toast.error(error.error));
         }
       })
-      .catch(console.log);
+      .catch(error => toast.error(error.message));
   };
 
   return (

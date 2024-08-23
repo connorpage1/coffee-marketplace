@@ -1,10 +1,6 @@
 import React from "react";
 import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-<<<<<<< HEAD
-import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image, Segment, Header } from 'semantic-ui-react';
-import toast from "react-hot-toast"
-=======
 import {
   Button,
   Form as SemanticForm,
@@ -18,7 +14,6 @@ import {
   Input,
 } from "semantic-ui-react";
 import toast from "react-hot-toast";
->>>>>>> df0355784ff24f11c103405575363b7ed8444174
 
 const validTags = [
   "light roast",
