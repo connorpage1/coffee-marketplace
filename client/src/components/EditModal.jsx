@@ -67,6 +67,7 @@ function EditModal({ product, setProduct, productId }) {
     })
       .then((resp) => {
         if (resp.ok) {
+          toast.success("Changes Saved")
           return resp.json().then((data) => {
             setProduct(data);
             setOpen(false);
@@ -118,7 +119,7 @@ function EditModal({ product, setProduct, productId }) {
                 validationSchema={schema}
                 onSubmit={async (values, actions) => {
                   await handleFormSubmit(values, actions);
-                  setOpen(false); // Close modal after form submission
+                  setOpen(false); 
                 }}
               >
                 {({ isSubmitting }) => (

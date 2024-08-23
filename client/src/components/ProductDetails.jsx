@@ -88,7 +88,7 @@ function ProductDetails() {
                       {user && user.id === user_id && (
                         <>
                           <Button onClick={() => handleDelete(id)} color='red'>Delete</Button>
-                          <Button color='blue'>Edit</Button>
+                          <EditModal product={product} setProduct={setProduct} productId={id} />
                         </>
                       )}
                     </Card.Content>
