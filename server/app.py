@@ -1,7 +1,6 @@
 # Remote library imports
 from flask import request, make_response, session
-from flask_migrate import Migrate
-from flask_restful import Resource, Api
+from flask_restful import Resource
 import os
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -19,6 +18,36 @@ from models.product import Product
 
 
 # Views go here!
+class Orders(Resource):
+    def get(self):
+        try:
+            return make_response([order.to_dict() for order in Order.query], 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
+        
+    def post(self):
+        try:
+            data = request.get_json()
+            new_order = Order(**data)
+            db.session.add(new_order)
+            db.session.commit()
+            return make_response(new_order.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({"error": str(e)}, 400)
+        
+class GetOrderById(Resource):
+    def get(self, id):
+        try:
+            order = db.session.get(Order, id)
+
+            if order is None:
+                return make_response({"error": str(e)}, 404)
+            else:
+                return make_response(order.to_dict(), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 404)
+
 class OrderItems(Resource):
     def get(self):
         try:
@@ -28,7 +57,7 @@ class OrderItems(Resource):
             ]
             return make_response(serialized_order_items, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -54,7 +83,7 @@ class OrderItems(Resource):
                 new_order.status = "ordered"
                 new_order.total = total
                 db.session.commit()
-                return (
+                return make_response(
                     f"Thank you for your purchase, your total is: ${total}, see you soon!",
                     201,
                 )
@@ -62,7 +91,7 @@ class OrderItems(Resource):
                 return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class Signup(Resource):
@@ -78,8 +107,6 @@ class Signup(Resource):
             db.session.rollback()
             if "UNIQUE constraint failed" in str(e):
                 return make_response({"error": "Email already exists"}, 400)
-        except Exception as e:
-            db.session.rollback()
             return make_response({"error": str(e)}, 400)
 
 
@@ -200,7 +227,7 @@ class Products(Resource):
             ]
             return make_response(serialized_products, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -208,10 +235,10 @@ class Products(Resource):
             new_product = Product(**data)
             db.session.add(new_product)
             db.session.commit()
-            return (new_product.to_dict(), 201)
+            return make_response(new_product.to_dict(), 201)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class ProductById(Resource):
@@ -235,11 +262,11 @@ class ProductById(Resource):
                     if value:
                         setattr(product, attr, value)
                 db.session.commit()
-                return product.to_dict(), 200
-            return {"error": "Product not found"}, 404
+                return make_response(product.to_dict(), 200)
+            return make_response({"error": "Product not found"}, 404)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return make_response({"error": str(e)}, 422)
 
     def delete(self, id):
         try:
@@ -247,13 +274,15 @@ class ProductById(Resource):
                 db.session.delete(product)
                 db.session.commit()
                 return {}, 204
-            return {"error": "Product not found"}, 404
+            return make_response({"error": "Product not found"}, 404)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return make_response({"error": str(e)}, 422)
+
+        
 
 
-
+api.add_resource(Orders, "/orders")
 api.add_resource(OrderItems, "/order_items")
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
@@ -263,6 +292,7 @@ api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
+
 
 
 
