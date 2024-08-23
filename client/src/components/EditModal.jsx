@@ -1,6 +1,17 @@
-import React from 'react'
-import * as yup from 'yup';
+import React from "react";
+import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import {
+  Button,
+  Form as SemanticForm,
+  Segment,
+  Header,
+  Message,
+  Container,
+  Image,
+  Modal,
+} from "semantic-ui-react";
+import toast from "react-hot-toast";
 import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image, Segment, Header } from 'semantic-ui-react';
 import toast from "react-hot-toast"
 
@@ -40,8 +51,7 @@ const schema = yup.object().shape({
 })
 
 function EditModal({ product, setProduct, productId }) {
-  const [open, setOpen] = React.useState(false)
-
+  const [open, setOpen] = React.useState(false);
 
   const initialValues = {
     name: `${product.name}`,
@@ -51,11 +61,11 @@ function EditModal({ product, setProduct, productId }) {
     price: `${product.price}`,
     tag: `${product.tag}`,
     description: `${product.description}`,
-    sku: `${product.sku}`
-  }
+    sku: `${product.sku}`,
+  };
 
   const handleFormSubmit = (FormData) => {
-    console.log(JSON.stringify(FormData))
+    console.log(JSON.stringify(FormData));
     FormData.price = parseFloat(FormData.price);
     FormData.stock = parseInt(FormData.stock);
     fetch(`/products/${productId}`, {
@@ -83,8 +93,6 @@ function EditModal({ product, setProduct, productId }) {
       });
   };
 
-
-
   return (
     <div>
       <Button onClick={() => setOpen(true)} primary>
@@ -110,7 +118,7 @@ function EditModal({ product, setProduct, productId }) {
                 style={{ marginBottom: '20px' }}
               />
 
-              <Header as='h2' textAlign='center'>
+              <Header as="h2" textAlign="center">
                 Edit Product
               </Header>
 
@@ -246,18 +254,13 @@ function EditModal({ product, setProduct, productId }) {
           </Container>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='black' onClick={() => setOpen(false)}>
+          <Button color="black" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </Modal.Actions>
       </Modal>
     </div>
   );
-};
+}
 
-export default EditModal
-
-
-
-
-
+export default EditModal;

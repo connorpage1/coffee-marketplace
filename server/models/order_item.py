@@ -19,19 +19,19 @@ class OrderItem(db.Model, SerializerMixin):
     serialize_rules = ("-order", "-product.order_items")
 
     @validates("quantity")
-    def validates_total(self, _, quantity):
+    def validates_quantity(self, _, quantity):
         if not isinstance(quantity, int):
-            raise TypeError("Total price must be of data type integer")
+            raise TypeError("Quantity must be of data type integer")
         elif quantity < 1:
             raise ValueError("Quantity must be at least 1")
         else:
             return quantity
 
     @validates("price_at_order")
-    def validates_total(self, _, price_at_order):
+    def validates_price_at_order(self, _, price_at_order):
         if not isinstance(price_at_order, float):
-            raise TypeError("Price must be of data type float")
+            raise TypeError("Price at order must be of data type float")
         elif price_at_order < 0.01:
-            raise ValueError("Price cannot be less that one cent")
+            raise ValueError("Price at order cannot be less that one cent")
         else:
             return price_at_order

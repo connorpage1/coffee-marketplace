@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext, useParams } from "react-router-dom";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import EditModal from "./EditModal";
 import { Card, Image, Container, Grid, Header, Button } from "semantic-ui-react";
 
@@ -11,37 +11,33 @@ function ProductDetails() {
   const { productId } = useParams();
   const { user } = useOutletContext();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/products/${productId}`)
-      .then((resp) => {
-        if (resp.ok) {
-          return resp.json()
-            .then((data) => {
+    if (user) {
+      fetch(`/products/${productId}`)
+        .then((resp) => {
+          if (resp.ok) {
+            return resp.json().then((data) => {
               setProduct(data);
-
-
-            })
-        } else {
-          return resp.json()
-            .then(() => {
-              resp.json().then((errorObj) => toast.error(errorObj.error))
-            })
-        }
-      })
-      .catch((errorObj) => toast.error(errorObj.error))
-  }, [productId]);
-
+            });
+          } else {
+            return resp.json().then(() => {
+              resp.json().then((errorObj) => toast.error(errorObj.error));
+            });
+          }
+        })
+        .catch((errorObj) => toast.error(errorObj.error));
+    }
+  }, [productId, user]);
 
   if (!product) {
-    return <h3>Loading</h3>
+    return <h3>Loading</h3>;
   }
-
 
   const handleDelete = (productId) => {
     fetch(`/products/${productId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     })
       .then((res) => {
         if (res.ok) {
@@ -54,7 +50,7 @@ function ProductDetails() {
           });
         }
       })
-      .catch((errorObj) => toast.error(errorObj.error))
+      .catch((errorObj) => toast.error(errorObj.error));
   };
 
   const { name, description, seller, image_url, id, user_id, price, stock, type, tag, sku } = product

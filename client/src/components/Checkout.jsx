@@ -1,4 +1,5 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Container,
@@ -11,7 +12,56 @@ import {
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, resetCart, updateStock } = useOutletContext();
+  const { cart, resetCart, user } = useOutletContext();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      setLoading(false);
+    }
+  }, [user, navigate]);
+
+  if (loading) return <div>Loading...</div>;
+
+  const handleCheckout = () => {
+    if (user) {
+      const orderItems = Array.from(document.querySelectorAll(".row")).map(
+        (div) => {
+          const productPrice = div.querySelector("h3").textContent;
+          const productQuantity = div.querySelector("input").value || 1;
+          const productId = div.querySelector("div.ui.input").dataset.productId;
+          return {
+            quantity: Number(productQuantity),
+            product_id: productId,
+            price_at_order: Number(productPrice.replace("$", "")),
+          };
+        }
+      );
+
+      fetch("/order_items", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderItems),
+      })
+        .then((resp) => {
+          if (resp.ok) {
+            return resp.json();
+          } else {
+            throw new Error(resp.json());
+          }
+        })
+        .then((message) => {
+          toast.success(`Thank you for your purchase, see you soon!`);
+          resetCart();
+          navigate("/products");
+        })
+        .catch((error) => toast.error(`Error: ${error.message}`));
+    }
+  };
 
   const mappedCart = cart.map((item) => (
     <Grid.Row key={item.id}>
@@ -29,46 +79,11 @@ const Checkout = () => {
           max={item.stock}
           step="1"
           data-product-id={item.id}
+          className="quantity-input"
         />
       </Grid.Column>
     </Grid.Row>
   ));
-
-  const handleCheckout = () => {
-    const orderItems = Array.from(document.querySelectorAll(".row")).map(
-      (div) => {
-        const productPrice = div.querySelector("h3").textContent;
-        const productQuantity = div.querySelector("input").value || 1;
-        const productId = div.querySelector("div.ui.input").dataset.productId;
-        return {
-          quantity: productQuantity,
-          product_id: productId,
-          price_at_order: Number(productPrice.replace("$", "")),
-        };
-      }
-    );
-
-    fetch("/order_items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderItems),
-    })
-      .then((resp) => {
-        if (resp.ok) {
-          return resp.json();
-        } else {
-          throw new Error("Failed to create order");
-        }
-      })
-      .then((message) => {
-        toast.success(`Thank you for your purchase, see you soon!`);
-        resetCart();
-        navigate("/products");
-      })
-      .catch((error) => toast.error("Error:", error.message));
-  };
 
   return (
     <Container>

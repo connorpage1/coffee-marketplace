@@ -1,11 +1,23 @@
-import React from 'react'
-import * as yup from 'yup';
+import React from "react";
+import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import toast from "react-hot-toast";
+import { nanoid } from "nanoid";
+import {
+  Button,
+  Form as SemanticForm,
+  Segment,
+  Header,
+  Message,
+  Container,
+  Image,
+  Modal,
+} from "semantic-ui-react";
 import toast from "react-hot-toast"
 import { nanoid } from 'nanoid';
 import { Button, Modal, Container, Form as SemanticForm, Message, Grid, Input, Image } from 'semantic-ui-react';
 
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const validTags = [
   "light roast",
@@ -29,8 +41,8 @@ const validTags = [
   "rooibos",
   "matcha",
   "caffeine",
-  "decaf"
-]
+  "decaf",
+];
 
 const initialValues = {
   name: ``,
@@ -38,10 +50,10 @@ const initialValues = {
   stock: ``,
   image_url: ``,
   price: ``,
-  tag: 'light roast',
+  tag: "light roast",
   description: ``,
-  sku: ''
-}
+  sku: "",
+};
 const imageUrlRegex = /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg)$/;
 
 const schema = yup.object().shape({
@@ -54,16 +66,15 @@ const schema = yup.object().shape({
   price: yup.number().required("Price is Required").min(1)
 })
 
-const generateCode = () => nanoid(8)
+const generateCode = () => nanoid(8);
 
-function NewProductModal({ }) {
-  const [open, setOpen] = React.useState(false)
-  const navigate = useNavigate()
-  const { user } = useOutletContext()
-
+function NewProductModal({}) {
+  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const { user } = useOutletContext();
 
   const handleFormSubmit = (FormData, { setSubmitting }) => {
-    console.log(generateCode())
+    console.log(generateCode());
     FormData.price = parseFloat(FormData.price);
     FormData.stock = parseInt(FormData.stock);
     FormData.sku = generateCode()
@@ -78,7 +89,7 @@ function NewProductModal({ }) {
       .then((resp) => {
         if (resp.ok) {
           return resp.json().then((data) => {
-            navigate(`/products`)
+            navigate(`/products`);
           });
         } else {
           return resp.json().then((errorObj) => {
@@ -89,7 +100,7 @@ function NewProductModal({ }) {
       .catch((errorObj) => {
         toast.error(errorObj.error);
       })
-      .finally(() => setSubmitting(false))
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -241,15 +252,13 @@ function NewProductModal({ }) {
           </Container>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='black' onClick={() => setOpen(false)}>
+          <Button color="black" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </Modal.Actions>
       </Modal>
     </div>
   );
-};
+}
 
-export default NewProductModal
-
-
+export default NewProductModal;

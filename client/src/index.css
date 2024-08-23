@@ -12,6 +12,9 @@
 
 .landing-page {
   font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .hero-section {
@@ -21,6 +24,7 @@
   padding: 100px 0;
   color: black;
   text-align: center;
+  flex: 1;
 }
 
 .hero-title {
@@ -51,15 +55,12 @@
 .footer {
   background-color: #8C442A;
   color: white;
-  padding: 20px 0;
+  padding: 1em 0;
 }
 
-
 .ui.top.fixed.menu {
-
   background-color: #5a8c0f;
   padding-bottom: 0px;
-  
 }
 
 .login-container{
@@ -87,7 +88,7 @@ button {
 }
 
 .content {
-  padding-top: 45px; /* Adjust this value based on navbar height */
+  padding-top: 45px; 
 }
 
 .flex-container {
@@ -155,4 +156,14 @@ button.ui.primary.button:hover {
 }
 #seller{
   color: #282c34;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-card .content {
+  flex: 1;
 }
