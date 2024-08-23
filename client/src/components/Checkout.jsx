@@ -59,7 +59,7 @@ const Checkout = () => {
         if (resp.ok) {
           return resp.json();
         } else {
-          throw new Error("Failed to create order");
+          throw new Error("Requested quantity exceeds available stock.");
         }
       })
       .then((message) => {
@@ -67,7 +67,7 @@ const Checkout = () => {
         resetCart();
         navigate("/products");
       })
-      .catch((error) => toast.error("Error:", error.message));
+      .catch((error) => toast.error(`Error: ${error.message}`));
   };
 
   return (

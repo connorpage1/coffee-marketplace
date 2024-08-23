@@ -1,10 +1,9 @@
 # Remote library imports
-from flask import Flask, request, make_response, session
-from flask_migrate import Migrate
-from flask_restful import Resource, Api
+from flask import request, make_response, session, redirect
+from flask_restful import Resource
 import os
 from datetime import datetime
-from sqlalchemy.exc import IntegrityError
+from functools import wraps
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -18,39 +17,17 @@ from models.user import User
 from models.product import Product
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get("user_id"):
+            return redirect("/login")
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # Views go here!
-class Orders(Resource):
-    def get(self):
-        try:
-            return make_response([order.to_dict() for order in Order.query], 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 404)
-
-    def post(self):
-        try:
-            data = request.get_json()
-            new_order = Order(**data)
-            db.session.add(new_order)
-            db.session.commit()
-            return make_response(new_order.to_dict(), 201)
-        except Exception as e:
-            db.session.rollback()
-            return make_response({"error": str(e)}, 400)
-
-
-class GetOrderById(Resource):
-    def get(self, id):
-        try:
-            order = db.session.get(Order, id)
-
-            if order is None:
-                return make_response({"error": str(e)}, 404)
-            else:
-                return make_response(order.to_dict(), 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 404)
-
-
 class OrderItems(Resource):
     def get(self):
         try:
@@ -76,10 +53,11 @@ class OrderItems(Resource):
                 data = request.get_json()
                 total = 0
                 for order_item in data:
+                    if int(order_item["quantity"]) > product.stock and 0:
+                        return {"error": f"Requested quantity for {product.name} exceeds available stock or needs to be greater than 1"}, 400
                     product = db.session.get(Product, order_item["product_id"])
                     new_order_item = OrderItem(**order_item, order_id=new_order.id)
                     db.session.add(new_order_item)
-                    db.session.commit()
                     product.stock -= int(order_item["quantity"])
                     db.session.commit()
                     total += new_order_item.price_at_order * new_order_item.quantity
@@ -122,7 +100,7 @@ class Login(Resource):
             user = User.query.filter_by(email=data.get("email")).first()
             if user and user.authenticate(data.get("password_hash")):
                 session["user_id"] = user.id
-                return make_response(user.to_dict(), 201)
+                return make_response(user.to_dict(), 200)
             else:
                 return make_response({"error": "Incorrect email or password"}, 401)
         except Exception as e:
@@ -236,10 +214,11 @@ class Products(Resource):
 
     def post(self):
         try:
-            data = request.get_json()
-            new_product = Product(**data)
-            db.session.add(new_product)
-            db.session.commit()
+            if user_id := session.get("user_id"):
+                data = request.get_json()
+                new_product = Product(**data)
+                db.session.add(new_product)
+                db.session.commit()
             return (new_product.to_dict(), 201)
         except Exception as e:
             db.session.rollback()
@@ -252,11 +231,11 @@ class ProductById(Resource):
             product = db.session.get(Product, id)
 
             if not product:
-                return make_response({"error": str(e)}, 404)
+                return make_response({"error": str(e)}, 400)
             else:
                 return make_response(product.to_dict(), 200)
         except Exception as e:
-            return make_response({"error": str(e)}, 404)
+            return make_response({"error": str(e)}, 400)
 
     def patch(self, id):
         try:
@@ -268,7 +247,7 @@ class ProductById(Resource):
                         setattr(product, attr, value)
                 db.session.commit()
                 return product.to_dict(), 200
-            return {"error": "Product not found"}, 404
+            return {"error": "Product not found"}, 400
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 422
@@ -279,37 +258,12 @@ class ProductById(Resource):
                 db.session.delete(product)
                 db.session.commit()
                 return {}, 204
-            return {"error": "Product not found"}, 404
+            return {"error": "Product not found"}, 400
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return {"error": str(e)}, 400
 
 
-class ProductByUser(Resource):
-    def get(self, id):
-        try:
-            if user := db.session.get(User, id):
-                products = [
-                    product.to_dict(
-                        rules=(
-                            "-created_at",
-                            "-id",
-                            "-sku",
-                            "-order_items",
-                            "-user_id",
-                            "-seller",
-                            "-updated_at",
-                        )
-                    )
-                    for product in user.selling_products
-                ]
-                return (products, 200)
-        except Exception as e:
-            return {"error": "User not found"}, 404
-
-
-api.add_resource(Orders, "/orders")
-api.add_resource(GetOrderById, "/orders/<int:id>")
 api.add_resource(OrderItems, "/order_items")
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
@@ -319,7 +273,6 @@ api.add_resource(UserById, "/user/<int:id>")
 api.add_resource(CheckSession, "/check-session")
 api.add_resource(Products, "/products")
 api.add_resource(ProductById, "/products/<int:id>")
-api.add_resource(ProductByUser, "/products/user/<int:id>")
 
 
 if __name__ == "__main__":
