@@ -17,14 +17,14 @@ from models.user import User
 from models.product import Product
 
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get("user_id"):
-            return redirect("/login")
-        return f(*args, **kwargs)
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if not session.get("user_id"):
+#             return redirect("/login")
+#         return f(*args, **kwargs)
 
-    return decorated_function
+#     return decorated_function
 
 
 # Views go here!
@@ -53,8 +53,11 @@ class OrderItems(Resource):
                 data = request.get_json()
                 total = 0
                 for order_item in data:
-                    if int(order_item["quantity"]) > product.stock and 0:
-                        return {"error": f"Requested quantity for {product.name} exceeds available stock or needs to be greater than 1"}, 400
+                    quantity = int(order_item["quantity"])
+                    if quantity > product.stock:
+                        return {"error": f"Requested quantity for {product.name} exceeds available stock"}, 400
+                    elif quantity == 0:
+                        return {"error": f"Quantity needs to be greater than 0."}, 400
                     product = db.session.get(Product, order_item["product_id"])
                     new_order_item = OrderItem(**order_item, order_id=new_order.id)
                     db.session.add(new_order_item)

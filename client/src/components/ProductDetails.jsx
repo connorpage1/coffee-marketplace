@@ -86,7 +86,7 @@ function ProductDetails() {
 
       </Card.Content>
       <Card.Content>
-      Seller: 
+      Vendor: 
         <Link to={`/products/vendor/${user_id}`}>
           {' ' + seller.first_name + ' ' + seller.last_name}
         </Link>

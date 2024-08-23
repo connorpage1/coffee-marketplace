@@ -116,3 +116,13 @@ button.ui.primary.button {
 button.ui.primary.button:hover {
   background-color: #5A8C0F;
 }
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-card .content {
+  flex: 1;
+}

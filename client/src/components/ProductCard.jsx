@@ -21,7 +21,7 @@ function ProductCard({
   };
 
   return (
-    <Card>
+    <Card className="product-card" fluid>
       <Link to={`/products/${id}`}>
         <Card.Content>
           <Card.Header>{name}</Card.Header>
@@ -39,7 +39,7 @@ function ProductCard({
           {stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}
         </Card.Description>
       </Card.Content>
-      <Card.Content extra>
+      <Card.Content>
         {user && (
           <Button disabled={disable} onClick={handleClick} primary fluid>
             Add to Cart <Icon name="cart plus"/>

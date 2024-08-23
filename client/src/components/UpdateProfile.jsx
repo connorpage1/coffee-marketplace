@@ -7,7 +7,7 @@ import * as yup from 'yup';
 const schema = yup.object().shape({
     first_name: yup.string().required("Name is required").min(1, "Must be at least one character").max(50, "Cannot be longer than 50 characters"),
     last_name: yup.string().required("Name is required").min(1, "Must be at least one character").max(50, "Cannot be longer than 50 characters"),
-    email: yup.string().email("Please enter a valid email").required("Email is required"),  
+    email: yup.string().email("Please enter a valid email").required("Email is required")
 })
 
 const UpdateProfile = ({ profile, newProfile }) => {

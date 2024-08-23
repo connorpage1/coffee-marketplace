@@ -51,7 +51,7 @@ function MyProfile() {
                 <div>
                     <h1>Hello, {first_name}. Welcome to your vendor profile.</h1>
                     <p>Vendor since {dateFormat(created_at, "mmmm dS, yyyy")}</p>
-                    <p><b>Name: </b>{`${first_name} ${last_name}`}</p>
+                    <p><b>Vendor: </b>{`${first_name} ${last_name}`}</p>
                     <p><b>Email: </b>{email}</p>
                     <NewProductModal />
                     <UpdateProfile profile={profile} newProfile={newProfile} />  <UpdatePassword /> <DeleteConfirm />
