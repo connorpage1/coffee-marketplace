@@ -146,7 +146,7 @@ function EditModal({ product, setProduct, productId }) {
 
                     <SemanticForm.Field>
                       <label htmlFor="price">Price: </label>
-                      <Field name="price" type='number' placeholder="Price" />
+                      <Field name="price" type='number' placeholder="Price" step='.01'/>
                       <ErrorMessage name="price" component={Message} negative />
                     </SemanticForm.Field>
 
