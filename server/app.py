@@ -277,8 +277,7 @@ class ProductByUser(Resource):
         
 
 
-api.add_resource(Orders, "/orders")
-api.add_resource(GetOrderById, "/orders/<int:id>")
+
 api.add_resource(OrderItems, "/order_items")
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
