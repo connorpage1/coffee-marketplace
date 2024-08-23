@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import "semantic-ui-css/semantic.min.css";
 import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -17,35 +18,35 @@ function App() {
   useEffect(() => {
     fetch("/check-session")
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           return res.json().then(setUser);
-        }
-        //! Fix Error
-        else {
-          console.log("er");
+        } else {
+          return res.json().then((errorObj) => {
+            toast.error(errorObj.error);
+          });
         }
       })
       .catch((error) => {
-        //! Fix Error
-        console.log();
+        toast.error(error.message); // Use error.message for better error info
       });
   }, []);
 
-  const updateUser = (value) => {
-    setUser(value);
-  };
 
-  return (
-    <div className="app">
-      <Toaster />
-      <header>
-        <NavBar user={user} updateUser={updateUser} />
-      </header>
-      <div className="content">
-        <Outlet context={{ user, updateUser, addToCart, cart, resetCart }} />
+    const updateUser = (value) => {
+      setUser(value);
+    };
+
+    return (
+      <div className="app">
+        <Toaster />
+        <header>
+          <NavBar user={user} updateUser={updateUser} />
+        </header>
+        <div className="content">
+          <Outlet context={{ user, updateUser, addToCart, cart, resetCart }} />
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 export default App;
