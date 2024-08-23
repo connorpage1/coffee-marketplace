@@ -1,7 +1,6 @@
 # Remote library imports
-from flask import Flask, request, make_response, session
-from flask_migrate import Migrate
-from flask_restful import Resource, Api
+from flask import request, make_response, session
+from flask_restful import Resource
 import os
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -19,37 +18,6 @@ from models.product import Product
 
 
 # Views go here!
-class Orders(Resource):
-    def get(self):
-        try:
-            return make_response([order.to_dict() for order in Order.query], 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 404)
-
-    def post(self):
-        try:
-            data = request.get_json()
-            new_order = Order(**data)
-            db.session.add(new_order)
-            db.session.commit()
-            return make_response(new_order.to_dict(), 201)
-        except Exception as e:
-            db.session.rollback()
-            return make_response({"error": str(e)}, 400)
-
-
-class GetOrderById(Resource):
-    def get(self, id):
-        try:
-            order = db.session.get(Order, id)
-
-            if order is None:
-                return make_response({"error": str(e)}, 404)
-            else:
-                return make_response(order.to_dict(), 200)
-        except Exception as e:
-            return make_response({"error": str(e)}, 404)
-
 
 class OrderItems(Resource):
     def get(self):
@@ -256,7 +224,7 @@ class ProductById(Resource):
             else:
                 return make_response(product.to_dict(), 200)
         except Exception as e:
-            return make_response({"error": str(e)}, 404)
+            return make_response({"error": str(e)}, 400)
 
     def patch(self, id):
         try:
