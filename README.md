@@ -32,6 +32,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
  
 - [npm - dateformat](https://www.npmjs.com/package/dateformat)
 
+- [pip - flask](https://pypi.org/project/Flask/)
+
+- [pip - functools](https://pypi.org/project/functools/)
+
+- [pip - DateTime](https://pypi.org/project/DateTime/)
+
+- Note: delete package-lock.json and install your own dependencies!!!
+
 
 ## Starting the Application
 
