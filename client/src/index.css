@@ -58,12 +58,9 @@
   padding: 1em 0;
 }
 
-
 .ui.top.fixed.menu {
-
   background-color: #5a8c0f;
   padding-bottom: 0px;
-  
 }
 
 .login-container{
@@ -91,7 +88,7 @@ button {
 }
 
 .content {
-  padding-top: 45px; /* Adjust this value based on navbar height */
+  padding-top: 45px; 
 }
 
 .flex-container {
