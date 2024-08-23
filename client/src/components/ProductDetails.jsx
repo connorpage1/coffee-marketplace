@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext, useParams } from "react-router-dom";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import EditModal from "./EditModal";
 import { Card, Image, Container } from "semantic-ui-react";
 
@@ -11,53 +11,60 @@ function ProductDetails() {
   const { productId } = useParams();
   const { user } = useOutletContext();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/products/${productId}`)
-      .then((resp) => {
-        if (resp.ok) {
-          return resp.json()
-            .then((data) => {
+    if (user) {
+      fetch(`/products/${productId}`)
+        .then((resp) => {
+          if (resp.ok) {
+            return resp.json().then((data) => {
               setProduct(data);
-
-
-            })
-        } else {
-          return resp.json()
-            .then(() => {
-              resp.json().then((errorObj) => toast.error(errorObj.error))
-            })
-        }
-      })
-      .catch((errorObj) => toast.error(errorObj.error))
-  }, [productId]);
-
+            });
+          } else {
+            return resp.json().then(() => {
+              resp.json().then((errorObj) => toast.error(errorObj.error));
+            });
+          }
+        })
+        .catch((errorObj) => toast.error(errorObj.error));
+    }
+  }, [productId, user]);
 
   if (!product) {
-    return <h3>Loading</h3>
+    return <h3>Loading</h3>;
   }
-
 
   const handleDelete = (productId) => {
     fetch(`/products/${productId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     })
       .then((res) => {
         if (res.ok) {
-          navigate('/products')
+          navigate("/products");
           return res.json();
-
         } else {
           return res.json().then((errorObj) => {
             toast.error(errorObj.error);
           });
         }
       })
-      .catch((errorObj) => toast.error(errorObj.error))
+      .catch((errorObj) => toast.error(errorObj.error));
   };
 
-  const { name, description, seller, image_url, id, user_id, price, stock, type, tag, sku } = product
+  const {
+    name,
+    description,
+    seller,
+    image_url,
+    id,
+    user_id,
+    price,
+    stock,
+    type,
+    tag,
+    sku,
+  } = product;
 
   //   return <div>
   //     <h1>{name} </h1>
@@ -81,39 +88,41 @@ function ProductDetails() {
   return (
     <Container>
       <Card.Content>
-
         <Card.Header>{name}</Card.Header>
-
       </Card.Content>
       <Card.Content>
-      Vendor: 
+        Vendor:
         <Link to={`/products/vendor/${user_id}`}>
-          {' ' + seller.first_name + ' ' + seller.last_name}
+          {" " + seller.first_name + " " + seller.last_name}
         </Link>
       </Card.Content>
       <Image src={image_url} alt={name} />
       <Card.Content>
         <Card.Meta>
-          <span>{type}: {tag}</span>
+          <span>
+            {type}: {tag}
+          </span>
         </Card.Meta>
-        <Card.Description>
-          ${price}/12oz bag
-        </Card.Description>
+        <Card.Description>${price}/12oz bag</Card.Description>
         <Card.Description>
           {stock ? <>Stock: {stock} remaining</> : <>Out of Stock</>}
         </Card.Description>
-        <Card.Description>
-          SKU: {sku}
-        </Card.Description>
-        <Card.Description>
-          {description}
-        </Card.Description>
+        <Card.Description>SKU: {sku}</Card.Description>
+        <Card.Description>{description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        {user && user.id === user_id && <button onClick={() => handleDelete(id)}> Delete </button>}
-        {user && user.id === user_id && <EditModal product={product} setProduct={setProduct} productId={productId} />}
+        {user && user.id === user_id && (
+          <button onClick={() => handleDelete(id)}> Delete </button>
+        )}
+        {user && user.id === user_id && (
+          <EditModal
+            product={product}
+            setProduct={setProduct}
+            productId={productId}
+          />
+        )}
       </Card.Content>
     </Container>
-  )
+  );
 }
 export default ProductDetails;

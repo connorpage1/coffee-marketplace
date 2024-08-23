@@ -37,7 +37,7 @@ class OrderItems(Resource):
             ]
             return make_response(serialized_order_items, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -54,11 +54,11 @@ class OrderItems(Resource):
                 total = 0
                 for order_item in data:
                     quantity = int(order_item["quantity"])
+                    product = db.session.get(Product, order_item["product_id"])
                     if quantity > product.stock:
                         return {"error": f"Requested quantity for {product.name} exceeds available stock"}, 400
                     elif quantity == 0:
                         return {"error": f"Quantity needs to be greater than 0."}, 400
-                    product = db.session.get(Product, order_item["product_id"])
                     new_order_item = OrderItem(**order_item, order_id=new_order.id)
                     db.session.add(new_order_item)
                     product.stock -= int(order_item["quantity"])
@@ -213,7 +213,7 @@ class Products(Resource):
             ]
             return make_response(serialized_products, 200)
         except Exception as e:
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
     def post(self):
         try:
@@ -222,10 +222,10 @@ class Products(Resource):
                 new_product = Product(**data)
                 db.session.add(new_product)
                 db.session.commit()
-            return (new_product.to_dict(), 201)
+            return make_response(new_product.to_dict(), 201)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 class ProductById(Resource):
@@ -234,37 +234,40 @@ class ProductById(Resource):
             product = db.session.get(Product, id)
 
             if not product:
-                return make_response({"error": str(e)}, 400)
-            else:
-                return make_response(product.to_dict(), 200)
+                return make_response({"error": "Product not found"}, 404)
+            return make_response(product.to_dict(), 200)
         except Exception as e:
             return make_response({"error": str(e)}, 400)
 
     def patch(self, id):
         try:
-            data = request.get_json()
-            product = db.session.get(Product, id)
-            if product:
-                for attr, value in data.items():
-                    if value:
-                        setattr(product, attr, value)
-                db.session.commit()
-                return product.to_dict(), 200
-            return {"error": "Product not found"}, 400
+            if user_id := session.get("user_id"):
+                data = request.get_json()
+                product = db.session.get(Product, id)
+                if product:
+                    for attr, value in data.items():
+                        if value:
+                            setattr(product, attr, value)
+                    db.session.commit()
+                    return product.to_dict(), 200
+                return {"error": "Product not found"}, 400
+            return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 422
+            return make_response({"error": str(e)}, 422)
 
     def delete(self, id):
         try:
-            if product := db.session.get(Product, id):
-                db.session.delete(product)
-                db.session.commit()
-                return {}, 204
-            return {"error": "Product not found"}, 400
+            if user_id := session.get("user_id"):
+                if product := db.session.get(Product, id):
+                    db.session.delete(product)
+                    db.session.commit()
+                    return {}, 204
+                return make_response({"error": "Product not found"}, 400)
+            return make_response({"error": "No logged in user"}, 401)
         except Exception as e:
             db.session.rollback()
-            return {"error": str(e)}, 400
+            return make_response({"error": str(e)}, 400)
 
 
 api.add_resource(OrderItems, "/order_items")

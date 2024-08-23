@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import SearchBar from "./SearchBar";
 import ProductCard from "./ProductCard";
 
+
 const ProductPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ const ProductPage = () => {
         }
     })
         .catch((errorObj) => toast.error(errorObj.message));
-    }, []);
+    },);
 
 
     const handleSearch = (e) => {
