@@ -16,9 +16,7 @@ class Order(db.Model, SerializerMixin):
     users = db.relationship("User", back_populates="orders")
     order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
     products = association_proxy("order_items", "product")
-    # products = db.relationship("Product", secondary="order_items", back_populates="orders", viewonly=True)
 
-    # serialize_rules = ("-users", "-order_items", "-products")
     serialize_rules = ("-users", "-order_items.order")
 
     @validates("total")
